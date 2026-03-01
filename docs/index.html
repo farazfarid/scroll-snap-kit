@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scroll-snap-kit — Demo</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface2: #1a1a24;
+            --border: #2a2a3a;
+            --accent: #7cffb2;
+            --accent2: #ff6b6b;
+            --accent3: #6b9fff;
+            --text: #e8e8f0;
+            --muted: #6b6b85;
+            --font-display: 'Syne', sans-serif;
+            --font-body: 'DM Sans', sans-serif;
+            --font-mono: 'DM Mono', monospace;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-weight: 300;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ---- NOISE OVERLAY ---- */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+        }
+
+        /* ---- PROGRESS BAR ---- */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--accent3));
+            width: 0%;
+            z-index: 1000;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 12px var(--accent);
+        }
+
+        /* ---- NAV ---- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.2rem 2.5rem;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        nav.scrolled {
+            border-color: var(--border);
+        }
+
+        nav.hidden {
+            transform: translateY(-100%);
+        }
+
+        .nav-logo {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--accent);
+            letter-spacing: 0.05em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-size: 0.8rem;
+            font-family: var(--font-mono);
+            color: var(--muted);
+            text-decoration: none;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        /* ---- SCROLL DIRECTION INDICATOR ---- */
+        #direction-badge {
+            position: fixed;
+            top: 5rem;
+            right: 2rem;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            padding: 0.4rem 0.8rem;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--muted);
+            z-index: 100;
+            transition: all 0.3s;
+            letter-spacing: 0.1em;
+        }
+
+        #direction-badge.up {
+            color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 12px rgba(124, 255, 178, 0.2);
+        }
+
+        #direction-badge.down {
+            color: var(--accent2);
+            border-color: var(--accent2);
+            box-shadow: 0 0 12px rgba(255, 107, 107, 0.2);
+        }
+
+        /* ---- SECTIONS ---- */
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 2.5rem 4rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* ---- HERO ---- */
+        #hero {
+            background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 255, 178, 0.08) 0%, transparent 70%);
+            text-align: center;
+            align-items: center;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--accent);
+            background: rgba(124, 255, 178, 0.08);
+            border: 1px solid rgba(124, 255, 178, 0.2);
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-tag::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(0.8);
+            }
+        }
+
+        h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-sub {
+            font-size: 1.15rem;
+            color: var(--muted);
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.8rem;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0a0f;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background: #a0ffcc;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(124, 255, 178, 0.3);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--muted);
+            transform: translateY(-2px);
+        }
+
+        /* ---- SECTION HEADINGS ---- */
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            line-height: 1.1;
+        }
+
+        /* ---- DEMO: SCROLL POSITION ---- */
+        #demo-position {
+            background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 100%);
+        }
+
+        .position-display {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-label {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .stat-value {
+            font-family: var(--font-mono);
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stat-unit {
+            font-size: 0.9rem;
+            color: var(--muted);
+            margin-left: 0.3rem;
+        }
+
+        /* ---- DEMO: SCROLL TO ---- */
+        #demo-scroll {
+            background: var(--surface);
+        }
+
+        .scroll-targets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .target-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .target-card:hover {
+            border-color: var(--accent3);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(107, 159, 255, 0.15);
+        }
+
+        .target-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .target-name {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .target-desc {
+            font-size: 0.8rem;
+            color: var(--muted);
+            font-family: var(--font-mono);
+        }
+
+        /* ---- DEMO: VIEWPORT ---- */
+        #demo-viewport {
+            background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+        }
+
+        .viewport-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .viewport-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .viewport-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+            border-color: var(--accent);
+            box-shadow: 0 0 32px rgba(124, 255, 178, 0.1);
+        }
+
+        .viewport-card-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .viewport-card-title {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .viewport-card-sub {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* ---- DEMO: SCROLL LOCK ---- */
+        #demo-lock {
+            background: var(--bg);
+        }
+
+        .lock-demo {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .lock-btn {
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.25s;
+            letter-spacing: 0.05em;
+        }
+
+        #lock-btn {
+            background: var(--accent2);
+            color: white;
+        }
+
+        #lock-btn:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
+        }
+
+        #unlock-btn {
+            background: var(--accent);
+            color: #0a0a0f;
+        }
+
+        #unlock-btn:hover {
+            opacity: 0.85;
+            transform: scale(1.05);
+            box-shadow: 0 8px 24px rgba(124, 255, 178, 0.3);
+        }
+
+        .lock-status {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--muted);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+        }
+
+        /* ---- CODE BLOCK ---- */
+        .code-block {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.25rem 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-top: 1.5rem;
+            overflow-x: auto;
+            line-height: 1.8;
+        }
+
+        .code-block .kw {
+            color: var(--accent3);
+        }
+
+        .code-block .fn {
+            color: var(--accent);
+        }
+
+        .code-block .str {
+            color: #ffd700;
+        }
+
+        .code-block .cm {
+            color: #444460;
+        }
+
+        /* ---- BACK TO TOP ---- */
+        #back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(16px);
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #back-to-top:hover {
+            background: var(--accent);
+            color: #0a0a0f;
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(124, 255, 178, 0.3);
+        }
+
+        /* ---- FOOTER ---- */
+        footer {
+            padding: 3rem 2.5rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* ---- ANIMATIONS ---- */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            opacity: 0;
+            animation: fadeUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .fade-up:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .fade-up:nth-child(2) {
+            animation-delay: 0.25s;
+        }
+
+        .fade-up:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .fade-up:nth-child(4) {
+            animation-delay: 0.55s;
+        }
+
+        @media (max-width: 640px) {
+
+            .position-display,
+            .scroll-targets,
+            .viewport-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Progress Bar -->
+    <div id="progress-bar"></div>
+
+    <!-- Direction Badge -->
+    <div id="direction-badge">— IDLE —</div>
+
+    <!-- Back to Top -->
+    <button id="back-to-top" title="Back to top">↑</button>
+
+    <!-- Nav -->
+    <nav id="nav">
+        <span class="nav-logo">scroll-snap-kit</span>
+        <div class="nav-links">
+            <a href="#demo-position">position</a>
+            <a href="#demo-scroll">scroll-to</a>
+            <a href="#demo-viewport">viewport</a>
+            <a href="#demo-lock">lock</a>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section id="hero">
+        <div class="container">
+            <div class="hero-tag fade-up">npm install scroll-snap-kit</div>
+            <h1 class="fade-up">
+                Scroll utils<br />
+                <span class="highlight">done right.</span>
+            </h1>
+            <p class="hero-sub fade-up">
+                Zero-dependency scroll utilities and React hooks for modern web apps.
+                Smooth, throttled, accessible.
+            </p>
+            <div class="hero-buttons fade-up">
+                <button class="btn btn-primary" onclick="scrollTo_('#demo-position')">See the demo ↓</button>
+                <a class="btn btn-ghost" href="https://npmjs.com/package/scroll-snap-kit" target="_blank">npm page ↗</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO 1: Scroll Position -->
+    <section id="demo-position">
+        <div class="container">
+            <div class="section-label">01 — getScrollPosition()</div>
+            <h2>Live scroll data.</h2>
+            <p style="color: var(--muted); max-width: 520px;">
+                Track exact pixel position and scroll percentage in real time — throttled for performance.
+            </p>
+            <div class="position-display">
+                <div class="stat-card">
+                    <div class="stat-label">Scroll Y</div>
+                    <div class="stat-value" id="stat-y">0<span class="stat-unit">px</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Scroll X</div>
+                    <div class="stat-value" id="stat-x">0<span class="stat-unit">px</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Page progress</div>
+                    <div class="stat-value" id="stat-pctY">0<span class="stat-unit">%</span></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Scroll direction</div>
+                    <div class="stat-value" id="stat-dir" style="font-size:1.4rem; color: var(--text);">—</div>
+                </div>
+            </div>
+            <div class="code-block">
+                <span class="cm">// Vanilla JS</span><br />
+                <span class="kw">import</span> { onScroll, getScrollPosition } <span class="kw">from</span> <span
+                    class="str">'scroll-snap-kit'</span><br /><br />
+                <span class="fn">onScroll</span>(({ y, percentY }) => {<br />
+                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">`Scrolled ${percentY}%
+                    down`</span>)<br />
+                }, { throttle: <span class="str">100</span> })
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO 2: Scroll To -->
+    <section id="demo-scroll">
+        <div class="container">
+            <div class="section-label">02 — scrollTo()</div>
+            <h2>Jump anywhere.</h2>
+            <p style="color: var(--muted); max-width: 520px;">
+                Click a card to smooth-scroll to that section. Supports elements, pixel values, and offset adjustments.
+            </p>
+            <div class="scroll-targets">
+                <div class="target-card" onclick="scrollTo_('#hero')">
+                    <div class="target-icon">🚀</div>
+                    <div class="target-name">Hero</div>
+                    <div class="target-desc">scrollTo(#hero)</div>
+                </div>
+                <div class="target-card" onclick="scrollTo_('#demo-viewport')">
+                    <div class="target-icon">👁</div>
+                    <div class="target-name">Viewport</div>
+                    <div class="target-desc">scrollTo(#viewport)</div>
+                </div>
+                <div class="target-card" onclick="scrollTo_('#demo-lock')">
+                    <div class="target-icon">🔒</div>
+                    <div class="target-name">Lock</div>
+                    <div class="target-desc">scrollTo(#lock)</div>
+                </div>
+            </div>
+            <div class="code-block">
+                <span class="cm">// Scroll to element with -80px offset (sticky header!)</span><br />
+                <span class="fn">scrollTo</span>(document.<span class="fn">querySelector</span>(<span
+                    class="str">'#section'</span>), { offset: <span class="str">-80</span> })<br /><br />
+                <span class="cm">// Scroll to pixel value</span><br />
+                <span class="fn">scrollTo</span>(<span class="str">500</span>)<br /><br />
+                <span class="fn">scrollToTop</span>() &nbsp;<span class="cm">// back to top</span><br />
+                <span class="fn">scrollToBottom</span>() <span class="cm">// jump to bottom</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO 3: isInViewport -->
+    <section id="demo-viewport">
+        <div class="container">
+            <div class="section-label">03 — isInViewport() / useInViewport()</div>
+            <h2>Visibility detection.</h2>
+            <p style="color: var(--muted); max-width: 520px;">
+                These cards animate in as they enter the viewport. Powered by <code
+                    style="font-family:var(--font-mono); color: var(--accent); font-size:0.9em;">useInViewport()</code>
+                with IntersectionObserver.
+            </p>
+            <div class="viewport-grid">
+                <div class="viewport-card" data-observe>
+                    <div class="viewport-card-icon">⚡</div>
+                    <div class="viewport-card-title">Fast</div>
+                    <div class="viewport-card-sub">IntersectionObserver powered</div>
+                </div>
+                <div class="viewport-card" data-observe style="transition-delay: 0.15s">
+                    <div class="viewport-card-icon">🎯</div>
+                    <div class="viewport-card-title">Precise</div>
+                    <div class="viewport-card-sub">Configurable threshold</div>
+                </div>
+                <div class="viewport-card" data-observe style="transition-delay: 0.3s">
+                    <div class="viewport-card-icon">✨</div>
+                    <div class="viewport-card-title">Once</div>
+                    <div class="viewport-card-sub">Trigger only on first enter</div>
+                </div>
+            </div>
+            <div class="code-block">
+                <span class="cm">// React hook</span><br />
+                <span class="kw">const</span> [ref, inView] = <span class="fn">useInViewport</span>({ threshold: <span
+                    class="str">0.2</span>, once: <span class="str">true</span> })<br /><br />
+                <span class="kw">return</span> &lt;<span class="fn">div</span> ref={ref} style={{ opacity: inView ?
+                <span class="str">1</span> : <span class="str">0</span> }}&gt;<br />
+                &nbsp;&nbsp;I fade in when visible!<br />
+                &lt;/<span class="fn">div</span>&gt;
+            </div>
+        </div>
+    </section>
+
+    <!-- DEMO 4: Scroll Lock -->
+    <section id="demo-lock">
+        <div class="container">
+            <div class="section-label">04 — lockScroll() / unlockScroll()</div>
+            <h2>Freeze the page.</h2>
+            <p style="color: var(--muted); max-width: 520px;">
+                Prevent body scroll when a modal or drawer is open, then restore the exact scroll position on unlock.
+            </p>
+            <div class="lock-demo">
+                <button class="lock-btn" id="lock-btn" onclick="handleLock()">🔒 Lock Scroll</button>
+                <button class="lock-btn" id="unlock-btn" onclick="handleUnlock()">🔓 Unlock Scroll</button>
+                <div class="lock-status" id="lock-status">Status: <strong>unlocked</strong></div>
+            </div>
+            <div class="code-block">
+                <span class="cm">// When opening a modal</span><br />
+                <span class="fn">lockScroll</span>()<br /><br />
+                <span class="cm">// When closing — restores scroll position automatically</span><br />
+                <span class="fn">unlockScroll</span>()
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>Built with <a href="https://npmjs.com/package/scroll-snap-kit">scroll-snap-kit</a> — MIT License — Made with
+            ♥</p>
+    </footer>
+
+    <script>
+        // ---- POLYFILL: scroll-snap-kit utilities (inline for demo) ----
+        function scrollTo_(target, options = {}) {
+            const { behavior = 'smooth', offset = 0 } = options;
+            if (typeof target === 'string') target = document.querySelector(target);
+            if (typeof target === 'number') { window.scrollTo({ top: target + offset, behavior }); return; }
+            if (!(target instanceof Element)) return;
+            const y = target.getBoundingClientRect().top + window.scrollY + offset - 70;
+            window.scrollTo({ top: y, behavior });
+        }
+
+        function getScrollPosition() {
+            const x = window.scrollX, y = window.scrollY;
+            const maxX = document.body.scrollWidth - window.innerWidth;
+            const maxY = document.body.scrollHeight - window.innerHeight;
+            return { x, y, percentX: maxX > 0 ? Math.round((x / maxX) * 100) : 0, percentY: maxY > 0 ? Math.round((y / maxY) * 100) : 0 };
+        }
+
+        function lockScroll() {
+            const scrollY = window.scrollY;
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollY}px`;
+            document.body.style.width = '100%';
+        }
+
+        function unlockScroll() {
+            const scrollY = document.body.style.top;
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+            window.scrollTo(0, parseInt(scrollY || '0') * -1);
+        }
+
+        // ---- SCROLL LISTENER ----
+        let lastY = 0;
+        let ticking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const { x, y, percentX, percentY } = getScrollPosition();
+
+                    // Progress bar
+                    document.getElementById('progress-bar').style.width = percentY + '%';
+
+                    // Stats
+                    document.getElementById('stat-y').innerHTML = `${y}<span class="stat-unit">px</span>`;
+                    document.getElementById('stat-x').innerHTML = `${x}<span class="stat-unit">px</span>`;
+                    document.getElementById('stat-pctY').innerHTML = `${percentY}<span class="stat-unit">%</span>`;
+
+                    // Direction
+                    const dir = y > lastY ? 'down' : 'up';
+                    const dirEl = document.getElementById('stat-dir');
+                    const badge = document.getElementById('direction-badge');
+                    dirEl.textContent = dir === 'down' ? '↓ Down' : '↑ Up';
+                    dirEl.style.color = dir === 'down' ? 'var(--accent2)' : 'var(--accent)';
+                    badge.textContent = dir === 'down' ? '↓ SCROLLING DOWN' : '↑ SCROLLING UP';
+                    badge.className = dir;
+
+                    // Nav hide/show
+                    const nav = document.getElementById('nav');
+                    nav.classList.toggle('scrolled', y > 10);
+                    nav.classList.toggle('hidden', y > lastY && y > 200);
+
+                    // Back to top
+                    document.getElementById('back-to-top').classList.toggle('visible', y > 300);
+
+                    lastY = y;
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+
+        // ---- SCROLL LOCK ----
+        function handleLock() {
+            lockScroll();
+            document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--accent2)">locked 🔒</strong>';
+        }
+        function handleUnlock() {
+            unlockScroll();
+            document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--accent)">unlocked 🔓</strong>';
+        }
+
+        // ---- BACK TO TOP ----
+        document.getElementById('back-to-top').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ---- INTERSECTION OBSERVER for viewport cards ----
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('[data-observe]').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
