@@ -1,0 +1,49 @@
+{
+    "name": "scroll-snap-kit",
+    "version": "1.0.0",
+    "description": "Smooth scroll utilities and React hooks for modern web apps",
+    "type": "module",
+    "main": "./src/index.js",
+    "module": "./src/index.js",
+    "exports": {
+        ".": {
+            "import": "./src/index.js"
+        },
+        "./utils": {
+            "import": "./src/utils.js"
+        },
+        "./hooks": {
+            "import": "./src/hooks.js"
+        }
+    },
+    "files": [
+        "src"
+    ],
+    "scripts": {
+        "test": "echo \"No tests yet\""
+    },
+    "keywords": [
+        "scroll",
+        "smooth-scroll",
+        "scroll-hooks",
+        "react-hooks",
+        "viewport",
+        "scroll-position",
+        "frontend",
+        "ui"
+    ],
+    "author": "Fabian Faraz Farid",
+    "license": "MIT",
+    "peerDependencies": {
+        "react": ">=16.8.0"
+    },
+    "peerDependenciesMeta": {
+        "react": {
+            "optional": true
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/farazfarid/scroll-snap-kit"
+    }
+}
