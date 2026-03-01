@@ -44,6 +44,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/farazfarid/scroll-snap-kit"
-    }
+        "url": "git+https://github.com/farazfarid/scroll-snap-kit.git"
+    },
+    "bugs": {
+        "url": "https://github.com/farazfarid/scroll-snap-kit/issues"
+    },
+    "homepage": "https://farazfarid.github.io/scroll-snap-kit/"
 }

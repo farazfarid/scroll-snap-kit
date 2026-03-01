@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>scroll-snap-kit — Demo</title>
+    <title>scroll-snap-kit — Interactive Demo</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800;900&family=Instrument+Sans:wght@300;400;500&display=swap"
         rel="stylesheet" />
     <style>
         *,
@@ -18,22 +18,25 @@
         }
 
         :root {
-            --bg: #0a0a0f;
-            --surface: #111118;
-            --surface2: #1a1a24;
-            --border: #2a2a3a;
-            --accent: #7cffb2;
-            --accent2: #ff6b6b;
-            --accent3: #6b9fff;
-            --text: #e8e8f0;
-            --muted: #6b6b85;
+            --bg: #070709;
+            --surface: #0f0f14;
+            --surface2: #17171f;
+            --surface3: #1f1f2a;
+            --border: #252530;
+            --border2: #323240;
+            --accent: #00ffaa;
+            --accent2: #ff5f6d;
+            --accent3: #5f8dff;
+            --accent4: #ffcc44;
+            --text: #ddddf0;
+            --muted: #666688;
             --font-display: 'Syne', sans-serif;
-            --font-body: 'DM Sans', sans-serif;
+            --font-body: 'Instrument Sans', sans-serif;
             --font-mono: 'DM Mono', monospace;
         }
 
         html {
-            scroll-behavior: smooth;
+            scroll-behavior: auto;
         }
 
         body {
@@ -41,49 +44,46 @@
             color: var(--text);
             font-family: var(--font-body);
             font-weight: 300;
-            line-height: 1.6;
+            line-height: 1.7;
             overflow-x: hidden;
         }
 
-        /* ---- NOISE OVERLAY ---- */
-        body::before {
+        body::after {
             content: '';
             position: fixed;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.4;
+            opacity: 0.45;
         }
 
-        /* ---- PROGRESS BAR ---- */
         #progress-bar {
             position: fixed;
             top: 0;
             left: 0;
             height: 2px;
-            background: linear-gradient(90deg, var(--accent), var(--accent3));
+            z-index: 2000;
+            background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2));
             width: 0%;
-            z-index: 1000;
-            transition: width 0.1s linear;
-            box-shadow: 0 0 12px var(--accent);
+            box-shadow: 0 0 16px var(--accent);
+            transition: width 0.08s linear;
         }
 
-        /* ---- NAV ---- */
         nav {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
+            z-index: 500;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1.2rem 2.5rem;
-            background: rgba(10, 10, 15, 0.85);
-            backdrop-filter: blur(16px);
+            padding: 1rem 2.5rem;
+            background: rgba(7, 7, 9, 0.82);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid transparent;
-            transition: border-color 0.3s, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: border-color .3s, transform .4s cubic-bezier(.4, 0, .2, 1);
         }
 
         nav.scrolled {
@@ -96,98 +96,228 @@
 
         .nav-logo {
             font-family: var(--font-mono);
-            font-size: 0.85rem;
+            font-size: .8rem;
             color: var(--accent);
-            letter-spacing: 0.05em;
+            letter-spacing: .06em;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1.6rem;
         }
 
         .nav-links a {
-            font-size: 0.8rem;
             font-family: var(--font-mono);
+            font-size: .7rem;
             color: var(--muted);
             text-decoration: none;
-            letter-spacing: 0.08em;
+            letter-spacing: .1em;
             text-transform: uppercase;
-            transition: color 0.2s;
+            padding-bottom: 2px;
+            border-bottom: 1px solid transparent;
+            transition: color .2s, border-color .2s;
         }
 
         .nav-links a:hover {
             color: var(--text);
         }
 
-        /* ---- SCROLL DIRECTION INDICATOR ---- */
-        #direction-badge {
-            position: fixed;
-            top: 5rem;
-            right: 2rem;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            padding: 0.4rem 0.8rem;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: var(--surface);
-            color: var(--muted);
-            z-index: 100;
-            transition: all 0.3s;
-            letter-spacing: 0.1em;
-        }
-
-        #direction-badge.up {
+        .nav-links a.scroll-spy-active {
             color: var(--accent);
             border-color: var(--accent);
-            box-shadow: 0 0 12px rgba(124, 255, 178, 0.2);
         }
 
-        #direction-badge.down {
+        .badge {
+            position: fixed;
+            z-index: 400;
+            font-family: var(--font-mono);
+            font-size: .68rem;
+            padding: .35rem .8rem;
+            border-radius: 999px;
+            border: 1px solid var(--border2);
+            background: var(--surface);
+            color: var(--muted);
+            letter-spacing: .1em;
+            transition: all .3s;
+        }
+
+        #dir-badge {
+            top: 4.8rem;
+            right: 2rem;
+        }
+
+        #pct-badge {
+            top: 4.8rem;
+            left: 2rem;
+        }
+
+        #end-badge {
+            top: 7.2rem;
+            right: 2rem;
+            opacity: 0;
+        }
+
+        #dir-badge.up {
+            color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(0, 255, 170, .2);
+        }
+
+        #dir-badge.down {
             color: var(--accent2);
             border-color: var(--accent2);
-            box-shadow: 0 0 12px rgba(255, 107, 107, 0.2);
+            box-shadow: 0 0 10px rgba(255, 95, 109, .2);
         }
 
-        /* ---- SECTIONS ---- */
+        #end-badge.show {
+            opacity: 1;
+            color: var(--accent4);
+            border-color: var(--accent4);
+            box-shadow: 0 0 10px rgba(255, 204, 68, .25);
+        }
+
+        #back-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 400;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--surface2);
+            border: 1px solid var(--border2);
+            color: var(--text);
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s;
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        #back-top.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #back-top:hover {
+            background: var(--accent);
+            color: #070709;
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(0, 255, 170, .3);
+        }
+
         section {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 8rem 2.5rem 4rem;
+            padding: 8rem 2.5rem 5rem;
             position: relative;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 920px;
             margin: 0 auto;
             width: 100%;
         }
 
-        /* ---- HERO ---- */
+        .section-label {
+            font-family: var(--font-mono);
+            font-size: .68rem;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            margin-bottom: .9rem;
+        }
+
+        .section-label.green {
+            color: var(--accent);
+        }
+
+        .section-label.red {
+            color: var(--accent2);
+        }
+
+        .section-label.blue {
+            color: var(--accent3);
+        }
+
+        .section-label.yellow {
+            color: var(--accent4);
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            letter-spacing: -.03em;
+            line-height: 1.05;
+            margin-bottom: .8rem;
+        }
+
+        .desc {
+            color: var(--muted);
+            max-width: 520px;
+            font-size: .95rem;
+            margin-bottom: 2rem;
+        }
+
+        .code {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.2rem 1.5rem;
+            font-family: var(--font-mono);
+            font-size: .78rem;
+            line-height: 1.9;
+            color: var(--muted);
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        .kw {
+            color: var(--accent3);
+        }
+
+        .fn {
+            color: var(--accent);
+        }
+
+        .str {
+            color: var(--accent4);
+        }
+
+        .cm {
+            color: #333350;
+            font-style: italic;
+        }
+
+        /* HERO */
         #hero {
-            background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 255, 178, 0.08) 0%, transparent 70%);
             text-align: center;
             align-items: center;
+            background: radial-gradient(ellipse 70% 50% at 50% -5%, rgba(0, 255, 170, .07) 0%, transparent 70%);
         }
 
-        .hero-tag {
+        .hero-pill {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: .5rem;
             font-family: var(--font-mono);
-            font-size: 0.75rem;
+            font-size: .72rem;
             color: var(--accent);
-            background: rgba(124, 255, 178, 0.08);
-            border: 1px solid rgba(124, 255, 178, 0.2);
-            padding: 0.4rem 1rem;
+            background: rgba(0, 255, 170, .07);
+            border: 1px solid rgba(0, 255, 170, .2);
+            padding: .4rem 1.1rem;
             border-radius: 999px;
             margin-bottom: 2rem;
-            letter-spacing: 0.1em;
+            letter-spacing: .1em;
+            animation: fadeUp .6s .1s both;
         }
 
-        .hero-tag::before {
+        .hero-pill::before {
             content: '';
             width: 6px;
             height: 6px;
@@ -201,77 +331,78 @@
             0%,
             100% {
                 opacity: 1;
-                transform: scale(1);
+                transform: scale(1)
             }
 
             50% {
-                opacity: 0.4;
-                transform: scale(0.8);
+                opacity: .4;
+                transform: scale(.8)
             }
         }
 
         h1 {
             font-family: var(--font-display);
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 800;
-            line-height: 1;
-            letter-spacing: -0.03em;
+            font-size: clamp(3.5rem, 9vw, 6.5rem);
+            font-weight: 900;
+            line-height: .95;
+            letter-spacing: -.04em;
             margin-bottom: 1.5rem;
+            animation: fadeUp .6s .25s both;
         }
 
-        h1 .highlight {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+        .grad {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 60%, var(--accent2) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .hero-sub {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             color: var(--muted);
-            max-width: 500px;
-            margin: 0 auto 3rem;
-            font-weight: 300;
+            max-width: 480px;
+            margin: 0 auto 2.5rem;
+            animation: fadeUp .6s .4s both;
         }
 
-        .hero-buttons {
+        .hero-ctas {
             display: flex;
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
+            animation: fadeUp .6s .55s both;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            padding: 0.8rem 1.8rem;
+            gap: .5rem;
+            padding: .75rem 1.8rem;
             border-radius: 8px;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            letter-spacing: 0.05em;
-            text-decoration: none;
-            cursor: pointer;
             border: none;
-            transition: all 0.2s;
+            font-family: var(--font-mono);
+            font-size: .78rem;
+            letter-spacing: .06em;
+            cursor: pointer;
+            transition: all .2s;
+            text-decoration: none;
         }
 
-        .btn-primary {
+        .btn-green {
             background: var(--accent);
-            color: #0a0a0f;
+            color: #070709;
             font-weight: 500;
         }
 
-        .btn-primary:hover {
-            background: #a0ffcc;
+        .btn-green:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(124, 255, 178, 0.3);
+            box-shadow: 0 10px 28px rgba(0, 255, 170, .3);
         }
 
         .btn-ghost {
             background: transparent;
             color: var(--text);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border2);
         }
 
         .btn-ghost:hover {
@@ -279,306 +410,475 @@
             transform: translateY(-2px);
         }
 
-        /* ---- SECTION HEADINGS ---- */
-        .section-label {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 1rem;
+        .feature-count {
+            margin-top: 4rem;
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            animation: fadeUp .6s .7s both;
         }
 
-        h2 {
+        .fc-item {
+            text-align: center;
+        }
+
+        .fc-num {
             font-family: var(--font-display);
-            font-size: clamp(2rem, 4vw, 3.2rem);
-            font-weight: 800;
-            letter-spacing: -0.03em;
-            margin-bottom: 1rem;
-            line-height: 1.1;
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent);
         }
 
-        /* ---- DEMO: SCROLL POSITION ---- */
-        #demo-position {
-            background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 100%);
+        .fc-label {
+            font-family: var(--font-mono);
+            font-size: .68rem;
+            color: var(--muted);
+            letter-spacing: .15em;
+            text-transform: uppercase;
         }
 
-        .position-display {
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* POSITION */
+        #s-position {
+            background: linear-gradient(180deg, var(--bg), var(--surface));
+        }
+
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 1rem;
-            margin: 2rem 0;
+            margin-bottom: 1.5rem;
         }
 
-        .stat-card {
+        .stat {
             background: var(--surface2);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.4rem 1.2rem;
             position: relative;
             overflow: hidden;
         }
 
-        .stat-card::before {
+        .stat::after {
             content: '';
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            height: 1px;
+            height: 2px;
             background: linear-gradient(90deg, transparent, var(--accent), transparent);
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity .3s;
         }
 
-        .stat-card:hover::before {
+        .stat:hover::after {
             opacity: 1;
         }
 
-        .stat-label {
+        .stat-lbl {
             font-family: var(--font-mono);
-            font-size: 0.7rem;
-            letter-spacing: 0.15em;
+            font-size: .65rem;
+            letter-spacing: .15em;
             text-transform: uppercase;
             color: var(--muted);
-            margin-bottom: 0.75rem;
+            margin-bottom: .6rem;
         }
 
-        .stat-value {
+        .stat-val {
             font-family: var(--font-mono);
-            font-size: 2.2rem;
-            font-weight: 500;
+            font-size: 1.9rem;
             color: var(--accent);
             line-height: 1;
         }
 
         .stat-unit {
-            font-size: 0.9rem;
+            font-size: .85rem;
             color: var(--muted);
-            margin-left: 0.3rem;
+            margin-left: .2rem;
         }
 
-        /* ---- DEMO: SCROLL TO ---- */
-        #demo-scroll {
+        /* SPY */
+        #s-spy {
             background: var(--surface);
         }
 
-        .scroll-targets {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin: 2rem 0;
+        .spy-demo {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
         }
 
-        .target-card {
+        .spy-hint {
+            font-family: var(--font-mono);
+            font-size: .75rem;
+            color: var(--muted);
+            margin-bottom: 1rem;
+        }
+
+        .spy-nav {
+            display: flex;
+            gap: .75rem;
+            flex-wrap: wrap;
+        }
+
+        .spy-link {
+            font-family: var(--font-mono);
+            font-size: .75rem;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            padding: .5rem 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            cursor: pointer;
+            transition: all .25s;
+            text-decoration: none;
+        }
+
+        .spy-link:hover {
+            color: var(--text);
+            border-color: var(--border2);
+        }
+
+        .spy-link.scroll-spy-active {
+            color: var(--accent);
+            border-color: var(--accent);
+            background: rgba(0, 255, 170, .07);
+            box-shadow: 0 0 14px rgba(0, 255, 170, .15);
+        }
+
+        /* END */
+        #s-end {
+            background: linear-gradient(180deg, var(--surface), var(--bg));
+        }
+
+        .end-display {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 2rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .end-indicator {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--border2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+            transition: all .5s cubic-bezier(.34, 1.56, .64, 1);
+        }
+
+        .end-indicator.fired {
+            border-color: var(--accent4);
+            box-shadow: 0 0 30px rgba(255, 204, 68, .4);
+            transform: scale(1.1);
+        }
+
+        .end-text .title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: .3rem;
+        }
+
+        .end-text .sub {
+            font-family: var(--font-mono);
+            font-size: .8rem;
+            color: var(--muted);
+        }
+
+        #end-count {
+            color: var(--accent4);
+            font-weight: 500;
+        }
+
+        /* IF NEEDED */
+        #s-needed {
+            background: var(--bg);
+        }
+
+        .needed-demo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .needed-card {
             background: var(--surface2);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 1.5rem;
             cursor: pointer;
-            transition: all 0.25s;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
+            transition: all .25s;
         }
 
-        .target-card:hover {
+        .needed-card:hover {
             border-color: var(--accent3);
-            transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(107, 159, 255, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(95, 141, 255, .15);
         }
 
-        .target-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
+        .needed-card .icon {
+            font-size: 1.8rem;
+            margin-bottom: .75rem;
         }
 
-        .target-name {
+        .needed-card .name {
             font-family: var(--font-display);
             font-size: 1rem;
             font-weight: 700;
+            margin-bottom: .3rem;
         }
 
-        .target-desc {
-            font-size: 0.8rem;
+        .needed-card .sub {
+            font-family: var(--font-mono);
+            font-size: .72rem;
             color: var(--muted);
+        }
+
+        #needed-log {
+            margin-top: 1rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            font-family: var(--font-mono);
+            font-size: .75rem;
+            color: var(--muted);
+            min-height: 56px;
+            line-height: 1.8;
+        }
+
+        /* EASE */
+        #s-ease {
+            background: linear-gradient(180deg, var(--bg), var(--surface));
+        }
+
+        .ease-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: .75rem;
+            margin-top: 1.5rem;
+        }
+
+        .ease-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all .25s;
             font-family: var(--font-mono);
         }
 
-        /* ---- DEMO: VIEWPORT ---- */
-        #demo-viewport {
-            background: linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+        .ease-btn:hover {
+            border-color: var(--accent2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px rgba(255, 95, 109, .15);
         }
 
-        .viewport-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin: 2rem 0;
+        .ease-btn.active {
+            border-color: var(--accent2);
+            background: rgba(255, 95, 109, .08);
         }
 
-        .viewport-card {
+        .ease-name {
+            font-size: .78rem;
+            color: var(--text);
+            margin-bottom: .3rem;
+            font-weight: 500;
+        }
+
+        .ease-desc {
+            font-size: .65rem;
+            color: var(--muted);
+        }
+
+        .ease-vis {
+            margin-top: 1.5rem;
             background: var(--surface2);
             border: 1px solid var(--border);
             border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .ease-canvas-wrap {
+            position: relative;
+            height: 60px;
+            margin-bottom: 1rem;
+        }
+
+        #ease-track {
+            width: 100%;
+            height: 6px;
+            background: var(--surface3);
+            border-radius: 3px;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        #ease-ball {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--accent2);
+            box-shadow: 0 0 16px rgba(255, 95, 109, .6);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        .ease-status {
+            font-family: var(--font-mono);
+            font-size: .75rem;
+            color: var(--muted);
+        }
+
+        #ease-current {
+            color: var(--accent2);
+        }
+
+        /* VIEWPORT */
+        #s-viewport {
+            background: var(--surface);
+        }
+
+        .vp-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .vp-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 14px;
             padding: 2rem 1.5rem;
             text-align: center;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(30px) scale(.97);
+            transition: opacity .6s, transform .6s cubic-bezier(.4, 0, .2, 1), border-color .3s, box-shadow .3s;
         }
 
-        .viewport-card.visible {
+        .vp-card.in {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
             border-color: var(--accent);
-            box-shadow: 0 0 32px rgba(124, 255, 178, 0.1);
+            box-shadow: 0 0 30px rgba(0, 255, 170, .1);
         }
 
-        .viewport-card-icon {
+        .vp-card:nth-child(2) {
+            transition-delay: .12s;
+        }
+
+        .vp-card:nth-child(3) {
+            transition-delay: .24s;
+        }
+
+        .vp-icon {
             font-size: 2rem;
             margin-bottom: 1rem;
         }
 
-        .viewport-card-title {
+        .vp-title {
             font-family: var(--font-display);
             font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 0.4rem;
+            font-weight: 800;
+            margin-bottom: .4rem;
         }
 
-        .viewport-card-sub {
-            font-size: 0.8rem;
+        .vp-sub {
+            font-size: .8rem;
             color: var(--muted);
         }
 
-        /* ---- DEMO: SCROLL LOCK ---- */
-        #demo-lock {
-            background: var(--bg);
+        /* LOCK */
+        #s-lock {
+            background: linear-gradient(180deg, var(--surface), var(--bg));
         }
 
-        .lock-demo {
+        .lock-row {
             display: flex;
+            gap: 1rem;
             align-items: center;
-            gap: 2rem;
-            margin: 2rem 0;
             flex-wrap: wrap;
+            margin-top: 1.5rem;
         }
 
         .lock-btn {
-            padding: 1rem 2rem;
+            padding: .9rem 2rem;
             border-radius: 10px;
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            cursor: pointer;
             border: none;
-            transition: all 0.25s;
-            letter-spacing: 0.05em;
-        }
-
-        #lock-btn {
-            background: var(--accent2);
-            color: white;
-        }
-
-        #lock-btn:hover {
-            opacity: 0.85;
-            transform: scale(1.05);
-            box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
-        }
-
-        #unlock-btn {
-            background: var(--accent);
-            color: #0a0a0f;
-        }
-
-        #unlock-btn:hover {
-            opacity: 0.85;
-            transform: scale(1.05);
-            box-shadow: 0 8px 24px rgba(124, 255, 178, 0.3);
-        }
-
-        .lock-status {
             font-family: var(--font-mono);
-            font-size: 0.8rem;
-            color: var(--muted);
-            padding: 0.8rem 1.2rem;
-            border-radius: 8px;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-        }
-
-        /* ---- CODE BLOCK ---- */
-        .code-block {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 1.25rem 1.5rem;
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            color: var(--muted);
-            margin-top: 1.5rem;
-            overflow-x: auto;
-            line-height: 1.8;
-        }
-
-        .code-block .kw {
-            color: var(--accent3);
-        }
-
-        .code-block .fn {
-            color: var(--accent);
-        }
-
-        .code-block .str {
-            color: #ffd700;
-        }
-
-        .code-block .cm {
-            color: #444460;
-        }
-
-        /* ---- BACK TO TOP ---- */
-        #back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-size: 1.1rem;
+            font-size: .8rem;
+            letter-spacing: .06em;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            transform: translateY(16px);
+            transition: all .25s;
+            font-weight: 500;
         }
 
-        #back-to-top.visible {
-            opacity: 1;
-            transform: translateY(0);
+        #btn-lock {
+            background: var(--accent2);
+            color: #fff;
         }
 
-        #back-to-top:hover {
+        #btn-lock:hover {
+            box-shadow: 0 8px 24px rgba(255, 95, 109, .35);
+            transform: scale(1.04);
+        }
+
+        #btn-unlock {
             background: var(--accent);
-            color: #0a0a0f;
-            border-color: var(--accent);
-            box-shadow: 0 8px 24px rgba(124, 255, 178, 0.3);
+            color: #070709;
         }
 
-        /* ---- FOOTER ---- */
+        #btn-unlock:hover {
+            box-shadow: 0 8px 24px rgba(0, 255, 170, .35);
+            transform: scale(1.04);
+        }
+
+        #lock-status {
+            font-family: var(--font-mono);
+            font-size: .78rem;
+            color: var(--muted);
+            padding: .8rem 1.2rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
         footer {
             padding: 3rem 2.5rem;
             border-top: 1px solid var(--border);
             text-align: center;
             font-family: var(--font-mono);
-            font-size: 0.75rem;
+            font-size: .72rem;
             color: var(--muted);
         }
 
@@ -587,54 +887,29 @@
             text-decoration: none;
         }
 
-        /* ---- ANIMATIONS ---- */
-        @keyframes fadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(24px);
-            }
+        @media(max-width:680px) {
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-up {
-            opacity: 0;
-            animation: fadeUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        .fade-up:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .fade-up:nth-child(2) {
-            animation-delay: 0.25s;
-        }
-
-        .fade-up:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        .fade-up:nth-child(4) {
-            animation-delay: 0.55s;
-        }
-
-        @media (max-width: 640px) {
-
-            .position-display,
-            .scroll-targets,
-            .viewport-grid {
-                grid-template-columns: 1fr;
-            }
-
-            nav {
-                padding: 1rem 1.5rem;
+            .stats-grid,
+            .ease-grid,
+            .vp-grid,
+            .needed-demo {
+                grid-template-columns: 1fr 1fr
             }
 
             .nav-links {
-                display: none;
+                display: none
+            }
+
+            nav {
+                padding: 1rem 1.5rem
+            }
+        }
+
+        @media(max-width:440px) {
+
+            .stats-grid,
+            .needed-demo {
+                grid-template-columns: 1fr
             }
         }
     </style>
@@ -642,286 +917,470 @@
 
 <body>
 
-    <!-- Progress Bar -->
     <div id="progress-bar"></div>
+    <div class="badge" id="pct-badge">0%</div>
+    <div class="badge" id="dir-badge">— IDLE</div>
+    <div class="badge" id="end-badge">✓ scroll stopped</div>
+    <button id="back-top">↑</button>
 
-    <!-- Direction Badge -->
-    <div id="direction-badge">— IDLE —</div>
-
-    <!-- Back to Top -->
-    <button id="back-to-top" title="Back to top">↑</button>
-
-    <!-- Nav -->
     <nav id="nav">
-        <span class="nav-logo">scroll-snap-kit</span>
-        <div class="nav-links">
-            <a href="#demo-position">position</a>
-            <a href="#demo-scroll">scroll-to</a>
-            <a href="#demo-viewport">viewport</a>
-            <a href="#demo-lock">lock</a>
+        <span class="nav-logo">scroll-snap-kit v1.1</span>
+        <div class="nav-links" id="nav-links">
+            <a href="#s-position">position</a>
+            <a href="#s-spy">scroll-spy</a>
+            <a href="#s-end">onScrollEnd</a>
+            <a href="#s-needed">ifNeeded</a>
+            <a href="#s-ease">easeScroll</a>
+            <a href="#s-viewport">viewport</a>
+            <a href="#s-lock">lock</a>
         </div>
     </nav>
 
     <!-- HERO -->
     <section id="hero">
         <div class="container">
-            <div class="hero-tag fade-up">npm install scroll-snap-kit</div>
-            <h1 class="fade-up">
-                Scroll utils<br />
-                <span class="highlight">done right.</span>
-            </h1>
-            <p class="hero-sub fade-up">
-                Zero-dependency scroll utilities and React hooks for modern web apps.
-                Smooth, throttled, accessible.
-            </p>
-            <div class="hero-buttons fade-up">
-                <button class="btn btn-primary" onclick="scrollTo_('#demo-position')">See the demo ↓</button>
-                <a class="btn btn-ghost" href="https://npmjs.com/package/scroll-snap-kit" target="_blank">npm page ↗</a>
+            <div class="hero-pill">npm install scroll-snap-kit</div>
+            <h1>Scroll.<br /><span class="grad">Perfected.</span></h1>
+            <p class="hero-sub">8 scroll utilities + 5 React hooks. Zero dependencies. Tree-shakeable.</p>
+            <div class="hero-ctas">
+                <button class="btn btn-green" onclick="easeScrollTo('#s-position')">Explore demos ↓</button>
+                <a class="btn btn-ghost" href="https://npmjs.com" target="_blank">npm page ↗</a>
+            </div>
+            <div class="feature-count">
+                <div class="fc-item">
+                    <div class="fc-num">8</div>
+                    <div class="fc-label">Utilities</div>
+                </div>
+                <div class="fc-item">
+                    <div class="fc-num">5</div>
+                    <div class="fc-label">React Hooks</div>
+                </div>
+                <div class="fc-item">
+                    <div class="fc-num">0</div>
+                    <div class="fc-label">Dependencies</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- DEMO 1: Scroll Position -->
-    <section id="demo-position">
+    <!-- 01 POSITION -->
+    <section id="s-position">
         <div class="container">
-            <div class="section-label">01 — getScrollPosition()</div>
+            <div class="section-label green">01 — getScrollPosition() + onScroll()</div>
             <h2>Live scroll data.</h2>
-            <p style="color: var(--muted); max-width: 520px;">
-                Track exact pixel position and scroll percentage in real time — throttled for performance.
-            </p>
-            <div class="position-display">
-                <div class="stat-card">
-                    <div class="stat-label">Scroll Y</div>
-                    <div class="stat-value" id="stat-y">0<span class="stat-unit">px</span></div>
+            <p class="desc">Throttled scroll listener giving you exact pixel position, percentages and direction — in
+                real time.</p>
+            <div class="stats-grid">
+                <div class="stat">
+                    <div class="stat-lbl">Scroll Y</div>
+                    <div class="stat-val" id="stat-y">0<span class="stat-unit">px</span></div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Scroll X</div>
-                    <div class="stat-value" id="stat-x">0<span class="stat-unit">px</span></div>
+                <div class="stat">
+                    <div class="stat-lbl">Page progress</div>
+                    <div class="stat-val" id="stat-pct">0<span class="stat-unit">%</span></div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Page progress</div>
-                    <div class="stat-value" id="stat-pctY">0<span class="stat-unit">%</span></div>
+                <div class="stat">
+                    <div class="stat-lbl">Direction</div>
+                    <div class="stat-val" id="stat-dir" style="font-size:1.3rem;color:var(--text)">—</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-label">Scroll direction</div>
-                    <div class="stat-value" id="stat-dir" style="font-size:1.4rem; color: var(--text);">—</div>
+                <div class="stat">
+                    <div class="stat-lbl">Scroll X</div>
+                    <div class="stat-val" id="stat-x">0<span class="stat-unit">px</span></div>
                 </div>
             </div>
-            <div class="code-block">
-                <span class="cm">// Vanilla JS</span><br />
-                <span class="kw">import</span> { onScroll, getScrollPosition } <span class="kw">from</span> <span
-                    class="str">'scroll-snap-kit'</span><br /><br />
-                <span class="fn">onScroll</span>(({ y, percentY }) => {<br />
-                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">`Scrolled ${percentY}%
-                    down`</span>)<br />
-                }, { throttle: <span class="str">100</span> })
+            <div class="code">
+                <span class="cm">// Throttled scroll listener — returns cleanup fn</span><br />
+                <span class="kw">const</span> stop = <span class="fn">onScroll</span>(({ y, percentY }) => {<br />
+                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">`${percentY}% down the
+                    page`</span>)<br />
+                }, { throttle: <span class="str">100</span> })<br />
+                stop() <span class="cm">// removes listener</span>
             </div>
         </div>
     </section>
 
-    <!-- DEMO 2: Scroll To -->
-    <section id="demo-scroll">
+    <!-- 02 SCROLL SPY -->
+    <section id="s-spy">
         <div class="container">
-            <div class="section-label">02 — scrollTo()</div>
-            <h2>Jump anywhere.</h2>
-            <p style="color: var(--muted); max-width: 520px;">
-                Click a card to smooth-scroll to that section. Supports elements, pixel values, and offset adjustments.
-            </p>
-            <div class="scroll-targets">
-                <div class="target-card" onclick="scrollTo_('#hero')">
-                    <div class="target-icon">🚀</div>
-                    <div class="target-name">Hero</div>
-                    <div class="target-desc">scrollTo(#hero)</div>
-                </div>
-                <div class="target-card" onclick="scrollTo_('#demo-viewport')">
-                    <div class="target-icon">👁</div>
-                    <div class="target-name">Viewport</div>
-                    <div class="target-desc">scrollTo(#viewport)</div>
-                </div>
-                <div class="target-card" onclick="scrollTo_('#demo-lock')">
-                    <div class="target-icon">🔒</div>
-                    <div class="target-name">Lock</div>
-                    <div class="target-desc">scrollTo(#lock)</div>
+            <div class="section-label blue">02 — scrollSpy()</div>
+            <h2>Nav that knows where you are.</h2>
+            <p class="desc">Automatically highlights nav links based on which section is currently active. The top nav
+                is using it right now — watch it update as you scroll.</p>
+            <div class="spy-demo">
+                <div class="spy-hint">↑ Watch the top nav update. Or click these mini-nav links:</div>
+                <div class="spy-nav" id="spy-mini">
+                    <a href="#s-position" class="spy-link">position</a>
+                    <a href="#s-spy" class="spy-link">scroll-spy</a>
+                    <a href="#s-end" class="spy-link">onScrollEnd</a>
+                    <a href="#s-needed" class="spy-link">ifNeeded</a>
+                    <a href="#s-ease" class="spy-link">easeScroll</a>
+                    <a href="#s-viewport" class="spy-link">viewport</a>
+                    <a href="#s-lock" class="spy-link">lock</a>
                 </div>
             </div>
-            <div class="code-block">
-                <span class="cm">// Scroll to element with -80px offset (sticky header!)</span><br />
-                <span class="fn">scrollTo</span>(document.<span class="fn">querySelector</span>(<span
-                    class="str">'#section'</span>), { offset: <span class="str">-80</span> })<br /><br />
-                <span class="cm">// Scroll to pixel value</span><br />
-                <span class="fn">scrollTo</span>(<span class="str">500</span>)<br /><br />
-                <span class="fn">scrollToTop</span>() &nbsp;<span class="cm">// back to top</span><br />
-                <span class="fn">scrollToBottom</span>() <span class="cm">// jump to bottom</span>
+            <div class="code">
+                <span class="cm">// Highlights &lt;a href="#id"&gt; matching the current section</span><br />
+                <span class="kw">const</span> stop = <span class="fn">scrollSpy</span>(<br />
+                &nbsp;&nbsp;<span class="str">'section[id]'</span>,<br />
+                &nbsp;&nbsp;<span class="str">'nav a'</span>,<br />
+                &nbsp;&nbsp;{ offset: <span class="str">80</span>, activeClass: <span class="str">'active'</span>
+                }<br />
+                )<br />
+                stop() <span class="cm">// remove listener</span>
             </div>
         </div>
     </section>
 
-    <!-- DEMO 3: isInViewport -->
-    <section id="demo-viewport">
+    <!-- 03 SCROLL END -->
+    <section id="s-end">
         <div class="container">
-            <div class="section-label">03 — isInViewport() / useInViewport()</div>
+            <div class="section-label yellow">03 — onScrollEnd()</div>
+            <h2>When scrolling stops.</h2>
+            <p class="desc">Fire a callback once the user has stopped scrolling for a configurable delay. Great for
+                lazy-loading, analytics, or autosave.</p>
+            <div class="end-display">
+                <div class="end-indicator" id="end-indicator">⏱</div>
+                <div class="end-text">
+                    <div class="title">Scroll, then stop.</div>
+                    <div class="sub">Indicator fires after <strong style="color:var(--accent4)">200ms</strong> of no
+                        scrolling.<br />Fired <span id="end-count">0</span> times this session.</div>
+                </div>
+            </div>
+            <div class="code">
+                <span class="cm">// Fires once idle for `delay` ms</span><br />
+                <span class="kw">const</span> stop = <span class="fn">onScrollEnd</span>(() => {<br />
+                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">'User stopped
+                    scrolling!'</span>)<br />
+                }, { delay: <span class="str">200</span> })<br />
+                stop()
+            </div>
+        </div>
+    </section>
+
+    <!-- 04 IF NEEDED -->
+    <section id="s-needed">
+        <div class="container">
+            <div class="section-label blue">04 — scrollIntoViewIfNeeded()</div>
+            <h2>Only scroll when necessary.</h2>
+            <p class="desc">Scrolls to an element only if it's outside the viewport. Click a card — if the target
+                section is already visible, nothing happens.</p>
+            <div class="needed-demo">
+                <div class="needed-card" onclick="needScroll('#s-position')">
+                    <div class="icon">📍</div>
+                    <div class="name">Position section</div>
+                    <div class="sub">scrollIntoViewIfNeeded()</div>
+                </div>
+                <div class="needed-card" onclick="needScroll('#s-ease')">
+                    <div class="icon">🎢</div>
+                    <div class="name">Ease section</div>
+                    <div class="sub">scrollIntoViewIfNeeded()</div>
+                </div>
+                <div class="needed-card" onclick="needScroll('#s-lock')">
+                    <div class="icon">🔒</div>
+                    <div class="name">Lock section</div>
+                    <div class="sub">scrollIntoViewIfNeeded()</div>
+                </div>
+                <div class="needed-card" onclick="needScroll('#hero')">
+                    <div class="icon">🚀</div>
+                    <div class="name">Hero (top)</div>
+                    <div class="sub">scrollIntoViewIfNeeded()</div>
+                </div>
+            </div>
+            <div id="needed-log">Click a card above — the log will tell you if a scroll was needed.</div>
+            <div class="code">
+                <span class="cm">// Only scrolls if element is off-screen</span><br />
+                <span class="fn">scrollIntoViewIfNeeded</span>(element)<br /><br />
+                <span class="cm">// threshold: how much must be visible to skip scroll</span><br />
+                <span class="fn">scrollIntoViewIfNeeded</span>(el, { threshold: <span class="str">0.5</span>, offset:
+                <span class="str">-80</span> })
+            </div>
+        </div>
+    </section>
+
+    <!-- 05 EASE SCROLL -->
+    <section id="s-ease">
+        <div class="container">
+            <div class="section-label red">05 — easeScroll() + Easings</div>
+            <h2>Custom easing curves.</h2>
+            <p class="desc">Bypass the browser's native smooth scroll with fully custom easing. Pick one below and watch
+                the ball animate across the track.</p>
+            <div class="ease-grid" id="ease-grid">
+                <div class="ease-btn active" data-easing="easeInOutCubic">
+                    <div class="ease-name">easeInOutCubic</div>
+                    <div class="ease-desc">smooth in & out</div>
+                </div>
+                <div class="ease-btn" data-easing="easeOutElastic">
+                    <div class="ease-name">easeOutElastic</div>
+                    <div class="ease-desc">springy overshoot</div>
+                </div>
+                <div class="ease-btn" data-easing="easeOutBounce">
+                    <div class="ease-name">easeOutBounce</div>
+                    <div class="ease-desc">bouncy landing</div>
+                </div>
+                <div class="ease-btn" data-easing="easeOutQuart">
+                    <div class="ease-name">easeOutQuart</div>
+                    <div class="ease-desc">fast decelerate</div>
+                </div>
+                <div class="ease-btn" data-easing="linear">
+                    <div class="ease-name">linear</div>
+                    <div class="ease-desc">constant speed</div>
+                </div>
+                <div class="ease-btn" data-easing="easeInQuad">
+                    <div class="ease-name">easeInQuad</div>
+                    <div class="ease-desc">slow start</div>
+                </div>
+            </div>
+            <div class="ease-vis">
+                <div class="ease-canvas-wrap">
+                    <div id="ease-track"></div>
+                    <div id="ease-ball"></div>
+                </div>
+                <div class="ease-status">Active: <span id="ease-current">easeInOutCubic</span> &nbsp;—&nbsp; <button
+                        class="btn btn-ghost" style="padding:.4rem 1rem;font-size:.72rem;display:inline-flex"
+                        onclick="runBall()">▶ Play</button></div>
+            </div>
+            <div class="code">
+                <span class="kw">await</span> <span class="fn">easeScroll</span>(<span class="str">'#contact'</span>,
+                {<br />
+                &nbsp;&nbsp;duration: <span class="str">800</span>,<br />
+                &nbsp;&nbsp;easing: Easings.<span class="fn">easeOutElastic</span><br />
+                })<br /><br />
+                <span class="cm">// BYO easing function</span><br />
+                <span class="fn">easeScroll</span>(el, { easing: t => t * t * t })
+            </div>
+        </div>
+    </section>
+
+    <!-- 06 VIEWPORT -->
+    <section id="s-viewport">
+        <div class="container">
+            <div class="section-label green">06 — isInViewport() / useInViewport()</div>
             <h2>Visibility detection.</h2>
-            <p style="color: var(--muted); max-width: 520px;">
-                These cards animate in as they enter the viewport. Powered by <code
-                    style="font-family:var(--font-mono); color: var(--accent); font-size:0.9em;">useInViewport()</code>
-                with IntersectionObserver.
-            </p>
-            <div class="viewport-grid">
-                <div class="viewport-card" data-observe>
-                    <div class="viewport-card-icon">⚡</div>
-                    <div class="viewport-card-title">Fast</div>
-                    <div class="viewport-card-sub">IntersectionObserver powered</div>
+            <p class="desc">These cards animate in as they enter the viewport — mirrors the <code
+                    style="font-family:var(--font-mono);color:var(--accent);font-size:.9em">useInViewport()</code> React
+                hook behaviour.</p>
+            <div class="vp-grid">
+                <div class="vp-card" data-vp>
+                    <div class="vp-icon">⚡</div>
+                    <div class="vp-title">Fast</div>
+                    <div class="vp-sub">IntersectionObserver — no scroll listeners</div>
                 </div>
-                <div class="viewport-card" data-observe style="transition-delay: 0.15s">
-                    <div class="viewport-card-icon">🎯</div>
-                    <div class="viewport-card-title">Precise</div>
-                    <div class="viewport-card-sub">Configurable threshold</div>
+                <div class="vp-card" data-vp>
+                    <div class="vp-icon">🎯</div>
+                    <div class="vp-title">Precise</div>
+                    <div class="vp-sub">Configurable threshold 0–1</div>
                 </div>
-                <div class="viewport-card" data-observe style="transition-delay: 0.3s">
-                    <div class="viewport-card-icon">✨</div>
-                    <div class="viewport-card-title">Once</div>
-                    <div class="viewport-card-sub">Trigger only on first enter</div>
+                <div class="vp-card" data-vp>
+                    <div class="vp-icon">🔂</div>
+                    <div class="vp-title">once: true</div>
+                    <div class="vp-sub">Trigger animation only first time</div>
                 </div>
             </div>
-            <div class="code-block">
-                <span class="cm">// React hook</span><br />
+            <div class="code">
                 <span class="kw">const</span> [ref, inView] = <span class="fn">useInViewport</span>({ threshold: <span
-                    class="str">0.2</span>, once: <span class="str">true</span> })<br /><br />
+                    class="str">0.2</span>, once: <span class="str">true</span> })<br />
                 <span class="kw">return</span> &lt;<span class="fn">div</span> ref={ref} style={{ opacity: inView ?
-                <span class="str">1</span> : <span class="str">0</span> }}&gt;<br />
-                &nbsp;&nbsp;I fade in when visible!<br />
-                &lt;/<span class="fn">div</span>&gt;
+                <span class="str">1</span> : <span class="str">0</span> }}&gt;...&lt;/<span class="fn">div</span>&gt;
             </div>
         </div>
     </section>
 
-    <!-- DEMO 4: Scroll Lock -->
-    <section id="demo-lock">
+    <!-- 07 LOCK -->
+    <section id="s-lock">
         <div class="container">
-            <div class="section-label">04 — lockScroll() / unlockScroll()</div>
+            <div class="section-label red">07 — lockScroll() / unlockScroll()</div>
             <h2>Freeze the page.</h2>
-            <p style="color: var(--muted); max-width: 520px;">
-                Prevent body scroll when a modal or drawer is open, then restore the exact scroll position on unlock.
-            </p>
-            <div class="lock-demo">
-                <button class="lock-btn" id="lock-btn" onclick="handleLock()">🔒 Lock Scroll</button>
-                <button class="lock-btn" id="unlock-btn" onclick="handleUnlock()">🔓 Unlock Scroll</button>
-                <div class="lock-status" id="lock-status">Status: <strong>unlocked</strong></div>
+            <p class="desc">Lock body scroll for modals or drawers. Restores the exact position on unlock — no layout
+                jump.</p>
+            <div class="lock-row">
+                <button class="lock-btn" id="btn-lock" onclick="doLock()">🔒 Lock</button>
+                <button class="lock-btn" id="btn-unlock" onclick="doUnlock()">🔓 Unlock</button>
+                <div id="lock-status">Status: <strong>unlocked</strong></div>
             </div>
-            <div class="code-block">
-                <span class="cm">// When opening a modal</span><br />
-                <span class="fn">lockScroll</span>()<br /><br />
-                <span class="cm">// When closing — restores scroll position automatically</span><br />
-                <span class="fn">unlockScroll</span>()
+            <div class="code">
+                <span class="fn">lockScroll</span>() <span class="cm">// body freezes, position saved</span><br />
+                <span class="fn">unlockScroll</span>() <span class="cm">// position restored perfectly</span>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
     <footer>
-        <p>Built with <a href="https://npmjs.com/package/scroll-snap-kit">scroll-snap-kit</a> — MIT License — Made with
-            ♥</p>
+        <p><a href="https://npmjs.com/package/scroll-snap-kit">scroll-snap-kit</a> — MIT License — 8 utilities · 5 hooks
+            · 0 dependencies</p>
     </footer>
 
     <script>
-        // ---- POLYFILL: scroll-snap-kit utilities (inline for demo) ----
-        function scrollTo_(target, options = {}) {
-            const { behavior = 'smooth', offset = 0 } = options;
-            if (typeof target === 'string') target = document.querySelector(target);
-            if (typeof target === 'number') { window.scrollTo({ top: target + offset, behavior }); return; }
-            if (!(target instanceof Element)) return;
-            const y = target.getBoundingClientRect().top + window.scrollY + offset - 70;
-            window.scrollTo({ top: y, behavior });
+        // ── Easings ──
+        const Easings = {
+            linear: t => t,
+            easeInQuad: t => t * t,
+            easeInOutCubic: t => t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
+            easeOutQuart: t => 1 - (--t) * t * t * t,
+            easeOutElastic: t => { const c4 = (2 * Math.PI) / 3; return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - .75) * c4) + 1; },
+            easeOutBounce: t => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + .75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + .9375; return n * (t -= 2.625 / d) * t + .984375; },
+        };
+
+        // ── easeScrollTo ──
+        function easeScrollTo(target, opts = {}) {
+            const { duration = 700, easing = Easings.easeInOutCubic, offset = -80 } = opts;
+            const el = typeof target === 'string' ? document.querySelector(target) : target;
+            const targetY = (el ? el.getBoundingClientRect().top + window.scrollY : +target) + offset;
+            const startY = window.scrollY, dist = targetY - startY, t0 = performance.now();
+            return new Promise(res => {
+                function step(now) {
+                    const p = Math.min((now - t0) / duration, 1);
+                    window.scrollTo(0, startY + dist * easing(p));
+                    p < 1 ? requestAnimationFrame(step) : res();
+                }
+                requestAnimationFrame(step);
+            });
         }
 
-        function getScrollPosition() {
-            const x = window.scrollX, y = window.scrollY;
-            const maxX = document.body.scrollWidth - window.innerWidth;
-            const maxY = document.body.scrollHeight - window.innerHeight;
-            return { x, y, percentX: maxX > 0 ? Math.round((x / maxX) * 100) : 0, percentY: maxY > 0 ? Math.round((y / maxY) * 100) : 0 };
+        // ── scrollIntoViewIfNeeded ──
+        function scrollIntoViewIfNeeded(target, opts = {}) {
+            const { threshold = 1, offset = 0 } = opts;
+            const el = typeof target === 'string' ? document.querySelector(target) : target;
+            if (!el) return { scrolled: false };
+            const rect = el.getBoundingClientRect(), wh = window.innerHeight, ww = window.innerWidth;
+            const vh = Math.min(rect.bottom, wh) - Math.max(rect.top, 0);
+            const vw = Math.min(rect.right, ww) - Math.max(rect.left, 0);
+            const ratio = (Math.max(0, vh) * Math.max(0, vw)) / (rect.height * rect.width);
+            if (ratio >= threshold) return { scrolled: false };
+            window.scrollTo({ top: rect.top + window.scrollY + offset, behavior: 'smooth' });
+            return { scrolled: true };
         }
 
-        function lockScroll() {
-            const scrollY = window.scrollY;
-            document.body.style.position = 'fixed';
-            document.body.style.top = `-${scrollY}px`;
-            document.body.style.width = '100%';
+        // ── scroll spy ──
+        function initSpy(secSel, linkSelectors, opts = {}) {
+            const { offset = 80, activeClass = 'scroll-spy-active' } = opts;
+            const sections = Array.from(document.querySelectorAll(secSel));
+            const linkGroups = linkSelectors.map(s => Array.from(document.querySelectorAll(s)));
+            function update() {
+                const sy = window.scrollY + offset;
+                let cur = sections[0];
+                for (const s of sections) { if (s.offsetTop <= sy) cur = s; }
+                linkGroups.forEach(links => links.forEach(link => {
+                    link.classList.remove(activeClass);
+                    if (link.getAttribute('href') === '#' + cur?.id) link.classList.add(activeClass);
+                }));
+            }
+            update();
+            window.addEventListener('scroll', update, { passive: true });
         }
 
-        function unlockScroll() {
-            const scrollY = document.body.style.top;
-            document.body.style.position = '';
-            document.body.style.top = '';
-            document.body.style.width = '';
-            window.scrollTo(0, parseInt(scrollY || '0') * -1);
-        }
+        // ── lock ──
+        function lockScroll() { const sy = window.scrollY; document.body.style.cssText = `position:fixed;top:-${sy}px;width:100%`; }
+        function unlockScroll() { const sy = document.body.style.top; document.body.style.cssText = ''; window.scrollTo(0, parseInt(sy || '0') * -1); }
 
-        // ---- SCROLL LISTENER ----
-        let lastY = 0;
-        let ticking = false;
+        // ── BOOT ──
+        let lastY = 0, ticking = false, endTimer = null, endCount = 0;
 
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 requestAnimationFrame(() => {
-                    const { x, y, percentX, percentY } = getScrollPosition();
+                    const x = window.scrollX, y = window.scrollY;
+                    const maxY = document.body.scrollHeight - window.innerHeight;
+                    const pct = maxY > 0 ? Math.round((y / maxY) * 100) : 0;
 
-                    // Progress bar
-                    document.getElementById('progress-bar').style.width = percentY + '%';
-
-                    // Stats
+                    document.getElementById('progress-bar').style.width = pct + '%';
                     document.getElementById('stat-y').innerHTML = `${y}<span class="stat-unit">px</span>`;
                     document.getElementById('stat-x').innerHTML = `${x}<span class="stat-unit">px</span>`;
-                    document.getElementById('stat-pctY').innerHTML = `${percentY}<span class="stat-unit">%</span>`;
+                    document.getElementById('stat-pct').innerHTML = `${pct}<span class="stat-unit">%</span>`;
+                    document.getElementById('pct-badge').textContent = pct + '% scrolled';
 
-                    // Direction
                     const dir = y > lastY ? 'down' : 'up';
                     const dirEl = document.getElementById('stat-dir');
-                    const badge = document.getElementById('direction-badge');
+                    const badge = document.getElementById('dir-badge');
                     dirEl.textContent = dir === 'down' ? '↓ Down' : '↑ Up';
                     dirEl.style.color = dir === 'down' ? 'var(--accent2)' : 'var(--accent)';
                     badge.textContent = dir === 'down' ? '↓ SCROLLING DOWN' : '↑ SCROLLING UP';
-                    badge.className = dir;
+                    badge.className = 'badge ' + (dir === 'down' ? 'down' : 'up');
 
-                    // Nav hide/show
                     const nav = document.getElementById('nav');
                     nav.classList.toggle('scrolled', y > 10);
                     nav.classList.toggle('hidden', y > lastY && y > 200);
+                    document.getElementById('back-top').classList.toggle('show', y > 300);
 
-                    // Back to top
-                    document.getElementById('back-to-top').classList.toggle('visible', y > 300);
+                    // onScrollEnd
+                    clearTimeout(endTimer);
+                    endTimer = setTimeout(() => {
+                        endCount++;
+                        document.getElementById('end-count').textContent = endCount;
+                        const ind = document.getElementById('end-indicator');
+                        ind.classList.add('fired'); ind.textContent = '✓';
+                        document.getElementById('end-badge').classList.add('show');
+                        setTimeout(() => {
+                            ind.classList.remove('fired'); ind.textContent = '⏱';
+                            document.getElementById('end-badge').classList.remove('show');
+                        }, 1800);
+                    }, 200);
 
-                    lastY = y;
-                    ticking = false;
+                    lastY = y; ticking = false;
                 });
                 ticking = true;
             }
         }, { passive: true });
 
-        // ---- SCROLL LOCK ----
-        function handleLock() {
-            lockScroll();
-            document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--accent2)">locked 🔒</strong>';
-        }
-        function handleUnlock() {
-            unlockScroll();
-            document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--accent)">unlocked 🔓</strong>';
-        }
+        // scroll spy — nav + mini nav
+        initSpy('section[id]', ['#nav-links a', '#spy-mini a'], { offset: 200 });
 
-        // ---- BACK TO TOP ----
-        document.getElementById('back-to-top').addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // viewport observer
+        const vpObs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }), { threshold: .2 });
+        document.querySelectorAll('[data-vp]').forEach(el => vpObs.observe(el));
+
+        // anchor smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => { e.preventDefault(); easeScrollTo(a.getAttribute('href'), { offset: -70, duration: 700 }); });
         });
 
-        // ---- INTERSECTION OBSERVER for viewport cards ----
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.2 });
+        // back to top
+        document.getElementById('back-top').addEventListener('click', () => easeScrollTo('#hero', { offset: 0, duration: 900 }));
 
-        document.querySelectorAll('[data-observe]').forEach(el => observer.observe(el));
+        // ifNeeded demo
+        function needScroll(sel) {
+            const r = scrollIntoViewIfNeeded(sel, { threshold: .9, offset: -80 });
+            document.getElementById('needed-log').innerHTML = r.scrolled
+                ? `<span style="color:var(--accent)">✓ Scrolled</span> — ${sel} was outside the viewport.`
+                : `<span style="color:var(--muted)">— Skipped</span> — ${sel} was already ≥90% visible. No scroll needed!`;
+        }
+
+        // ease ball demo
+        let currentEasing = 'easeInOutCubic', ballRunning = false;
+        document.querySelectorAll('.ease-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.ease-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentEasing = btn.dataset.easing;
+                document.getElementById('ease-current').textContent = currentEasing;
+                runBall();
+            });
+        });
+
+        function runBall() {
+            if (ballRunning) return;
+            ballRunning = true;
+            const ball = document.getElementById('ease-ball');
+            const trackW = document.getElementById('ease-track').offsetWidth - 20;
+            const easing = Easings[currentEasing];
+            const dur = 1000, t0 = performance.now();
+            function step(now) {
+                const p = Math.min((now - t0) / dur, 1);
+                ball.style.transform = `translateY(-50%) translateX(${easing(p) * trackW}px)`;
+                if (p < 1) { requestAnimationFrame(step); }
+                else {
+                    setTimeout(() => {
+                        const s2 = performance.now();
+                        function back(n) { const p2 = Math.min((n - s2) / 600, 1); ball.style.transform = `translateY(-50%) translateX(${(1 - p2) * trackW}px)`; p2 < 1 ? requestAnimationFrame(back) : ballRunning = false; }
+                        requestAnimationFrame(back);
+                    }, 350);
+                }
+            }
+            requestAnimationFrame(step);
+        }
+
+        // lock demo
+        function doLock() { lockScroll(); document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--accent2)">locked 🔒</strong>'; }
+        function doUnlock() { unlockScroll(); document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--accent)">unlocked 🔓</strong>'; }
     </script>
 </body>
 

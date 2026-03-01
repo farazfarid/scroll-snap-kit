@@ -11,6 +11,12 @@ export {
     isInViewport,
     lockScroll,
     unlockScroll,
+    // New in v1.1
+    scrollSpy,
+    onScrollEnd,
+    scrollIntoViewIfNeeded,
+    easeScroll,
+    Easings,
 } from './utils.js';
 
 export {
