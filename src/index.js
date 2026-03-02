@@ -17,6 +17,11 @@ export {
     scrollIntoViewIfNeeded,
     easeScroll,
     Easings,
+    // v1.2
+    scrollSequence,
+    parallax,
+    scrollProgress,
+    snapToSection,
 } from './utils.js';
 
 export {

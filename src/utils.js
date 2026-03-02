@@ -335,3 +335,143 @@ export function easeScroll(target, options = {}) {
         requestAnimationFrame(step);
     });
 }
+
+// ─────────────────────────────────────────────
+// v1.2 FEATURES
+// ─────────────────────────────────────────────
+
+/**
+ * scrollSequence — run multiple easeScroll animations one after another.
+ * Returns { promise, cancel } — cancel() aborts mid-sequence.
+ *
+ * @example
+ * const { promise, cancel } = scrollSequence([
+ *   { target: '#intro',    duration: 600 },
+ *   { target: '#features', duration: 800, pause: 400 },
+ *   { target: '#pricing',  duration: 600, easing: Easings.easeOutElastic },
+ * ])
+ */
+export function scrollSequence(steps) {
+    let cancelled = false;
+    const promise = (async () => {
+        for (const step of steps) {
+            if (cancelled) break;
+            const { target, duration = 600, easing = Easings.easeInOutCubic, offset = 0, pause = 0 } = step;
+            await easeScroll(target, { duration, easing, offset });
+            if (pause > 0 && !cancelled) await new Promise(res => setTimeout(res, pause));
+        }
+    })();
+    return { promise, cancel: () => { cancelled = true; } };
+}
+
+/**
+ * parallax — attach a parallax scroll effect to one or more elements.
+ * speed < 1 = slower (background), speed > 1 = faster (foreground), speed < 0 = reverse.
+ * Returns a destroy / cleanup function.
+ *
+ * @example
+ * const destroy = parallax('.hero-bg', { speed: 0.4 })
+ * const destroy = parallax('.clouds',  { speed: -0.2, axis: 'x' })
+ */
+export function parallax(targets, options = {}) {
+    const { speed = 0.5, axis = 'y', container } = options;
+    let els;
+    if (typeof targets === 'string') els = Array.from(document.querySelectorAll(targets));
+    else if (targets instanceof Element) els = [targets];
+    else els = Array.from(targets);
+    if (!els.length) { console.warn('[scroll-snap-kit] parallax: no elements found'); return () => { }; }
+
+    const origins = els.map(el => ({
+        el,
+        originY: el.getBoundingClientRect().top + window.scrollY,
+        originX: el.getBoundingClientRect().left + window.scrollX,
+    }));
+
+    let rafId = null;
+    function update() {
+        const scrollY = container ? container.scrollTop : window.scrollY;
+        const scrollX = container ? container.scrollLeft : window.scrollX;
+        origins.forEach(({ el, originY, originX }) => {
+            const dy = (scrollY - (originY - window.innerHeight / 2)) * (speed - 1);
+            const dx = (scrollX - (originX - window.innerWidth / 2)) * (speed - 1);
+            if (axis === 'y') el.style.transform = `translateY(${dy}px)`;
+            else if (axis === 'x') el.style.transform = `translateX(${dx}px)`;
+            else el.style.transform = `translate(${dx}px, ${dy}px)`;
+        });
+        rafId = null;
+    }
+    const handler = () => { if (!rafId) rafId = requestAnimationFrame(update); };
+    const t = container || window;
+    t.addEventListener('scroll', handler, { passive: true });
+    update();
+    return () => {
+        t.removeEventListener('scroll', handler);
+        if (rafId) cancelAnimationFrame(rafId);
+        origins.forEach(({ el }) => { el.style.transform = ''; });
+    };
+}
+
+/**
+ * scrollProgress — track how far the user has scrolled through a specific element (0→1).
+ * 0 = element top just entered the viewport, 1 = element bottom just left the viewport.
+ * Returns a cleanup function.
+ *
+ * @example
+ * const stop = scrollProgress('#article', progress => {
+ *   bar.style.width = `${progress * 100}%`
+ * })
+ */
+export function scrollProgress(element, callback, options = {}) {
+    const el = typeof element === 'string' ? document.querySelector(element) : element;
+    if (!el) { console.warn('[scroll-snap-kit] scrollProgress: element not found'); return () => { }; }
+    const { offset = 0 } = options;
+    function calculate() {
+        const rect = el.getBoundingClientRect();
+        const wh = window.innerHeight;
+        const total = rect.height + wh;
+        const passed = wh - rect.top + offset;
+        callback(Math.min(1, Math.max(0, passed / total)));
+    }
+    calculate();
+    window.addEventListener('scroll', calculate, { passive: true });
+    window.addEventListener('resize', calculate);
+    return () => {
+        window.removeEventListener('scroll', calculate);
+        window.removeEventListener('resize', calculate);
+    };
+}
+
+/**
+ * snapToSection — after scrolling stops, auto-snap to the nearest section.
+ * Returns a destroy function.
+ *
+ * @example
+ * const destroy = snapToSection('section[id]', { delay: 150, offset: -70 })
+ */
+export function snapToSection(sections, options = {}) {
+    const { delay = 150, offset = 0, duration = 500, easing = Easings.easeInOutCubic } = options;
+    const els = typeof sections === 'string'
+        ? Array.from(document.querySelectorAll(sections))
+        : Array.from(sections);
+    if (!els.length) { console.warn('[scroll-snap-kit] snapToSection: no sections found'); return () => { }; }
+
+    let timer = null, snapping = false;
+    const handler = () => {
+        clearTimeout(timer);
+        timer = setTimeout(async () => {
+            if (snapping) return;
+            snapping = true;
+            const scrollMid = window.scrollY + window.innerHeight / 2;
+            let closest = els[0], minDist = Infinity;
+            els.forEach(el => {
+                const mid = el.offsetTop + el.offsetHeight / 2;
+                const d = Math.abs(mid - scrollMid);
+                if (d < minDist) { minDist = d; closest = el; }
+            });
+            await easeScroll(closest, { duration, easing, offset });
+            snapping = false;
+        }, delay);
+    };
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => { clearTimeout(timer); window.removeEventListener('scroll', handler); };
+}

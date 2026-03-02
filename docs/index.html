@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>scroll-snap-kit — Interactive Demo</title>
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800;900&family=Instrument+Sans:wght@300;400;500&display=swap"
@@ -14,38 +14,39 @@
         *::after {
             box-sizing: border-box;
             margin: 0;
-            padding: 0;
+            padding: 0
         }
 
         :root {
             --bg: #070709;
             --surface: #0f0f14;
-            --surface2: #17171f;
-            --surface3: #1f1f2a;
+            --s2: #17171f;
+            --s3: #1f1f2a;
             --border: #252530;
             --border2: #323240;
-            --accent: #00ffaa;
-            --accent2: #ff5f6d;
-            --accent3: #5f8dff;
-            --accent4: #ffcc44;
+            --g: #00ffaa;
+            --r: #ff5f6d;
+            --b: #5f8dff;
+            --y: #ffcc44;
+            --p: #c084fc;
             --text: #ddddf0;
             --muted: #666688;
-            --font-display: 'Syne', sans-serif;
-            --font-body: 'Instrument Sans', sans-serif;
-            --font-mono: 'DM Mono', monospace;
+            --fd: 'Syne', sans-serif;
+            --fb: 'Instrument Sans', sans-serif;
+            --fm: 'DM Mono', monospace;
         }
 
         html {
-            scroll-behavior: auto;
+            scroll-behavior: auto
         }
 
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: var(--font-body);
+            font-family: var(--fb);
             font-weight: 300;
             line-height: 1.7;
-            overflow-x: hidden;
+            overflow-x: hidden
         }
 
         body::after {
@@ -55,7 +56,7 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.45;
+            opacity: .45
         }
 
         #progress-bar {
@@ -64,10 +65,10 @@
             left: 0;
             height: 2px;
             z-index: 2000;
-            background: linear-gradient(90deg, var(--accent), var(--accent3), var(--accent2));
+            background: linear-gradient(90deg, var(--g), var(--b), var(--r));
             width: 0%;
-            box-shadow: 0 0 16px var(--accent);
-            transition: width 0.08s linear;
+            box-shadow: 0 0 16px var(--g);
+            transition: width .08s linear
         }
 
         nav {
@@ -80,100 +81,101 @@
             align-items: center;
             justify-content: space-between;
             padding: 1rem 2.5rem;
-            background: rgba(7, 7, 9, 0.82);
+            background: rgba(7, 7, 9, .85);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid transparent;
-            transition: border-color .3s, transform .4s cubic-bezier(.4, 0, .2, 1);
+            transition: border-color .3s, transform .4s cubic-bezier(.4, 0, .2, 1)
         }
 
         nav.scrolled {
-            border-color: var(--border);
+            border-color: var(--border)
         }
 
         nav.hidden {
-            transform: translateY(-100%);
+            transform: translateY(-100%)
         }
 
         .nav-logo {
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .8rem;
-            color: var(--accent);
-            letter-spacing: .06em;
+            color: var(--g);
+            letter-spacing: .06em
         }
 
         .nav-links {
             display: flex;
-            gap: 1.6rem;
+            gap: 1.4rem;
+            flex-wrap: wrap
         }
 
         .nav-links a {
-            font-family: var(--font-mono);
-            font-size: .7rem;
+            font-family: var(--fm);
+            font-size: .65rem;
             color: var(--muted);
             text-decoration: none;
             letter-spacing: .1em;
             text-transform: uppercase;
             padding-bottom: 2px;
             border-bottom: 1px solid transparent;
-            transition: color .2s, border-color .2s;
+            transition: color .2s, border-color .2s
         }
 
         .nav-links a:hover {
-            color: var(--text);
+            color: var(--text)
         }
 
-        .nav-links a.scroll-spy-active {
-            color: var(--accent);
-            border-color: var(--accent);
+        .nav-links a.active {
+            color: var(--g);
+            border-color: var(--g)
         }
 
         .badge {
             position: fixed;
             z-index: 400;
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .68rem;
             padding: .35rem .8rem;
             border-radius: 999px;
             border: 1px solid var(--border2);
-            background: var(--surface);
+            background: var(--s2);
             color: var(--muted);
             letter-spacing: .1em;
-            transition: all .3s;
+            transition: all .3s
         }
 
         #dir-badge {
             top: 4.8rem;
-            right: 2rem;
+            right: 2rem
         }
 
         #pct-badge {
             top: 4.8rem;
-            left: 2rem;
+            left: 2rem
         }
 
         #end-badge {
             top: 7.2rem;
             right: 2rem;
-            opacity: 0;
+            opacity: 0
         }
 
         #dir-badge.up {
-            color: var(--accent);
-            border-color: var(--accent);
-            box-shadow: 0 0 10px rgba(0, 255, 170, .2);
+            color: var(--g);
+            border-color: var(--g);
+            box-shadow: 0 0 10px rgba(0, 255, 170, .2)
         }
 
         #dir-badge.down {
-            color: var(--accent2);
-            border-color: var(--accent2);
-            box-shadow: 0 0 10px rgba(255, 95, 109, .2);
+            color: var(--r);
+            border-color: var(--r);
+            box-shadow: 0 0 10px rgba(255, 95, 109, .2)
         }
 
         #end-badge.show {
             opacity: 1;
-            color: var(--accent4);
-            border-color: var(--accent4);
-            box-shadow: 0 0 10px rgba(255, 204, 68, .25);
+            color: var(--y);
+            border-color: var(--y);
+            box-shadow: 0 0 10px rgba(255, 204, 68, .25)
         }
 
         #back-top {
@@ -184,7 +186,7 @@
             width: 42px;
             height: 42px;
             border-radius: 10px;
-            background: var(--surface2);
+            background: var(--s2);
             border: 1px solid var(--border2);
             color: var(--text);
             font-size: 1rem;
@@ -194,19 +196,19 @@
             justify-content: center;
             transition: all .3s;
             opacity: 0;
-            transform: translateY(12px);
+            transform: translateY(12px)
         }
 
         #back-top.show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0)
         }
 
         #back-top:hover {
-            background: var(--accent);
+            background: var(--g);
             color: #070709;
-            border-color: var(--accent);
-            box-shadow: 0 8px 24px rgba(0, 255, 170, .3);
+            border-color: var(--g);
+            box-shadow: 0 8px 24px rgba(0, 255, 170, .3)
         }
 
         section {
@@ -215,106 +217,175 @@
             flex-direction: column;
             justify-content: center;
             padding: 8rem 2.5rem 5rem;
-            position: relative;
+            position: relative
         }
 
         .container {
             max-width: 920px;
             margin: 0 auto;
-            width: 100%;
+            width: 100%
         }
 
         .section-label {
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .68rem;
             letter-spacing: .2em;
             text-transform: uppercase;
-            margin-bottom: .9rem;
+            margin-bottom: .9rem
         }
 
-        .section-label.green {
-            color: var(--accent);
+        .lg {
+            color: var(--g)
         }
 
-        .section-label.red {
-            color: var(--accent2);
+        .lr {
+            color: var(--r)
         }
 
-        .section-label.blue {
-            color: var(--accent3);
+        .lb {
+            color: var(--b)
         }
 
-        .section-label.yellow {
-            color: var(--accent4);
+        .ly {
+            color: var(--y)
+        }
+
+        .lp {
+            color: var(--p)
         }
 
         h2 {
-            font-family: var(--font-display);
+            font-family: var(--fd);
             font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 900;
             letter-spacing: -.03em;
             line-height: 1.05;
-            margin-bottom: .8rem;
+            margin-bottom: .8rem
         }
 
         .desc {
             color: var(--muted);
             max-width: 520px;
             font-size: .95rem;
-            margin-bottom: 2rem;
+            margin-bottom: 2rem
         }
 
-        .code {
-            background: var(--surface2);
+        code {
+            font-family: var(--fm);
+            color: var(--g);
+            font-size: .9em
+        }
+
+        .codeblock {
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 1.2rem 1.5rem;
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .78rem;
             line-height: 1.9;
             color: var(--muted);
             overflow-x: auto;
-            margin-top: 1.5rem;
+            margin-top: 1.5rem
         }
 
         .kw {
-            color: var(--accent3);
+            color: var(--b)
         }
 
         .fn {
-            color: var(--accent);
+            color: var(--g)
         }
 
         .str {
-            color: var(--accent4);
+            color: var(--y)
         }
 
         .cm {
             color: #333350;
-            font-style: italic;
+            font-style: italic
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .75rem 1.8rem;
+            border-radius: 8px;
+            border: none;
+            font-family: var(--fm);
+            font-size: .78rem;
+            letter-spacing: .06em;
+            cursor: pointer;
+            transition: all .2s;
+            text-decoration: none
+        }
+
+        .btn-g {
+            background: var(--g);
+            color: #070709;
+            font-weight: 500
+        }
+
+        .btn-g:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0, 255, 170, .3)
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border2)
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--muted);
+            transform: translateY(-2px)
+        }
+
+        .btn-r {
+            background: var(--r);
+            color: #fff;
+            font-weight: 500
+        }
+
+        .btn-r:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(255, 95, 109, .3)
+        }
+
+        .btn-b {
+            background: var(--b);
+            color: #fff;
+            font-weight: 500
+        }
+
+        .btn-b:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(95, 141, 255, .3)
         }
 
         /* HERO */
         #hero {
             text-align: center;
             align-items: center;
-            background: radial-gradient(ellipse 70% 50% at 50% -5%, rgba(0, 255, 170, .07) 0%, transparent 70%);
+            background: radial-gradient(ellipse 70% 50% at 50% -5%, rgba(0, 255, 170, .07) 0%, transparent 70%)
         }
 
         .hero-pill {
             display: inline-flex;
             align-items: center;
             gap: .5rem;
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .72rem;
-            color: var(--accent);
+            color: var(--g);
             background: rgba(0, 255, 170, .07);
             border: 1px solid rgba(0, 255, 170, .2);
             padding: .4rem 1.1rem;
             border-radius: 999px;
             margin-bottom: 2rem;
             letter-spacing: .1em;
-            animation: fadeUp .6s .1s both;
+            animation: fadeUp .6s .1s both
         }
 
         .hero-pill::before {
@@ -322,8 +393,8 @@
             width: 6px;
             height: 6px;
             border-radius: 50%;
-            background: var(--accent);
-            animation: pulse 2s infinite;
+            background: var(--g);
+            animation: pulse 2s infinite
         }
 
         @keyframes pulse {
@@ -341,28 +412,28 @@
         }
 
         h1 {
-            font-family: var(--font-display);
+            font-family: var(--fd);
             font-size: clamp(3.5rem, 9vw, 6.5rem);
             font-weight: 900;
             line-height: .95;
             letter-spacing: -.04em;
             margin-bottom: 1.5rem;
-            animation: fadeUp .6s .25s both;
+            animation: fadeUp .6s .25s both
         }
 
         .grad {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 60%, var(--accent2) 100%);
+            background: linear-gradient(135deg, var(--g) 0%, var(--b) 60%, var(--r) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            background-clip: text
         }
 
         .hero-sub {
             font-size: 1.1rem;
             color: var(--muted);
-            max-width: 480px;
+            max-width: 500px;
             margin: 0 auto 2.5rem;
-            animation: fadeUp .6s .4s both;
+            animation: fadeUp .6s .4s both
         }
 
         .hero-ctas {
@@ -370,71 +441,34 @@
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
-            animation: fadeUp .6s .55s both;
+            animation: fadeUp .6s .55s both
         }
 
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: .5rem;
-            padding: .75rem 1.8rem;
-            border-radius: 8px;
-            border: none;
-            font-family: var(--font-mono);
-            font-size: .78rem;
-            letter-spacing: .06em;
-            cursor: pointer;
-            transition: all .2s;
-            text-decoration: none;
-        }
-
-        .btn-green {
-            background: var(--accent);
-            color: #070709;
-            font-weight: 500;
-        }
-
-        .btn-green:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(0, 255, 170, .3);
-        }
-
-        .btn-ghost {
-            background: transparent;
-            color: var(--text);
-            border: 1px solid var(--border2);
-        }
-
-        .btn-ghost:hover {
-            border-color: var(--muted);
-            transform: translateY(-2px);
-        }
-
-        .feature-count {
+        .feat-counts {
             margin-top: 4rem;
             display: flex;
             gap: 3rem;
             justify-content: center;
-            animation: fadeUp .6s .7s both;
+            animation: fadeUp .6s .7s both
         }
 
-        .fc-item {
-            text-align: center;
+        .fc {
+            text-align: center
         }
 
-        .fc-num {
-            font-family: var(--font-display);
+        .fc-n {
+            font-family: var(--fd);
             font-size: 2.5rem;
             font-weight: 900;
-            color: var(--accent);
+            color: var(--g)
         }
 
-        .fc-label {
-            font-family: var(--font-mono);
+        .fc-l {
+            font-family: var(--fm);
             font-size: .68rem;
             color: var(--muted);
             letter-spacing: .15em;
-            text-transform: uppercase;
+            text-transform: uppercase
         }
 
         @keyframes fadeUp {
@@ -449,25 +483,25 @@
             }
         }
 
-        /* POSITION */
-        #s-position {
-            background: linear-gradient(180deg, var(--bg), var(--surface));
+        /* STATS */
+        #s-pos {
+            background: linear-gradient(180deg, var(--bg), var(--surface))
         }
 
-        .stats-grid {
+        .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 1rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.5rem
         }
 
         .stat {
-            background: var(--surface2);
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 1.4rem 1.2rem;
             position: relative;
-            overflow: hidden;
+            overflow: hidden
         }
 
         .stat::after {
@@ -477,65 +511,65 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            background: linear-gradient(90deg, transparent, var(--g), transparent);
             opacity: 0;
-            transition: opacity .3s;
+            transition: opacity .3s
         }
 
         .stat:hover::after {
-            opacity: 1;
+            opacity: 1
         }
 
-        .stat-lbl {
-            font-family: var(--font-mono);
+        .slbl {
+            font-family: var(--fm);
             font-size: .65rem;
             letter-spacing: .15em;
             text-transform: uppercase;
             color: var(--muted);
-            margin-bottom: .6rem;
+            margin-bottom: .6rem
         }
 
-        .stat-val {
-            font-family: var(--font-mono);
+        .sval {
+            font-family: var(--fm);
             font-size: 1.9rem;
-            color: var(--accent);
-            line-height: 1;
+            color: var(--g);
+            line-height: 1
         }
 
-        .stat-unit {
+        .su {
             font-size: .85rem;
             color: var(--muted);
-            margin-left: .2rem;
+            margin-left: .2rem
         }
 
         /* SPY */
         #s-spy {
-            background: var(--surface);
+            background: var(--surface)
         }
 
-        .spy-demo {
-            background: var(--surface2);
+        .spy-box {
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 1.5rem;
-            margin-top: 1.5rem;
+            margin-top: 1.5rem
         }
 
         .spy-hint {
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .75rem;
             color: var(--muted);
-            margin-bottom: 1rem;
+            margin-bottom: 1rem
         }
 
         .spy-nav {
             display: flex;
             gap: .75rem;
-            flex-wrap: wrap;
+            flex-wrap: wrap
         }
 
         .spy-link {
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .75rem;
             letter-spacing: .1em;
             text-transform: uppercase;
@@ -545,28 +579,28 @@
             color: var(--muted);
             cursor: pointer;
             transition: all .25s;
-            text-decoration: none;
+            text-decoration: none
         }
 
         .spy-link:hover {
             color: var(--text);
-            border-color: var(--border2);
+            border-color: var(--border2)
         }
 
-        .spy-link.scroll-spy-active {
-            color: var(--accent);
-            border-color: var(--accent);
+        .spy-link.active {
+            color: var(--g);
+            border-color: var(--g);
             background: rgba(0, 255, 170, .07);
-            box-shadow: 0 0 14px rgba(0, 255, 170, .15);
+            box-shadow: 0 0 14px rgba(0, 255, 170, .15)
         }
 
         /* END */
         #s-end {
-            background: linear-gradient(180deg, var(--surface), var(--bg));
+            background: linear-gradient(180deg, var(--surface), var(--bg))
         }
 
-        .end-display {
-            background: var(--surface2);
+        .end-box {
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 2rem;
@@ -574,10 +608,10 @@
             display: flex;
             align-items: center;
             gap: 2rem;
-            flex-wrap: wrap;
+            flex-wrap: wrap
         }
 
-        .end-indicator {
+        .end-ind {
             width: 80px;
             height: 80px;
             border-radius: 50%;
@@ -587,240 +621,235 @@
             justify-content: center;
             font-size: 2rem;
             flex-shrink: 0;
-            transition: all .5s cubic-bezier(.34, 1.56, .64, 1);
+            transition: all .5s cubic-bezier(.34, 1.56, .64, 1)
         }
 
-        .end-indicator.fired {
-            border-color: var(--accent4);
+        .end-ind.fired {
+            border-color: var(--y);
             box-shadow: 0 0 30px rgba(255, 204, 68, .4);
-            transform: scale(1.1);
+            transform: scale(1.1)
         }
 
-        .end-text .title {
-            font-family: var(--font-display);
+        .et .title {
+            font-family: var(--fd);
             font-size: 1.3rem;
             font-weight: 700;
-            margin-bottom: .3rem;
+            margin-bottom: .3rem
         }
 
-        .end-text .sub {
-            font-family: var(--font-mono);
+        .et .sub {
+            font-family: var(--fm);
             font-size: .8rem;
-            color: var(--muted);
+            color: var(--muted)
         }
 
-        #end-count {
-            color: var(--accent4);
-            font-weight: 500;
-        }
-
-        /* IF NEEDED */
+        /* NEEDED */
         #s-needed {
-            background: var(--bg);
+            background: var(--bg)
         }
 
-        .needed-demo {
+        .needed-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            margin-top: 1.5rem;
+            margin-top: 1.5rem
         }
 
-        .needed-card {
-            background: var(--surface2);
+        .nc {
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 1.5rem;
             cursor: pointer;
-            transition: all .25s;
+            transition: all .25s
         }
 
-        .needed-card:hover {
-            border-color: var(--accent3);
+        .nc:hover {
+            border-color: var(--b);
             transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(95, 141, 255, .15);
+            box-shadow: 0 10px 30px rgba(95, 141, 255, .15)
         }
 
-        .needed-card .icon {
+        .nc .icon {
             font-size: 1.8rem;
-            margin-bottom: .75rem;
+            margin-bottom: .75rem
         }
 
-        .needed-card .name {
-            font-family: var(--font-display);
+        .nc .name {
+            font-family: var(--fd);
             font-size: 1rem;
             font-weight: 700;
-            margin-bottom: .3rem;
+            margin-bottom: .3rem
         }
 
-        .needed-card .sub {
-            font-family: var(--font-mono);
+        .nc .sub {
+            font-family: var(--fm);
             font-size: .72rem;
-            color: var(--muted);
+            color: var(--muted)
         }
 
         #needed-log {
             margin-top: 1rem;
-            background: var(--surface2);
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 1rem 1.2rem;
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .75rem;
             color: var(--muted);
             min-height: 56px;
-            line-height: 1.8;
+            line-height: 1.8
         }
 
         /* EASE */
         #s-ease {
-            background: linear-gradient(180deg, var(--bg), var(--surface));
+            background: linear-gradient(180deg, var(--bg), var(--surface))
         }
 
         .ease-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: .75rem;
-            margin-top: 1.5rem;
+            margin-top: 1.5rem
         }
 
         .ease-btn {
-            background: var(--surface2);
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 10px;
             padding: 1rem;
             cursor: pointer;
             text-align: center;
             transition: all .25s;
-            font-family: var(--font-mono);
+            font-family: var(--fm)
         }
 
         .ease-btn:hover {
-            border-color: var(--accent2);
+            border-color: var(--r);
             transform: translateY(-3px);
-            box-shadow: 0 10px 24px rgba(255, 95, 109, .15);
+            box-shadow: 0 10px 24px rgba(255, 95, 109, .15)
         }
 
         .ease-btn.active {
-            border-color: var(--accent2);
-            background: rgba(255, 95, 109, .08);
+            border-color: var(--r);
+            background: rgba(255, 95, 109, .08)
         }
 
         .ease-name {
             font-size: .78rem;
             color: var(--text);
             margin-bottom: .3rem;
-            font-weight: 500;
+            font-weight: 500
         }
 
         .ease-desc {
             font-size: .65rem;
-            color: var(--muted);
+            color: var(--muted)
         }
 
         .ease-vis {
             margin-top: 1.5rem;
-            background: var(--surface2);
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.5rem
         }
 
-        .ease-canvas-wrap {
+        .ease-wrap {
             position: relative;
             height: 60px;
-            margin-bottom: 1rem;
+            margin-bottom: 1rem
         }
 
         #ease-track {
             width: 100%;
             height: 6px;
-            background: var(--surface3);
+            background: var(--s3);
             border-radius: 3px;
             position: absolute;
             top: 50%;
-            transform: translateY(-50%);
+            transform: translateY(-50%)
         }
 
         #ease-ball {
             width: 20px;
             height: 20px;
             border-radius: 50%;
-            background: var(--accent2);
+            background: var(--r);
             box-shadow: 0 0 16px rgba(255, 95, 109, .6);
             position: absolute;
             top: 50%;
-            transform: translateY(-50%) translateX(0);
+            transform: translateY(-50%) translateX(0)
         }
 
         .ease-status {
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .75rem;
-            color: var(--muted);
+            color: var(--muted)
         }
 
-        #ease-current {
-            color: var(--accent2);
+        #ease-cur {
+            color: var(--r)
         }
 
         /* VIEWPORT */
-        #s-viewport {
-            background: var(--surface);
+        #s-vp {
+            background: var(--surface)
         }
 
         .vp-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
-            margin-top: 1.5rem;
+            margin-top: 1.5rem
         }
 
-        .vp-card {
-            background: var(--surface2);
+        .vpc {
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 2rem 1.5rem;
             text-align: center;
             opacity: 0;
             transform: translateY(30px) scale(.97);
-            transition: opacity .6s, transform .6s cubic-bezier(.4, 0, .2, 1), border-color .3s, box-shadow .3s;
+            transition: opacity .6s, transform .6s cubic-bezier(.4, 0, .2, 1), border-color .3s, box-shadow .3s
         }
 
-        .vp-card.in {
+        .vpc.in {
             opacity: 1;
             transform: translateY(0) scale(1);
-            border-color: var(--accent);
-            box-shadow: 0 0 30px rgba(0, 255, 170, .1);
+            border-color: var(--g);
+            box-shadow: 0 0 30px rgba(0, 255, 170, .1)
         }
 
-        .vp-card:nth-child(2) {
-            transition-delay: .12s;
+        .vpc:nth-child(2) {
+            transition-delay: .12s
         }
 
-        .vp-card:nth-child(3) {
-            transition-delay: .24s;
+        .vpc:nth-child(3) {
+            transition-delay: .24s
         }
 
         .vp-icon {
             font-size: 2rem;
-            margin-bottom: 1rem;
+            margin-bottom: 1rem
         }
 
         .vp-title {
-            font-family: var(--font-display);
+            font-family: var(--fd);
             font-size: 1.1rem;
             font-weight: 800;
-            margin-bottom: .4rem;
+            margin-bottom: .4rem
         }
 
         .vp-sub {
             font-size: .8rem;
-            color: var(--muted);
+            color: var(--muted)
         }
 
         /* LOCK */
         #s-lock {
-            background: linear-gradient(180deg, var(--surface), var(--bg));
+            background: linear-gradient(180deg, var(--surface), var(--bg))
         }
 
         .lock-row {
@@ -828,71 +857,386 @@
             gap: 1rem;
             align-items: center;
             flex-wrap: wrap;
-            margin-top: 1.5rem;
+            margin-top: 1.5rem
         }
 
         .lock-btn {
             padding: .9rem 2rem;
             border-radius: 10px;
             border: none;
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .8rem;
             letter-spacing: .06em;
             cursor: pointer;
             transition: all .25s;
-            font-weight: 500;
+            font-weight: 500
         }
 
         #btn-lock {
-            background: var(--accent2);
-            color: #fff;
+            background: var(--r);
+            color: #fff
         }
 
         #btn-lock:hover {
             box-shadow: 0 8px 24px rgba(255, 95, 109, .35);
-            transform: scale(1.04);
+            transform: scale(1.04)
         }
 
         #btn-unlock {
-            background: var(--accent);
-            color: #070709;
+            background: var(--g);
+            color: #070709
         }
 
         #btn-unlock:hover {
             box-shadow: 0 8px 24px rgba(0, 255, 170, .35);
-            transform: scale(1.04);
+            transform: scale(1.04)
         }
 
         #lock-status {
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .78rem;
             color: var(--muted);
             padding: .8rem 1.2rem;
-            background: var(--surface2);
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 8px
+        }
+
+        /* SEQUENCE */
+        #s-seq {
+            background: var(--bg)
+        }
+
+        .seq-targets {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem
+        }
+
+        .seq-target {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all .4s
+        }
+
+        .seq-target.active {
+            border-color: var(--p);
+            box-shadow: 0 0 24px rgba(192, 132, 252, .3);
+            background: rgba(192, 132, 252, .06)
+        }
+
+        .seq-icon {
+            font-size: 2rem;
+            margin-bottom: .5rem
+        }
+
+        .seq-name {
+            font-family: var(--fd);
+            font-size: 1rem;
+            font-weight: 700
+        }
+
+        .seq-status {
+            font-family: var(--fm);
+            font-size: .72rem;
+            color: var(--muted);
+            margin-top: .25rem
+        }
+
+        .seq-controls {
+            display: flex;
+            gap: .75rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem
+        }
+
+        /* PARALLAX */
+        #s-parallax {
+            background: linear-gradient(180deg, var(--bg), var(--surface));
+            overflow: hidden;
+            min-height: 100vh
+        }
+
+        .parallax-stage {
+            position: relative;
+            height: 340px;
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 1.5rem
+        }
+
+        .plx-layer {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-family: var(--fd);
+            font-weight: 800;
+            user-select: none
+        }
+
+        #plx-bg {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 60%, rgba(0, 255, 170, .06), transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(95, 141, 255, .06), transparent 60%);
+            font-size: .8rem;
+            font-family: var(--fm);
+            color: var(--muted);
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            align-items: flex-end;
+            padding: 1rem;
+            justify-content: flex-start
+        }
+
+        #plx-mid {
+            width: 220px;
+            height: 220px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 255, 170, .05);
+            border: 1px solid rgba(0, 255, 170, .15);
+            border-radius: 50%;
+            font-size: 1rem;
+            color: rgba(0, 255, 170, .4);
+            letter-spacing: .1em;
+            text-align: center
+        }
+
+        #plx-fg {
+            bottom: 2rem;
+            left: 3rem;
+            background: rgba(255, 95, 109, .1);
+            border: 1px solid rgba(255, 95, 109, .25);
+            color: rgba(255, 95, 109, .7);
+            padding: 1rem 1.5rem;
+            font-size: 1.5rem;
+            letter-spacing: -.02em
+        }
+
+        .plx-hint {
+            font-family: var(--fm);
+            font-size: .75rem;
+            color: var(--muted);
+            margin-top: 1rem;
+            text-align: center
+        }
+
+        .plx-controls {
+            display: flex;
+            gap: .75rem;
+            margin-top: 1rem;
+            flex-wrap: wrap
+        }
+
+        .plx-speed {
+            font-family: var(--fm);
+            font-size: .8rem;
+            background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 8px;
+            padding: .5rem 1rem;
+            color: var(--text);
+            cursor: pointer;
+            transition: all .2s
+        }
+
+        .plx-speed:hover,
+        .plx-speed.active {
+            border-color: var(--g);
+            color: var(--g)
+        }
+
+        /* PROGRESS */
+        #s-progress {
+            background: var(--surface)
+        }
+
+        .progress-demo {
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start
+        }
+
+        .prog-article {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            height: 320px;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            position: relative
+        }
+
+        .prog-article p {
+            font-size: .85rem;
+            color: var(--muted);
+            line-height: 1.9;
+            margin-bottom: 1rem
+        }
+
+        .prog-article p:last-child {
+            margin-bottom: 0
+        }
+
+        .prog-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem
+        }
+
+        .prog-bar-wrap {
+            background: var(--s3);
+            border-radius: 999px;
+            height: 8px;
+            overflow: hidden;
+            margin-bottom: .5rem
+        }
+
+        #prog-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--g), var(--b));
+            width: 0%;
+            transition: width .1s linear;
+            box-shadow: 0 0 10px rgba(0, 255, 170, .4)
+        }
+
+        .prog-val {
+            font-family: var(--fm);
+            font-size: 2.5rem;
+            font-weight: 500;
+            color: var(--g);
+            line-height: 1
+        }
+
+        .prog-lbl {
+            font-family: var(--fm);
+            font-size: .7rem;
+            color: var(--muted);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            margin-bottom: .5rem
+        }
+
+        /* SNAP */
+        #s-snap {
+            background: linear-gradient(180deg, var(--surface), var(--bg));
+            min-height: auto;
+            padding: 5rem 2.5rem
+        }
+
+        .snap-demo {
+            margin-top: 1.5rem;
+            position: relative
+        }
+
+        .snap-stage {
+            height: 400px;
+            overflow-y: scroll;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--s2);
+            scroll-behavior: auto
+        }
+
+        .snap-section {
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--border);
+            transition: background .3s, color .3s;
+            cursor: default;
+            flex-direction: column;
+            gap: .5rem
+        }
+
+        .snap-section:last-child {
+            border-bottom: none
+        }
+
+        .snap-section.snapped {
+            background: rgba(0, 255, 170, .05);
+            border-color: rgba(0, 255, 170, .2)
+        }
+
+        .snap-section .ss-num {
+            font-family: var(--fd);
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--border2);
+            transition: color .3s
+        }
+
+        .snap-section.snapped .ss-num {
+            color: var(--g)
+        }
+
+        .snap-section .ss-lbl {
+            font-family: var(--fm);
+            font-size: .72rem;
+            color: var(--muted);
+            letter-spacing: .15em;
+            text-transform: uppercase
+        }
+
+        .snap-toggle {
+            display: flex;
+            gap: .75rem;
+            margin-bottom: 1rem;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .snap-indicator {
+            font-family: var(--fm);
+            font-size: .78rem;
+            color: var(--muted);
+            padding: .6rem 1rem;
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 8px
+        }
+
+        #snap-cur {
+            color: var(--g);
+            font-weight: 500
         }
 
         footer {
             padding: 3rem 2.5rem;
             border-top: 1px solid var(--border);
             text-align: center;
-            font-family: var(--font-mono);
+            font-family: var(--fm);
             font-size: .72rem;
-            color: var(--muted);
+            color: var(--muted)
         }
 
         footer a {
-            color: var(--accent);
-            text-decoration: none;
+            color: var(--g);
+            text-decoration: none
         }
 
-        @media(max-width:680px) {
+        @media(max-width:720px) {
 
-            .stats-grid,
+            .stats,
             .ease-grid,
             .vp-grid,
-            .needed-demo {
+            .seq-targets,
+            .progress-demo {
                 grid-template-columns: 1fr 1fr
             }
 
@@ -907,8 +1251,9 @@
 
         @media(max-width:440px) {
 
-            .stats-grid,
-            .needed-demo {
+            .stats,
+            .needed-grid,
+            .progress-demo {
                 grid-template-columns: 1fr
             }
         }
@@ -916,7 +1261,6 @@
 </head>
 
 <body>
-
     <div id="progress-bar"></div>
     <div class="badge" id="pct-badge">0%</div>
     <div class="badge" id="dir-badge">— IDLE</div>
@@ -924,15 +1268,19 @@
     <button id="back-top">↑</button>
 
     <nav id="nav">
-        <span class="nav-logo">scroll-snap-kit v1.1</span>
+        <span class="nav-logo">scroll-snap-kit v1.2</span>
         <div class="nav-links" id="nav-links">
-            <a href="#s-position">position</a>
-            <a href="#s-spy">scroll-spy</a>
-            <a href="#s-end">onScrollEnd</a>
+            <a href="#s-pos">position</a>
+            <a href="#s-spy">spy</a>
+            <a href="#s-end">onEnd</a>
             <a href="#s-needed">ifNeeded</a>
-            <a href="#s-ease">easeScroll</a>
-            <a href="#s-viewport">viewport</a>
+            <a href="#s-ease">ease</a>
+            <a href="#s-vp">viewport</a>
             <a href="#s-lock">lock</a>
+            <a href="#s-seq">sequence</a>
+            <a href="#s-parallax">parallax</a>
+            <a href="#s-progress">progress</a>
+            <a href="#s-snap">snap</a>
         </div>
     </nav>
 
@@ -941,91 +1289,89 @@
         <div class="container">
             <div class="hero-pill">npm install scroll-snap-kit</div>
             <h1>Scroll.<br /><span class="grad">Perfected.</span></h1>
-            <p class="hero-sub">8 scroll utilities + 5 React hooks. Zero dependencies. Tree-shakeable.</p>
+            <p class="hero-sub">12 scroll utilities + 5 React hooks. Zero dependencies. Tree-shakeable. Works with or
+                without React.</p>
             <div class="hero-ctas">
-                <button class="btn btn-green" onclick="easeScrollTo('#s-position')">Explore demos ↓</button>
+                <button class="btn btn-g" onclick="easeGo('#s-pos')">Explore demos ↓</button>
                 <a class="btn btn-ghost" href="https://npmjs.com" target="_blank">npm page ↗</a>
             </div>
-            <div class="feature-count">
-                <div class="fc-item">
-                    <div class="fc-num">8</div>
-                    <div class="fc-label">Utilities</div>
+            <div class="feat-counts">
+                <div class="fc">
+                    <div class="fc-n">12</div>
+                    <div class="fc-l">Utilities</div>
                 </div>
-                <div class="fc-item">
-                    <div class="fc-num">5</div>
-                    <div class="fc-label">React Hooks</div>
+                <div class="fc">
+                    <div class="fc-n">5</div>
+                    <div class="fc-l">React Hooks</div>
                 </div>
-                <div class="fc-item">
-                    <div class="fc-num">0</div>
-                    <div class="fc-label">Dependencies</div>
+                <div class="fc">
+                    <div class="fc-n">0</div>
+                    <div class="fc-l">Dependencies</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 01 POSITION -->
-    <section id="s-position">
+    <section id="s-pos">
         <div class="container">
-            <div class="section-label green">01 — getScrollPosition() + onScroll()</div>
+            <div class="section-label lg">01 — getScrollPosition() + onScroll()</div>
             <h2>Live scroll data.</h2>
-            <p class="desc">Throttled scroll listener giving you exact pixel position, percentages and direction — in
-                real time.</p>
-            <div class="stats-grid">
+            <p class="desc">Throttled listener giving you exact position, percentages and direction — in real time.</p>
+            <div class="stats">
                 <div class="stat">
-                    <div class="stat-lbl">Scroll Y</div>
-                    <div class="stat-val" id="stat-y">0<span class="stat-unit">px</span></div>
+                    <div class="slbl">Scroll Y</div>
+                    <div class="sval" id="stat-y">0<span class="su">px</span></div>
                 </div>
                 <div class="stat">
-                    <div class="stat-lbl">Page progress</div>
-                    <div class="stat-val" id="stat-pct">0<span class="stat-unit">%</span></div>
+                    <div class="slbl">Progress</div>
+                    <div class="sval" id="stat-pct">0<span class="su">%</span></div>
                 </div>
                 <div class="stat">
-                    <div class="stat-lbl">Direction</div>
-                    <div class="stat-val" id="stat-dir" style="font-size:1.3rem;color:var(--text)">—</div>
+                    <div class="slbl">Direction</div>
+                    <div class="sval" id="stat-dir" style="font-size:1.3rem;color:var(--text)">—</div>
                 </div>
                 <div class="stat">
-                    <div class="stat-lbl">Scroll X</div>
-                    <div class="stat-val" id="stat-x">0<span class="stat-unit">px</span></div>
+                    <div class="slbl">Scroll X</div>
+                    <div class="sval" id="stat-x">0<span class="su">px</span></div>
                 </div>
             </div>
-            <div class="code">
-                <span class="cm">// Throttled scroll listener — returns cleanup fn</span><br />
+            <div class="codeblock">
                 <span class="kw">const</span> stop = <span class="fn">onScroll</span>(({ y, percentY }) => {<br />
-                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">`${percentY}% down the
-                    page`</span>)<br />
+                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">`${percentY}% down`</span>)<br />
                 }, { throttle: <span class="str">100</span> })<br />
-                stop() <span class="cm">// removes listener</span>
+                stop() <span class="cm">// cleanup</span>
             </div>
         </div>
     </section>
 
-    <!-- 02 SCROLL SPY -->
+    <!-- 02 SPY -->
     <section id="s-spy">
         <div class="container">
-            <div class="section-label blue">02 — scrollSpy()</div>
+            <div class="section-label lb">02 — scrollSpy()</div>
             <h2>Nav that knows where you are.</h2>
-            <p class="desc">Automatically highlights nav links based on which section is currently active. The top nav
-                is using it right now — watch it update as you scroll.</p>
-            <div class="spy-demo">
-                <div class="spy-hint">↑ Watch the top nav update. Or click these mini-nav links:</div>
+            <p class="desc">Automatically highlights nav links based on the active section. The top nav is using it live
+                right now.</p>
+            <div class="spy-box">
+                <div class="spy-hint">↑ Watch the top nav. Or click these mini-nav links:</div>
                 <div class="spy-nav" id="spy-mini">
-                    <a href="#s-position" class="spy-link">position</a>
-                    <a href="#s-spy" class="spy-link">scroll-spy</a>
-                    <a href="#s-end" class="spy-link">onScrollEnd</a>
+                    <a href="#s-pos" class="spy-link">position</a>
+                    <a href="#s-spy" class="spy-link">spy</a>
+                    <a href="#s-end" class="spy-link">onEnd</a>
                     <a href="#s-needed" class="spy-link">ifNeeded</a>
-                    <a href="#s-ease" class="spy-link">easeScroll</a>
-                    <a href="#s-viewport" class="spy-link">viewport</a>
+                    <a href="#s-ease" class="spy-link">ease</a>
+                    <a href="#s-vp" class="spy-link">viewport</a>
                     <a href="#s-lock" class="spy-link">lock</a>
+                    <a href="#s-seq" class="spy-link">sequence</a>
+                    <a href="#s-parallax" class="spy-link">parallax</a>
+                    <a href="#s-progress" class="spy-link">progress</a>
+                    <a href="#s-snap" class="spy-link">snap</a>
                 </div>
             </div>
-            <div class="code">
-                <span class="cm">// Highlights &lt;a href="#id"&gt; matching the current section</span><br />
-                <span class="kw">const</span> stop = <span class="fn">scrollSpy</span>(<br />
-                &nbsp;&nbsp;<span class="str">'section[id]'</span>,<br />
-                &nbsp;&nbsp;<span class="str">'nav a'</span>,<br />
-                &nbsp;&nbsp;{ offset: <span class="str">80</span>, activeClass: <span class="str">'active'</span>
-                }<br />
-                )<br />
+            <div class="codeblock">
+                <span class="kw">const</span> stop = <span class="fn">scrollSpy</span>(<span
+                    class="str">'section[id]'</span>, <span class="str">'nav a'</span>, { offset: <span
+                    class="str">80</span> })<br />
                 stop() <span class="cm">// remove listener</span>
             </div>
         </div>
@@ -1034,25 +1380,21 @@
     <!-- 03 SCROLL END -->
     <section id="s-end">
         <div class="container">
-            <div class="section-label yellow">03 — onScrollEnd()</div>
+            <div class="section-label ly">03 — onScrollEnd()</div>
             <h2>When scrolling stops.</h2>
-            <p class="desc">Fire a callback once the user has stopped scrolling for a configurable delay. Great for
-                lazy-loading, analytics, or autosave.</p>
-            <div class="end-display">
-                <div class="end-indicator" id="end-indicator">⏱</div>
-                <div class="end-text">
+            <p class="desc">Fire a callback once the user has been idle for a configurable delay.</p>
+            <div class="end-box">
+                <div class="end-ind" id="end-ind">⏱</div>
+                <div class="et">
                     <div class="title">Scroll, then stop.</div>
-                    <div class="sub">Indicator fires after <strong style="color:var(--accent4)">200ms</strong> of no
-                        scrolling.<br />Fired <span id="end-count">0</span> times this session.</div>
+                    <div class="sub">Fires after <strong style="color:var(--y)">200ms</strong> idle. Count: <span
+                            id="end-count" style="color:var(--y);font-weight:500">0</span></div>
                 </div>
             </div>
-            <div class="code">
-                <span class="cm">// Fires once idle for `delay` ms</span><br />
+            <div class="codeblock">
                 <span class="kw">const</span> stop = <span class="fn">onScrollEnd</span>(() => {<br />
-                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">'User stopped
-                    scrolling!'</span>)<br />
-                }, { delay: <span class="str">200</span> })<br />
-                stop()
+                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">'Stopped!'</span>)<br />
+                }, { delay: <span class="str">200</span> })
             </div>
         </div>
     </section>
@@ -1060,127 +1402,109 @@
     <!-- 04 IF NEEDED -->
     <section id="s-needed">
         <div class="container">
-            <div class="section-label blue">04 — scrollIntoViewIfNeeded()</div>
+            <div class="section-label lb">04 — scrollIntoViewIfNeeded()</div>
             <h2>Only scroll when necessary.</h2>
-            <p class="desc">Scrolls to an element only if it's outside the viewport. Click a card — if the target
-                section is already visible, nothing happens.</p>
-            <div class="needed-demo">
-                <div class="needed-card" onclick="needScroll('#s-position')">
+            <p class="desc">Clicks a card — if the section is already visible, nothing happens.</p>
+            <div class="needed-grid">
+                <div class="nc" onclick="needScroll('#s-pos')">
                     <div class="icon">📍</div>
-                    <div class="name">Position section</div>
+                    <div class="name">Position</div>
                     <div class="sub">scrollIntoViewIfNeeded()</div>
                 </div>
-                <div class="needed-card" onclick="needScroll('#s-ease')">
+                <div class="nc" onclick="needScroll('#s-ease')">
                     <div class="icon">🎢</div>
-                    <div class="name">Ease section</div>
+                    <div class="name">Ease</div>
                     <div class="sub">scrollIntoViewIfNeeded()</div>
                 </div>
-                <div class="needed-card" onclick="needScroll('#s-lock')">
-                    <div class="icon">🔒</div>
-                    <div class="name">Lock section</div>
+                <div class="nc" onclick="needScroll('#s-parallax')">
+                    <div class="icon">🏔</div>
+                    <div class="name">Parallax</div>
                     <div class="sub">scrollIntoViewIfNeeded()</div>
                 </div>
-                <div class="needed-card" onclick="needScroll('#hero')">
+                <div class="nc" onclick="needScroll('#hero')">
                     <div class="icon">🚀</div>
                     <div class="name">Hero (top)</div>
                     <div class="sub">scrollIntoViewIfNeeded()</div>
                 </div>
             </div>
-            <div id="needed-log">Click a card above — the log will tell you if a scroll was needed.</div>
-            <div class="code">
-                <span class="cm">// Only scrolls if element is off-screen</span><br />
-                <span class="fn">scrollIntoViewIfNeeded</span>(element)<br /><br />
-                <span class="cm">// threshold: how much must be visible to skip scroll</span><br />
-                <span class="fn">scrollIntoViewIfNeeded</span>(el, { threshold: <span class="str">0.5</span>, offset:
-                <span class="str">-80</span> })
-            </div>
+            <div id="needed-log">Click a card — the log will tell you if a scroll was needed.</div>
         </div>
     </section>
 
-    <!-- 05 EASE SCROLL -->
+    <!-- 05 EASE -->
     <section id="s-ease">
         <div class="container">
-            <div class="section-label red">05 — easeScroll() + Easings</div>
+            <div class="section-label lr">05 — easeScroll() + Easings</div>
             <h2>Custom easing curves.</h2>
-            <p class="desc">Bypass the browser's native smooth scroll with fully custom easing. Pick one below and watch
-                the ball animate across the track.</p>
-            <div class="ease-grid" id="ease-grid">
-                <div class="ease-btn active" data-easing="easeInOutCubic">
+            <p class="desc">Pick a curve and watch the ball animate across the track.</p>
+            <div class="ease-grid">
+                <div class="ease-btn active" data-e="easeInOutCubic">
                     <div class="ease-name">easeInOutCubic</div>
                     <div class="ease-desc">smooth in & out</div>
                 </div>
-                <div class="ease-btn" data-easing="easeOutElastic">
+                <div class="ease-btn" data-e="easeOutElastic">
                     <div class="ease-name">easeOutElastic</div>
                     <div class="ease-desc">springy overshoot</div>
                 </div>
-                <div class="ease-btn" data-easing="easeOutBounce">
+                <div class="ease-btn" data-e="easeOutBounce">
                     <div class="ease-name">easeOutBounce</div>
                     <div class="ease-desc">bouncy landing</div>
                 </div>
-                <div class="ease-btn" data-easing="easeOutQuart">
+                <div class="ease-btn" data-e="easeOutQuart">
                     <div class="ease-name">easeOutQuart</div>
                     <div class="ease-desc">fast decelerate</div>
                 </div>
-                <div class="ease-btn" data-easing="linear">
+                <div class="ease-btn" data-e="linear">
                     <div class="ease-name">linear</div>
                     <div class="ease-desc">constant speed</div>
                 </div>
-                <div class="ease-btn" data-easing="easeInQuad">
+                <div class="ease-btn" data-e="easeInQuad">
                     <div class="ease-name">easeInQuad</div>
                     <div class="ease-desc">slow start</div>
                 </div>
             </div>
             <div class="ease-vis">
-                <div class="ease-canvas-wrap">
+                <div class="ease-wrap">
                     <div id="ease-track"></div>
                     <div id="ease-ball"></div>
                 </div>
-                <div class="ease-status">Active: <span id="ease-current">easeInOutCubic</span> &nbsp;—&nbsp; <button
+                <div class="ease-status">Active: <span id="ease-cur">easeInOutCubic</span> &nbsp;—&nbsp; <button
                         class="btn btn-ghost" style="padding:.4rem 1rem;font-size:.72rem;display:inline-flex"
                         onclick="runBall()">▶ Play</button></div>
             </div>
-            <div class="code">
-                <span class="kw">await</span> <span class="fn">easeScroll</span>(<span class="str">'#contact'</span>,
-                {<br />
-                &nbsp;&nbsp;duration: <span class="str">800</span>,<br />
-                &nbsp;&nbsp;easing: Easings.<span class="fn">easeOutElastic</span><br />
-                })<br /><br />
-                <span class="cm">// BYO easing function</span><br />
-                <span class="fn">easeScroll</span>(el, { easing: t => t * t * t })
+            <div class="codeblock">
+                <span class="kw">await</span> <span class="fn">easeScroll</span>(<span class="str">'#contact'</span>, {
+                duration: <span class="str">800</span>, easing: Easings.<span class="fn">easeOutElastic</span> })
             </div>
         </div>
     </section>
 
     <!-- 06 VIEWPORT -->
-    <section id="s-viewport">
+    <section id="s-vp">
         <div class="container">
-            <div class="section-label green">06 — isInViewport() / useInViewport()</div>
+            <div class="section-label lg">06 — isInViewport() / useInViewport()</div>
             <h2>Visibility detection.</h2>
-            <p class="desc">These cards animate in as they enter the viewport — mirrors the <code
-                    style="font-family:var(--font-mono);color:var(--accent);font-size:.9em">useInViewport()</code> React
-                hook behaviour.</p>
+            <p class="desc">Cards animate in as they enter the viewport using IntersectionObserver.</p>
             <div class="vp-grid">
-                <div class="vp-card" data-vp>
+                <div class="vpc" data-vp>
                     <div class="vp-icon">⚡</div>
                     <div class="vp-title">Fast</div>
                     <div class="vp-sub">IntersectionObserver — no scroll listeners</div>
                 </div>
-                <div class="vp-card" data-vp>
+                <div class="vpc" data-vp>
                     <div class="vp-icon">🎯</div>
                     <div class="vp-title">Precise</div>
                     <div class="vp-sub">Configurable threshold 0–1</div>
                 </div>
-                <div class="vp-card" data-vp>
+                <div class="vpc" data-vp>
                     <div class="vp-icon">🔂</div>
                     <div class="vp-title">once: true</div>
-                    <div class="vp-sub">Trigger animation only first time</div>
+                    <div class="vp-sub">Trigger animation only once</div>
                 </div>
             </div>
-            <div class="code">
+            <div class="codeblock">
                 <span class="kw">const</span> [ref, inView] = <span class="fn">useInViewport</span>({ threshold: <span
-                    class="str">0.2</span>, once: <span class="str">true</span> })<br />
-                <span class="kw">return</span> &lt;<span class="fn">div</span> ref={ref} style={{ opacity: inView ?
-                <span class="str">1</span> : <span class="str">0</span> }}&gt;...&lt;/<span class="fn">div</span>&gt;
+                    class="str">0.2</span>, once: <span class="str">true</span> })
             </div>
         </div>
     </section>
@@ -1188,55 +1512,316 @@
     <!-- 07 LOCK -->
     <section id="s-lock">
         <div class="container">
-            <div class="section-label red">07 — lockScroll() / unlockScroll()</div>
+            <div class="section-label lr">07 — lockScroll() / unlockScroll()</div>
             <h2>Freeze the page.</h2>
-            <p class="desc">Lock body scroll for modals or drawers. Restores the exact position on unlock — no layout
-                jump.</p>
+            <p class="desc">Lock body scroll for modals or drawers. Restores the exact position on unlock.</p>
             <div class="lock-row">
                 <button class="lock-btn" id="btn-lock" onclick="doLock()">🔒 Lock</button>
                 <button class="lock-btn" id="btn-unlock" onclick="doUnlock()">🔓 Unlock</button>
                 <div id="lock-status">Status: <strong>unlocked</strong></div>
             </div>
-            <div class="code">
+            <div class="codeblock">
                 <span class="fn">lockScroll</span>() <span class="cm">// body freezes, position saved</span><br />
                 <span class="fn">unlockScroll</span>() <span class="cm">// position restored perfectly</span>
             </div>
         </div>
     </section>
 
+    <!-- 08 SEQUENCE -->
+    <section id="s-seq">
+        <div class="container">
+            <div class="section-label lp">08 — scrollSequence()</div>
+            <h2>Chain scroll animations.</h2>
+            <p class="desc">Run multiple <code>easeScroll</code> animations one after another as a choreographed
+                sequence. Supports pauses between steps and mid-sequence cancel.</p>
+            <div class="seq-controls">
+                <button class="btn btn-b" onclick="runSequence()">▶ Run full tour</button>
+                <button class="btn btn-ghost" onclick="cancelSeq()">✕ Cancel</button>
+                <div id="seq-status"
+                    style="font-family:var(--fm);font-size:.78rem;color:var(--muted);padding:.6rem 1rem;background:var(--s2);border:1px solid var(--border);border-radius:8px">
+                    Idle</div>
+            </div>
+            <div class="seq-targets" id="seq-targets">
+                <div class="seq-target" id="sq1">
+                    <div class="seq-icon">1️⃣</div>
+                    <div class="seq-name">Position</div>
+                    <div class="seq-status">waiting</div>
+                </div>
+                <div class="seq-target" id="sq2">
+                    <div class="seq-icon">2️⃣</div>
+                    <div class="seq-name">Parallax</div>
+                    <div class="seq-status">waiting</div>
+                </div>
+                <div class="seq-target" id="sq3">
+                    <div class="seq-icon">3️⃣</div>
+                    <div class="seq-name">Progress</div>
+                    <div class="seq-status">waiting</div>
+                </div>
+            </div>
+            <div class="codeblock">
+                <span class="kw">const</span> { promise, cancel } = <span class="fn">scrollSequence</span>([<br />
+                &nbsp;&nbsp;{ target: <span class="str">'#intro'</span>, duration: <span class="str">600</span> },<br />
+                &nbsp;&nbsp;{ target: <span class="str">'#features'</span>, duration: <span class="str">800</span>,
+                pause: <span class="str">400</span> },<br />
+                &nbsp;&nbsp;{ target: <span class="str">'#pricing'</span>, easing: Easings.<span
+                    class="fn">easeOutElastic</span> },<br />
+                ])<br />
+                <span class="kw">await</span> promise<br />
+                cancel() <span class="cm">// abort at any time</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 09 PARALLAX -->
+    <section id="s-parallax">
+        <div class="container">
+            <div class="section-label ly">09 — parallax()</div>
+            <h2>Depth on scroll.</h2>
+            <p class="desc">Attach different scroll speeds to elements to create a layered parallax effect. Scroll down
+                slowly and watch the layers move at different rates.</p>
+            <div class="parallax-stage" id="parallax-stage">
+                <div class="plx-layer" id="plx-bg">speed: 0.2 — background</div>
+                <div class="plx-layer" id="plx-mid">speed: 0.6<br />midground</div>
+                <div class="plx-layer" id="plx-fg">speed: 1.4 — foreground</div>
+            </div>
+            <p class="plx-hint">↑ Scroll to see parallax layers move at different speeds</p>
+            <div class="plx-controls">
+                <span style="font-family:var(--fm);font-size:.75rem;color:var(--muted)">BG speed:</span>
+                <div class="plx-speed active" data-speed="0.2" onclick="changeBgSpeed(this)">0.2 slow</div>
+                <div class="plx-speed" data-speed="0.5" onclick="changeBgSpeed(this)">0.5 medium</div>
+                <div class="plx-speed" data-speed="-0.1" onclick="changeBgSpeed(this)">−0.1 reverse</div>
+            </div>
+            <div class="codeblock">
+                <span class="cm">// speed &lt; 1 = slower (background feel)</span><br />
+                <span class="cm">// speed &gt; 1 = faster (foreground feel)</span><br />
+                <span class="cm">// speed &lt; 0 = moves in opposite direction</span><br />
+                <span class="kw">const</span> destroy = <span class="fn">parallax</span>(<span
+                    class="str">'.hero-bg'</span>, { speed: <span class="str">0.4</span> })<br />
+                <span class="kw">const</span> destroy = <span class="fn">parallax</span>(<span
+                    class="str">'.clouds'</span>, { speed: <span class="str">-0.2</span>, axis: <span
+                    class="str">'x'</span> })<br />
+                destroy() <span class="cm">// remove effect, reset transforms</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10 SCROLL PROGRESS -->
+    <section id="s-progress">
+        <div class="container">
+            <div class="section-label lg">10 — scrollProgress()</div>
+            <h2>Track element read progress.</h2>
+            <p class="desc">Measure how far through a specific element the user has scrolled — 0 when it enters the
+                viewport, 1 when it leaves. Scroll the article box below.</p>
+            <div class="progress-demo">
+                <div class="prog-article" id="prog-article">
+                    <p>Scroll snap kit gives you precise control over every aspect of scroll behaviour in your web app.
+                        Whether you need smooth navigation, progress tracking, or choreographed animations, the API is
+                        designed to be minimal and composable.</p>
+                    <p>The scrollProgress utility fires a callback with a normalised value from 0 to 1 as the user
+                        scrolls through the target element. This makes it trivially easy to build reading progress bars,
+                        reveal animations, or sticky sidebars that respond to content position.</p>
+                    <p>Unlike scroll percentage of the whole page, scrollProgress is scoped to a single element. This
+                        means you can independently track multiple articles, carousels, or code blocks on the same page
+                        without any interference.</p>
+                    <p>Under the hood it uses getBoundingClientRect on every scroll event, with a lightweight
+                        requestAnimationFrame throttle to keep performance smooth even on long pages.</p>
+                    <p>Combined with the easeScroll and scrollSequence utilities, scrollProgress unlocks scroll-driven
+                        storytelling patterns that previously required heavyweight libraries.</p>
+                    <p>Keep scrolling this box to see the progress value reach 100% ✨</p>
+                </div>
+                <div class="prog-stats">
+                    <div class="stat" style="margin:0">
+                        <div class="slbl">Article progress</div>
+                        <div class="prog-bar-wrap">
+                            <div id="prog-bar-fill"></div>
+                        </div>
+                        <div class="prog-val" id="prog-val">0<span class="su">%</span></div>
+                    </div>
+                    <div class="codeblock" style="margin:0">
+                        <span class="kw">const</span> stop = <span class="fn">scrollProgress</span>(<br />
+                        &nbsp;&nbsp;<span class="str">'#article'</span>,<br />
+                        &nbsp;&nbsp;progress => {<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;bar.style.width =<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">`${progress * 100}%`</span><br />
+                        &nbsp;&nbsp;}<br />
+                        )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11 SNAP -->
+    <section id="s-snap">
+        <div class="container">
+            <div class="section-label lb">11 — snapToSection()</div>
+            <h2>Auto-snap to nearest section.</h2>
+            <p class="desc">After scrolling stops, automatically snaps the container to the nearest section. Scroll the
+                box below — it'll snap after 300ms of idle time.</p>
+            <div class="snap-demo">
+                <div class="snap-toggle">
+                    <button class="btn btn-g" onclick="enableSnap()">✓ Enable snap</button>
+                    <button class="btn btn-ghost" onclick="disableSnap()">✕ Disable</button>
+                    <div class="snap-indicator">Snapped to: <span id="snap-cur">none</span></div>
+                </div>
+                <div class="snap-stage" id="snap-stage">
+                    <div class="snap-section" id="snap-s1">
+                        <div class="ss-num">01</div>
+                        <div class="ss-lbl">Section One</div>
+                    </div>
+                    <div class="snap-section" id="snap-s2">
+                        <div class="ss-num">02</div>
+                        <div class="ss-lbl">Section Two</div>
+                    </div>
+                    <div class="snap-section" id="snap-s3">
+                        <div class="ss-num">03</div>
+                        <div class="ss-lbl">Section Three</div>
+                    </div>
+                    <div class="snap-section" id="snap-s4">
+                        <div class="ss-num">04</div>
+                        <div class="ss-lbl">Section Four</div>
+                    </div>
+                    <div class="snap-section" id="snap-s5">
+                        <div class="ss-num">05</div>
+                        <div class="ss-lbl">Section Five</div>
+                    </div>
+                </div>
+            </div>
+            <div class="codeblock">
+                <span class="kw">const</span> destroy = <span class="fn">snapToSection</span>(<span
+                    class="str">'section[id]'</span>, {<br />
+                &nbsp;&nbsp;delay: <span class="str">150</span>, <span class="cm">// ms after scroll stops</span><br />
+                &nbsp;&nbsp;offset: <span class="str">-70</span>, <span class="cm">// account for sticky
+                    nav</span><br />
+                &nbsp;&nbsp;easing: Easings.<span class="fn">easeInOutCubic</span><br />
+                })<br />
+                destroy() <span class="cm">// remove snap behaviour</span>
+            </div>
+        </div>
+    </section>
+
     <footer>
-        <p><a href="https://npmjs.com/package/scroll-snap-kit">scroll-snap-kit</a> — MIT License — 8 utilities · 5 hooks
-            · 0 dependencies</p>
+        <p><a href="#">scroll-snap-kit</a> — MIT License — 12 utilities · 5 hooks · 0 dependencies</p>
     </footer>
 
     <script>
-        // ── Easings ──
+        // ══════════════════════════════════════════════
+        // INLINE IMPLEMENTATIONS (mirrors the npm pkg)
+        // ══════════════════════════════════════════════
         const Easings = {
             linear: t => t,
             easeInQuad: t => t * t,
             easeInOutCubic: t => t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
             easeOutQuart: t => 1 - (--t) * t * t * t,
-            easeOutElastic: t => { const c4 = (2 * Math.PI) / 3; return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - .75) * c4) + 1; },
-            easeOutBounce: t => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + .75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + .9375; return n * (t -= 2.625 / d) * t + .984375; },
+            easeOutElastic: t => { const c = (2 * Math.PI) / 3; return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - .75) * c) + 1 },
+            easeOutBounce: t => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + .75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + .9375; return n * (t -= 2.625 / d) * t + .984375 },
         };
 
-        // ── easeScrollTo ──
-        function easeScrollTo(target, opts = {}) {
+        function easeGo(target, opts = {}) {
             const { duration = 700, easing = Easings.easeInOutCubic, offset = -80 } = opts;
             const el = typeof target === 'string' ? document.querySelector(target) : target;
             const targetY = (el ? el.getBoundingClientRect().top + window.scrollY : +target) + offset;
             const startY = window.scrollY, dist = targetY - startY, t0 = performance.now();
             return new Promise(res => {
-                function step(now) {
-                    const p = Math.min((now - t0) / duration, 1);
-                    window.scrollTo(0, startY + dist * easing(p));
-                    p < 1 ? requestAnimationFrame(step) : res();
-                }
+                function step(now) { const p = Math.min((now - t0) / duration, 1); window.scrollTo(0, startY + dist * easing(p)); p < 1 ? requestAnimationFrame(step) : res(); }
                 requestAnimationFrame(step);
             });
         }
 
-        // ── scrollIntoViewIfNeeded ──
+        // scrollSequence
+        let activeSeqCancel = null;
+        async function runSequence() {
+            if (activeSeqCancel) { activeSeqCancel(); }
+            let cancelled = false;
+            activeSeqCancel = () => { cancelled = true; };
+            const steps = [
+                { id: 'sq1', target: '#s-pos', label: 'Position', duration: 700 },
+                { id: 'sq2', target: '#s-parallax', label: 'Parallax', duration: 800, pause: 500 },
+                { id: 'sq3', target: '#s-progress', label: 'Progress', duration: 700 },
+            ];
+            document.getElementById('seq-status').textContent = 'Running…';
+            for (const step of steps) {
+                if (cancelled) break;
+                document.querySelectorAll('.seq-target').forEach(el => { el.classList.remove('active'); el.querySelector('.seq-status').textContent = 'waiting'; });
+                const card = document.getElementById(step.id);
+                if (card) { card.classList.add('active'); card.querySelector('.seq-status').textContent = '▶ scrolling…'; }
+                await easeGo(step.target, { duration: step.duration, offset: -80 });
+                if (cancelled) break;
+                if (card) card.querySelector('.seq-status').textContent = '✓ done';
+                if (step.pause) await new Promise(r => setTimeout(r, step.pause));
+            }
+            document.getElementById('seq-status').textContent = cancelled ? 'Cancelled' : '✓ Sequence complete';
+            if (!cancelled) document.querySelectorAll('.seq-target').forEach(el => el.classList.remove('active'));
+            activeSeqCancel = null;
+        }
+        function cancelSeq() { if (activeSeqCancel) { activeSeqCancel(); document.getElementById('seq-status').textContent = 'Cancelled'; } }
+
+        // parallax
+        let plxDestroys = [];
+        function initParallax() {
+            plxDestroys.forEach(d => d());
+            plxDestroys = [];
+            const stage = document.getElementById('parallax-stage');
+            function plx(el, speed, axis = 'y') {
+                const originY = el.getBoundingClientRect().top + window.scrollY;
+                let rafId = null;
+                const handler = () => { if (!rafId) rafId = requestAnimationFrame(() => { const dy = (window.scrollY - (originY - window.innerHeight / 2)) * (speed - 1); el.style.transform = `translateY(${dy}px)`; rafId = null; }); };
+                window.addEventListener('scroll', handler, { passive: true });
+                handler();
+                return () => { window.removeEventListener('scroll', handler); if (rafId) cancelAnimationFrame(rafId); el.style.transform = ''; };
+            }
+            plxDestroys.push(plx(document.getElementById('plx-bg'), parseFloat(document.querySelector('.plx-speed.active')?.dataset.speed || '0.2')));
+            plxDestroys.push(plx(document.getElementById('plx-mid'), 0.6));
+            plxDestroys.push(plx(document.getElementById('plx-fg'), 1.4));
+        }
+        function changeBgSpeed(el) { document.querySelectorAll('.plx-speed').forEach(b => b.classList.remove('active')); el.classList.add('active'); initParallax(); }
+        initParallax();
+
+        // scrollProgress on article
+        (function () {
+            const article = document.getElementById('prog-article');
+            function calc() {
+                const rect = article.getBoundingClientRect(), wh = window.innerHeight;
+                const total = rect.height + wh, passed = wh - rect.top;
+                const p = Math.min(1, Math.max(0, passed / total));
+                document.getElementById('prog-bar-fill').style.width = (p * 100) + '%';
+                document.getElementById('prog-val').innerHTML = Math.round(p * 100) + '<span class="su">%</span>';
+            }
+            article.addEventListener('scroll', calc);
+            window.addEventListener('scroll', calc, { passive: true });
+        })();
+
+        // snapToSection in the demo box
+        let snapDestroy = null;
+        function enableSnap() {
+            if (snapDestroy) { snapDestroy(); }
+            const stage = document.getElementById('snap-stage');
+            const sections = Array.from(stage.querySelectorAll('.snap-section'));
+            let timer = null, snapping = false;
+            snapDestroy = () => { clearTimeout(timer); stage.removeEventListener('scroll', handler); };
+            function handler() {
+                clearTimeout(timer);
+                timer = setTimeout(async () => {
+                    if (snapping) return; snapping = true;
+                    const mid = stage.scrollTop + stage.clientHeight / 2;
+                    let closest = sections[0], minD = Infinity;
+                    sections.forEach(s => { const d = Math.abs((s.offsetTop + s.offsetHeight / 2) - mid); if (d < minD) { minD = d; closest = s; } });
+                    const targetTop = closest.offsetTop;
+                    const startY = stage.scrollTop, dist = targetTop - startY, t0 = performance.now(), dur = 400;
+                    function step(now) { const p = Math.min((now - t0) / dur, 1); stage.scrollTop = startY + dist * Easings.easeInOutCubic(p); p < 1 ? requestAnimationFrame(step) : null; }
+                    requestAnimationFrame(step);
+                    sections.forEach(s => s.classList.remove('snapped'));
+                    closest.classList.add('snapped');
+                    document.getElementById('snap-cur').textContent = closest.querySelector('.ss-lbl').textContent;
+                    snapping = false;
+                }, 300);
+            }
+            stage.addEventListener('scroll', handler, { passive: true });
+        }
+        function disableSnap() { if (snapDestroy) { snapDestroy(); snapDestroy = null; } document.querySelectorAll('.snap-section').forEach(s => s.classList.remove('snapped')); document.getElementById('snap-cur').textContent = 'disabled'; }
+        enableSnap();
+
+        // scrollIntoViewIfNeeded
         function scrollIntoViewIfNeeded(target, opts = {}) {
             const { threshold = 1, offset = 0 } = opts;
             const el = typeof target === 'string' ? document.querySelector(target) : target;
@@ -1249,138 +1834,86 @@
             window.scrollTo({ top: rect.top + window.scrollY + offset, behavior: 'smooth' });
             return { scrolled: true };
         }
-
-        // ── scroll spy ──
-        function initSpy(secSel, linkSelectors, opts = {}) {
-            const { offset = 80, activeClass = 'scroll-spy-active' } = opts;
-            const sections = Array.from(document.querySelectorAll(secSel));
-            const linkGroups = linkSelectors.map(s => Array.from(document.querySelectorAll(s)));
-            function update() {
-                const sy = window.scrollY + offset;
-                let cur = sections[0];
-                for (const s of sections) { if (s.offsetTop <= sy) cur = s; }
-                linkGroups.forEach(links => links.forEach(link => {
-                    link.classList.remove(activeClass);
-                    if (link.getAttribute('href') === '#' + cur?.id) link.classList.add(activeClass);
-                }));
-            }
-            update();
-            window.addEventListener('scroll', update, { passive: true });
+        function needScroll(sel) {
+            const r = scrollIntoViewIfNeeded(sel, { threshold: .9, offset: -80 });
+            document.getElementById('needed-log').innerHTML = r.scrolled
+                ? `<span style="color:var(--g)">✓ Scrolled</span> — ${sel} was outside the viewport.`
+                : `<span style="color:var(--muted)">— Skipped</span> — ${sel} was already ≥90% visible. No scroll needed!`;
         }
 
-        // ── lock ──
+        // lockScroll
         function lockScroll() { const sy = window.scrollY; document.body.style.cssText = `position:fixed;top:-${sy}px;width:100%`; }
         function unlockScroll() { const sy = document.body.style.top; document.body.style.cssText = ''; window.scrollTo(0, parseInt(sy || '0') * -1); }
+        function doLock() { lockScroll(); document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--r)">locked 🔒</strong>'; }
+        function doUnlock() { unlockScroll(); document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--g)">unlocked 🔓</strong>'; }
 
-        // ── BOOT ──
-        let lastY = 0, ticking = false, endTimer = null, endCount = 0;
+        // ease ball
+        let curEasing = 'easeInOutCubic', ballRunning = false;
+        document.querySelectorAll('.ease-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.ease-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active'); curEasing = btn.dataset.e;
+                document.getElementById('ease-cur').textContent = curEasing; runBall();
+            });
+        });
+        function runBall() {
+            if (ballRunning) return; ballRunning = true;
+            const ball = document.getElementById('ease-ball');
+            const trackW = document.getElementById('ease-track').offsetWidth - 20;
+            const ease = Easings[curEasing], dur = 1000, t0 = performance.now();
+            function step(now) { const p = Math.min((now - t0) / dur, 1); ball.style.transform = `translateY(-50%) translateX(${ease(p) * trackW}px)`; if (p < 1) requestAnimationFrame(step); else setTimeout(() => { const s2 = performance.now(); function back(n) { const p2 = Math.min((n - s2) / 600, 1); ball.style.transform = `translateY(-50%) translateX(${(1 - p2) * trackW}px)`; p2 < 1 ? requestAnimationFrame(back) : ballRunning = false; } requestAnimationFrame(back); }, 350); }
+            requestAnimationFrame(step);
+        }
 
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(() => {
-                    const x = window.scrollX, y = window.scrollY;
-                    const maxY = document.body.scrollHeight - window.innerHeight;
-                    const pct = maxY > 0 ? Math.round((y / maxY) * 100) : 0;
-
-                    document.getElementById('progress-bar').style.width = pct + '%';
-                    document.getElementById('stat-y').innerHTML = `${y}<span class="stat-unit">px</span>`;
-                    document.getElementById('stat-x').innerHTML = `${x}<span class="stat-unit">px</span>`;
-                    document.getElementById('stat-pct').innerHTML = `${pct}<span class="stat-unit">%</span>`;
-                    document.getElementById('pct-badge').textContent = pct + '% scrolled';
-
-                    const dir = y > lastY ? 'down' : 'up';
-                    const dirEl = document.getElementById('stat-dir');
-                    const badge = document.getElementById('dir-badge');
-                    dirEl.textContent = dir === 'down' ? '↓ Down' : '↑ Up';
-                    dirEl.style.color = dir === 'down' ? 'var(--accent2)' : 'var(--accent)';
-                    badge.textContent = dir === 'down' ? '↓ SCROLLING DOWN' : '↑ SCROLLING UP';
-                    badge.className = 'badge ' + (dir === 'down' ? 'down' : 'up');
-
-                    const nav = document.getElementById('nav');
-                    nav.classList.toggle('scrolled', y > 10);
-                    nav.classList.toggle('hidden', y > lastY && y > 200);
-                    document.getElementById('back-top').classList.toggle('show', y > 300);
-
-                    // onScrollEnd
-                    clearTimeout(endTimer);
-                    endTimer = setTimeout(() => {
-                        endCount++;
-                        document.getElementById('end-count').textContent = endCount;
-                        const ind = document.getElementById('end-indicator');
-                        ind.classList.add('fired'); ind.textContent = '✓';
-                        document.getElementById('end-badge').classList.add('show');
-                        setTimeout(() => {
-                            ind.classList.remove('fired'); ind.textContent = '⏱';
-                            document.getElementById('end-badge').classList.remove('show');
-                        }, 1800);
-                    }, 200);
-
-                    lastY = y; ticking = false;
-                });
-                ticking = true;
-            }
-        }, { passive: true });
-
-        // scroll spy — nav + mini nav
+        // scroll spy
+        function initSpy(secSel, linkSels, opts = {}) {
+            const { offset = 80, activeClass = 'active' } = opts;
+            const sections = Array.from(document.querySelectorAll(secSel));
+            const groups = linkSels.map(s => Array.from(document.querySelectorAll(s)));
+            function update() { const sy = window.scrollY + offset; let cur = sections[0]; for (const s of sections) { if (s.offsetTop <= sy) cur = s; } groups.forEach(links => links.forEach(l => { l.classList.remove(activeClass); if (l.getAttribute('href') === '#' + cur?.id) l.classList.add(activeClass); })); }
+            update(); window.addEventListener('scroll', update, { passive: true });
+        }
         initSpy('section[id]', ['#nav-links a', '#spy-mini a'], { offset: 200 });
 
         // viewport observer
         const vpObs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }), { threshold: .2 });
         document.querySelectorAll('[data-vp]').forEach(el => vpObs.observe(el));
 
-        // anchor smooth scroll
+        // anchor links
         document.querySelectorAll('a[href^="#"]').forEach(a => {
-            a.addEventListener('click', e => { e.preventDefault(); easeScrollTo(a.getAttribute('href'), { offset: -70, duration: 700 }); });
+            a.addEventListener('click', e => { e.preventDefault(); easeGo(a.getAttribute('href'), { offset: -70, duration: 700 }); });
         });
+        document.getElementById('back-top').addEventListener('click', () => easeGo('#hero', { offset: 0, duration: 900 }));
 
-        // back to top
-        document.getElementById('back-top').addEventListener('click', () => easeScrollTo('#hero', { offset: 0, duration: 900 }));
-
-        // ifNeeded demo
-        function needScroll(sel) {
-            const r = scrollIntoViewIfNeeded(sel, { threshold: .9, offset: -80 });
-            document.getElementById('needed-log').innerHTML = r.scrolled
-                ? `<span style="color:var(--accent)">✓ Scrolled</span> — ${sel} was outside the viewport.`
-                : `<span style="color:var(--muted)">— Skipped</span> — ${sel} was already ≥90% visible. No scroll needed!`;
-        }
-
-        // ease ball demo
-        let currentEasing = 'easeInOutCubic', ballRunning = false;
-        document.querySelectorAll('.ease-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.ease-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentEasing = btn.dataset.easing;
-                document.getElementById('ease-current').textContent = currentEasing;
-                runBall();
-            });
-        });
-
-        function runBall() {
-            if (ballRunning) return;
-            ballRunning = true;
-            const ball = document.getElementById('ease-ball');
-            const trackW = document.getElementById('ease-track').offsetWidth - 20;
-            const easing = Easings[currentEasing];
-            const dur = 1000, t0 = performance.now();
-            function step(now) {
-                const p = Math.min((now - t0) / dur, 1);
-                ball.style.transform = `translateY(-50%) translateX(${easing(p) * trackW}px)`;
-                if (p < 1) { requestAnimationFrame(step); }
-                else {
-                    setTimeout(() => {
-                        const s2 = performance.now();
-                        function back(n) { const p2 = Math.min((n - s2) / 600, 1); ball.style.transform = `translateY(-50%) translateX(${(1 - p2) * trackW}px)`; p2 < 1 ? requestAnimationFrame(back) : ballRunning = false; }
-                        requestAnimationFrame(back);
-                    }, 350);
-                }
+        // main scroll listener
+        let lastY = 0, ticking = false, endTimer = null, endCount = 0;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    const x = window.scrollX, y = window.scrollY, maxY = document.body.scrollHeight - window.innerHeight;
+                    const pct = maxY > 0 ? Math.round((y / maxY) * 100) : 0;
+                    document.getElementById('progress-bar').style.width = pct + '%';
+                    document.getElementById('stat-y').innerHTML = `${y}<span class="su">px</span>`;
+                    document.getElementById('stat-x').innerHTML = `${x}<span class="su">px</span>`;
+                    document.getElementById('stat-pct').innerHTML = `${pct}<span class="su">%</span>`;
+                    document.getElementById('pct-badge').textContent = pct + '% scrolled';
+                    const dir = y > lastY ? 'down' : 'up';
+                    const de = document.getElementById('stat-dir'), db = document.getElementById('dir-badge');
+                    de.textContent = dir === 'down' ? '↓ Down' : '↑ Up'; de.style.color = dir === 'down' ? 'var(--r)' : 'var(--g)';
+                    db.textContent = dir === 'down' ? '↓ SCROLLING DOWN' : '↑ SCROLLING UP'; db.className = 'badge ' + (dir === 'down' ? 'down' : 'up');
+                    const nav = document.getElementById('nav');
+                    nav.classList.toggle('scrolled', y > 10); nav.classList.toggle('hidden', y > lastY && y > 200);
+                    document.getElementById('back-top').classList.toggle('show', y > 300);
+                    clearTimeout(endTimer); endTimer = setTimeout(() => {
+                        endCount++; document.getElementById('end-count').textContent = endCount;
+                        const ind = document.getElementById('end-ind'); ind.classList.add('fired'); ind.textContent = '✓';
+                        document.getElementById('end-badge').classList.add('show');
+                        setTimeout(() => { ind.classList.remove('fired'); ind.textContent = '⏱'; document.getElementById('end-badge').classList.remove('show'); }, 1800);
+                    }, 200);
+                    lastY = y; ticking = false;
+                }); ticking = true;
             }
-            requestAnimationFrame(step);
-        }
-
-        // lock demo
-        function doLock() { lockScroll(); document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--accent2)">locked 🔒</strong>'; }
-        function doUnlock() { unlockScroll(); document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--accent)">unlocked 🔓</strong>'; }
+        }, { passive: true });
     </script>
 </body>
 
