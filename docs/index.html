@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <title>scroll-snap-kit — Interactive Demo</title>
+    <title>scroll-snap-kit v2.0 — Interactive Demo</title>
     <link
         href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@700;800;900&family=Instrument+Sans:wght@300;400;500&display=swap"
         rel="stylesheet" />
@@ -18,19 +18,20 @@
         }
 
         :root {
-            --bg: #070709;
-            --surface: #0f0f14;
-            --s2: #17171f;
-            --s3: #1f1f2a;
-            --border: #252530;
-            --border2: #323240;
+            --bg: #06060a;
+            --surface: #0e0e15;
+            --s2: #16161f;
+            --s3: #1e1e2a;
+            --border: #222230;
+            --b2: #2e2e40;
             --g: #00ffaa;
             --r: #ff5f6d;
             --b: #5f8dff;
             --y: #ffcc44;
             --p: #c084fc;
+            --o: #ff9f43;
             --text: #ddddf0;
-            --muted: #666688;
+            --muted: #60607a;
             --fd: 'Syne', sans-serif;
             --fb: 'Instrument Sans', sans-serif;
             --fm: 'DM Mono', monospace;
@@ -53,19 +54,20 @@
             content: '';
             position: fixed;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 9999;
-            opacity: .45
+            opacity: .5
         }
 
+        /* NAV */
         #progress-bar {
             position: fixed;
             top: 0;
             left: 0;
             height: 2px;
             z-index: 2000;
-            background: linear-gradient(90deg, var(--g), var(--b), var(--r));
+            background: linear-gradient(90deg, var(--g), var(--b), var(--r), var(--p));
             width: 0%;
             box-shadow: 0 0 16px var(--g);
             transition: width .08s linear
@@ -80,9 +82,9 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1rem 2.5rem;
-            background: rgba(7, 7, 9, .85);
-            backdrop-filter: blur(20px);
+            padding: .9rem 2.5rem;
+            background: rgba(6, 6, 10, .88);
+            backdrop-filter: blur(24px);
             border-bottom: 1px solid transparent;
             transition: border-color .3s, transform .4s cubic-bezier(.4, 0, .2, 1)
         }
@@ -97,20 +99,26 @@
 
         .nav-logo {
             font-family: var(--fm);
-            font-size: .8rem;
+            font-size: .78rem;
             color: var(--g);
             letter-spacing: .06em
         }
 
+        .nav-v {
+            font-size: .6rem;
+            color: var(--muted);
+            margin-left: .4rem
+        }
+
         .nav-links {
             display: flex;
-            gap: 1.4rem;
+            gap: 1.2rem;
             flex-wrap: wrap
         }
 
         .nav-links a {
             font-family: var(--fm);
-            font-size: .65rem;
+            font-size: .62rem;
             color: var(--muted);
             text-decoration: none;
             letter-spacing: .1em;
@@ -129,14 +137,15 @@
             border-color: var(--g)
         }
 
+        /* BADGES */
         .badge {
             position: fixed;
             z-index: 400;
             font-family: var(--fm);
-            font-size: .68rem;
-            padding: .35rem .8rem;
+            font-size: .65rem;
+            padding: .3rem .75rem;
             border-radius: 999px;
-            border: 1px solid var(--border2);
+            border: 1px solid var(--b2);
             background: var(--s2);
             color: var(--muted);
             letter-spacing: .1em;
@@ -144,17 +153,23 @@
         }
 
         #dir-badge {
-            top: 4.8rem;
+            top: 4.6rem;
             right: 2rem
         }
 
         #pct-badge {
-            top: 4.8rem;
+            top: 4.6rem;
             left: 2rem
         }
 
         #end-badge {
-            top: 7.2rem;
+            top: 6.8rem;
+            right: 2rem;
+            opacity: 0
+        }
+
+        #inf-badge {
+            top: 9rem;
             right: 2rem;
             opacity: 0
         }
@@ -174,8 +189,14 @@
         #end-badge.show {
             opacity: 1;
             color: var(--y);
-            border-color: var(--y);
-            box-shadow: 0 0 10px rgba(255, 204, 68, .25)
+            border-color: var(--y)
+        }
+
+        #inf-badge.show {
+            opacity: 1;
+            color: var(--o);
+            border-color: var(--o);
+            box-shadow: 0 0 10px rgba(255, 159, 67, .2)
         }
 
         #back-top {
@@ -183,11 +204,11 @@
             bottom: 2rem;
             right: 2rem;
             z-index: 400;
-            width: 42px;
-            height: 42px;
+            width: 40px;
+            height: 40px;
             border-radius: 10px;
             background: var(--s2);
-            border: 1px solid var(--border2);
+            border: 1px solid var(--b2);
             color: var(--text);
             font-size: 1rem;
             cursor: pointer;
@@ -206,11 +227,12 @@
 
         #back-top:hover {
             background: var(--g);
-            color: #070709;
+            color: #06060a;
             border-color: var(--g);
             box-shadow: 0 8px 24px rgba(0, 255, 170, .3)
         }
 
+        /* LAYOUT */
         section {
             min-height: 100vh;
             display: flex;
@@ -226,9 +248,9 @@
             width: 100%
         }
 
-        .section-label {
+        .sl {
             font-family: var(--fm);
-            font-size: .68rem;
+            font-size: .65rem;
             letter-spacing: .2em;
             text-transform: uppercase;
             margin-bottom: .9rem
@@ -254,9 +276,13 @@
             color: var(--p)
         }
 
+        .lo {
+            color: var(--o)
+        }
+
         h2 {
             font-family: var(--fd);
-            font-size: clamp(2rem, 4vw, 3rem);
+            font-size: clamp(2rem, 4vw, 2.8rem);
             font-weight: 900;
             letter-spacing: -.03em;
             line-height: 1.05;
@@ -266,23 +292,23 @@
         .desc {
             color: var(--muted);
             max-width: 520px;
-            font-size: .95rem;
-            margin-bottom: 2rem
+            font-size: .92rem;
+            margin-bottom: 1.8rem
         }
 
         code {
             font-family: var(--fm);
             color: var(--g);
-            font-size: .9em
+            font-size: .88em
         }
 
-        .codeblock {
+        .cb {
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 1.2rem 1.5rem;
+            padding: 1.1rem 1.4rem;
             font-family: var(--fm);
-            font-size: .78rem;
+            font-size: .76rem;
             line-height: 1.9;
             color: var(--muted);
             overflow-x: auto;
@@ -302,7 +328,7 @@
         }
 
         .cm {
-            color: #333350;
+            color: #2e2e50;
             font-style: italic
         }
 
@@ -310,74 +336,165 @@
             display: inline-flex;
             align-items: center;
             gap: .5rem;
-            padding: .75rem 1.8rem;
+            padding: .7rem 1.6rem;
             border-radius: 8px;
             border: none;
             font-family: var(--fm);
-            font-size: .78rem;
+            font-size: .76rem;
             letter-spacing: .06em;
             cursor: pointer;
             transition: all .2s;
             text-decoration: none
         }
 
-        .btn-g {
+        .bg {
             background: var(--g);
-            color: #070709;
+            color: #06060a;
             font-weight: 500
         }
 
-        .btn-g:hover {
+        .bg:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 28px rgba(0, 255, 170, .3)
         }
 
-        .btn-ghost {
-            background: transparent;
-            color: var(--text);
-            border: 1px solid var(--border2)
-        }
-
-        .btn-ghost:hover {
-            border-color: var(--muted);
-            transform: translateY(-2px)
-        }
-
-        .btn-r {
+        .br {
             background: var(--r);
             color: #fff;
             font-weight: 500
         }
 
-        .btn-r:hover {
+        .br:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 28px rgba(255, 95, 109, .3)
         }
 
-        .btn-b {
+        .bb {
             background: var(--b);
             color: #fff;
             font-weight: 500
         }
 
-        .btn-b:hover {
+        .bb:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 28px rgba(95, 141, 255, .3)
+        }
+
+        .bp {
+            background: var(--p);
+            color: #fff;
+            font-weight: 500
+        }
+
+        .bp:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(192, 132, 252, .3)
+        }
+
+        .bo {
+            background: var(--o);
+            color: #06060a;
+            font-weight: 500
+        }
+
+        .bo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(255, 159, 67, .3)
+        }
+
+        .ghost {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--b2)
+        }
+
+        .ghost:hover {
+            border-color: var(--muted);
+            transform: translateY(-2px)
+        }
+
+        .card {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.4rem
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem
+        }
+
+        .stat {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.3rem;
+            position: relative;
+            overflow: hidden
+        }
+
+        .stat::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--g), transparent);
+            opacity: 0;
+            transition: opacity .3s
+        }
+
+        .stat:hover::after {
+            opacity: 1
+        }
+
+        .slbl {
+            font-family: var(--fm);
+            font-size: .62rem;
+            letter-spacing: .15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: .5rem
+        }
+
+        .sval {
+            font-family: var(--fm);
+            font-size: 1.8rem;
+            color: var(--g);
+            line-height: 1
+        }
+
+        .su {
+            font-size: .8rem;
+            color: var(--muted);
+            margin-left: .2rem
+        }
+
+        .row {
+            display: flex;
+            gap: .75rem;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 1.5rem
         }
 
         /* HERO */
         #hero {
             text-align: center;
             align-items: center;
-            background: radial-gradient(ellipse 70% 50% at 50% -5%, rgba(0, 255, 170, .07) 0%, transparent 70%)
+            background: radial-gradient(ellipse 70% 45% at 50% -5%, rgba(0, 255, 170, .07) 0%, transparent 70%)
         }
 
-        .hero-pill {
+        .pill {
             display: inline-flex;
             align-items: center;
             gap: .5rem;
             font-family: var(--fm);
-            font-size: .72rem;
+            font-size: .7rem;
             color: var(--g);
             background: rgba(0, 255, 170, .07);
             border: 1px solid rgba(0, 255, 170, .2);
@@ -385,10 +502,10 @@
             border-radius: 999px;
             margin-bottom: 2rem;
             letter-spacing: .1em;
-            animation: fadeUp .6s .1s both
+            animation: fu .6s .1s both
         }
 
-        .hero-pill::before {
+        .pill::before {
             content: '';
             width: 6px;
             height: 6px;
@@ -418,60 +535,60 @@
             line-height: .95;
             letter-spacing: -.04em;
             margin-bottom: 1.5rem;
-            animation: fadeUp .6s .25s both
+            animation: fu .6s .25s both
         }
 
         .grad {
-            background: linear-gradient(135deg, var(--g) 0%, var(--b) 60%, var(--r) 100%);
+            background: linear-gradient(135deg, var(--g) 0%, var(--b) 50%, var(--p) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text
         }
 
-        .hero-sub {
-            font-size: 1.1rem;
+        .hs {
+            font-size: 1.05rem;
             color: var(--muted);
             max-width: 500px;
             margin: 0 auto 2.5rem;
-            animation: fadeUp .6s .4s both
+            animation: fu .6s .4s both
         }
 
-        .hero-ctas {
+        .hc {
             display: flex;
             gap: 1rem;
             justify-content: center;
             flex-wrap: wrap;
-            animation: fadeUp .6s .55s both
+            animation: fu .6s .55s both
         }
 
-        .feat-counts {
+        .counts {
             margin-top: 4rem;
             display: flex;
             gap: 3rem;
             justify-content: center;
-            animation: fadeUp .6s .7s both
+            animation: fu .6s .7s both
         }
 
-        .fc {
+        .cn {
             text-align: center
         }
 
-        .fc-n {
+        .cn-n {
             font-family: var(--fd);
             font-size: 2.5rem;
             font-weight: 900;
             color: var(--g)
         }
 
-        .fc-l {
+        .cn-l {
             font-family: var(--fm);
-            font-size: .68rem;
+            font-size: .65rem;
             color: var(--muted);
             letter-spacing: .15em;
             text-transform: uppercase
         }
 
-        @keyframes fadeUp {
+        @keyframes fu {
             from {
                 opacity: 0;
                 transform: translateY(20px)
@@ -483,71 +600,8 @@
             }
         }
 
-        /* STATS */
-        #s-pos {
-            background: linear-gradient(180deg, var(--bg), var(--surface))
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem
-        }
-
-        .stat {
-            background: var(--s2);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.4rem 1.2rem;
-            position: relative;
-            overflow: hidden
-        }
-
-        .stat::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--g), transparent);
-            opacity: 0;
-            transition: opacity .3s
-        }
-
-        .stat:hover::after {
-            opacity: 1
-        }
-
-        .slbl {
-            font-family: var(--fm);
-            font-size: .65rem;
-            letter-spacing: .15em;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: .6rem
-        }
-
-        .sval {
-            font-family: var(--fm);
-            font-size: 1.9rem;
-            color: var(--g);
-            line-height: 1
-        }
-
-        .su {
-            font-size: .85rem;
-            color: var(--muted);
-            margin-left: .2rem
-        }
-
-        /* SPY */
-        #s-spy {
-            background: var(--surface)
-        }
-
-        .spy-box {
+        /* SECTION-SPECIFIC */
+        #s-spy .spy-box {
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 14px;
@@ -555,25 +609,25 @@
             margin-top: 1.5rem
         }
 
-        .spy-hint {
+        #s-spy .spy-hint {
             font-family: var(--fm);
-            font-size: .75rem;
+            font-size: .73rem;
             color: var(--muted);
             margin-bottom: 1rem
         }
 
         .spy-nav {
             display: flex;
-            gap: .75rem;
+            gap: .65rem;
             flex-wrap: wrap
         }
 
         .spy-link {
             font-family: var(--fm);
-            font-size: .75rem;
-            letter-spacing: .1em;
+            font-size: .68rem;
+            letter-spacing: .08em;
             text-transform: uppercase;
-            padding: .5rem 1rem;
+            padding: .45rem .9rem;
             border-radius: 6px;
             border: 1px solid var(--border);
             color: var(--muted);
@@ -584,26 +638,20 @@
 
         .spy-link:hover {
             color: var(--text);
-            border-color: var(--border2)
+            border-color: var(--b2)
         }
 
         .spy-link.active {
             color: var(--g);
             border-color: var(--g);
-            background: rgba(0, 255, 170, .07);
-            box-shadow: 0 0 14px rgba(0, 255, 170, .15)
+            background: rgba(0, 255, 170, .07)
         }
 
-        /* END */
-        #s-end {
-            background: linear-gradient(180deg, var(--surface), var(--bg))
-        }
-
-        .end-box {
+        #s-end .end-box {
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 14px;
-            padding: 2rem;
+            padding: 1.8rem;
             margin-top: 1.5rem;
             display: flex;
             align-items: center;
@@ -612,14 +660,14 @@
         }
 
         .end-ind {
-            width: 80px;
-            height: 80px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
-            border: 2px solid var(--border2);
+            border: 2px solid var(--b2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             flex-shrink: 0;
             transition: all .5s cubic-bezier(.34, 1.56, .64, 1)
         }
@@ -627,25 +675,7 @@
         .end-ind.fired {
             border-color: var(--y);
             box-shadow: 0 0 30px rgba(255, 204, 68, .4);
-            transform: scale(1.1)
-        }
-
-        .et .title {
-            font-family: var(--fd);
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: .3rem
-        }
-
-        .et .sub {
-            font-family: var(--fm);
-            font-size: .8rem;
-            color: var(--muted)
-        }
-
-        /* NEEDED */
-        #s-needed {
-            background: var(--bg)
+            transform: scale(1.12)
         }
 
         .needed-grid {
@@ -659,7 +689,7 @@
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.4rem;
             cursor: pointer;
             transition: all .25s
         }
@@ -670,21 +700,21 @@
             box-shadow: 0 10px 30px rgba(95, 141, 255, .15)
         }
 
-        .nc .icon {
-            font-size: 1.8rem;
-            margin-bottom: .75rem
+        .nc .ic {
+            font-size: 1.6rem;
+            margin-bottom: .65rem
         }
 
-        .nc .name {
+        .nc .nm {
             font-family: var(--fd);
-            font-size: 1rem;
+            font-size: .95rem;
             font-weight: 700;
-            margin-bottom: .3rem
+            margin-bottom: .25rem
         }
 
-        .nc .sub {
+        .nc .sb {
             font-family: var(--fm);
-            font-size: .72rem;
+            font-size: .7rem;
             color: var(--muted)
         }
 
@@ -693,57 +723,51 @@
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 1rem 1.2rem;
+            padding: .9rem 1.2rem;
             font-family: var(--fm);
-            font-size: .75rem;
+            font-size: .73rem;
             color: var(--muted);
-            min-height: 56px;
+            min-height: 50px;
             line-height: 1.8
-        }
-
-        /* EASE */
-        #s-ease {
-            background: linear-gradient(180deg, var(--bg), var(--surface))
         }
 
         .ease-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: .75rem;
+            gap: .7rem;
             margin-top: 1.5rem
         }
 
-        .ease-btn {
+        .eb {
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 10px;
-            padding: 1rem;
+            padding: .9rem;
             cursor: pointer;
             text-align: center;
             transition: all .25s;
             font-family: var(--fm)
         }
 
-        .ease-btn:hover {
+        .eb:hover {
             border-color: var(--r);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 24px rgba(255, 95, 109, .15)
+            transform: translateY(-3px)
         }
 
-        .ease-btn.active {
+        .eb.active {
             border-color: var(--r);
             background: rgba(255, 95, 109, .08)
         }
 
-        .ease-name {
-            font-size: .78rem;
+        .en {
+            font-size: .75rem;
             color: var(--text);
-            margin-bottom: .3rem;
+            margin-bottom: .25rem;
             font-weight: 500
         }
 
-        .ease-desc {
-            font-size: .65rem;
+        .ed {
+            font-size: .62rem;
             color: var(--muted)
         }
 
@@ -752,18 +776,18 @@
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.5rem
+            padding: 1.4rem
         }
 
-        .ease-wrap {
+        .ew {
             position: relative;
-            height: 60px;
+            height: 56px;
             margin-bottom: 1rem
         }
 
         #ease-track {
             width: 100%;
-            height: 6px;
+            height: 5px;
             background: var(--s3);
             border-radius: 3px;
             position: absolute;
@@ -772,29 +796,24 @@
         }
 
         #ease-ball {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             background: var(--r);
-            box-shadow: 0 0 16px rgba(255, 95, 109, .6);
+            box-shadow: 0 0 14px rgba(255, 95, 109, .6);
             position: absolute;
             top: 50%;
-            transform: translateY(-50%) translateX(0)
+            transform: translateY(-50%)
         }
 
-        .ease-status {
+        .es {
             font-family: var(--fm);
-            font-size: .75rem;
+            font-size: .73rem;
             color: var(--muted)
         }
 
-        #ease-cur {
+        #ec {
             color: var(--r)
-        }
-
-        /* VIEWPORT */
-        #s-vp {
-            background: var(--surface)
         }
 
         .vp-grid {
@@ -808,10 +827,10 @@
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 14px;
-            padding: 2rem 1.5rem;
+            padding: 1.8rem 1.4rem;
             text-align: center;
             opacity: 0;
-            transform: translateY(30px) scale(.97);
+            transform: translateY(28px) scale(.97);
             transition: opacity .6s, transform .6s cubic-bezier(.4, 0, .2, 1), border-color .3s, box-shadow .3s
         }
 
@@ -819,7 +838,7 @@
             opacity: 1;
             transform: translateY(0) scale(1);
             border-color: var(--g);
-            box-shadow: 0 0 30px rgba(0, 255, 170, .1)
+            box-shadow: 0 0 28px rgba(0, 255, 170, .1)
         }
 
         .vpc:nth-child(2) {
@@ -830,51 +849,34 @@
             transition-delay: .24s
         }
 
-        .vp-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem
+        .vi {
+            font-size: 1.8rem;
+            margin-bottom: .9rem
         }
 
-        .vp-title {
+        .vt {
             font-family: var(--fd);
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 800;
-            margin-bottom: .4rem
+            margin-bottom: .35rem
         }
 
-        .vp-sub {
-            font-size: .8rem;
+        .vs {
+            font-size: .78rem;
             color: var(--muted)
-        }
-
-        /* LOCK */
-        #s-lock {
-            background: linear-gradient(180deg, var(--surface), var(--bg))
-        }
-
-        .lock-row {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-            margin-top: 1.5rem
-        }
-
-        .lock-btn {
-            padding: .9rem 2rem;
-            border-radius: 10px;
-            border: none;
-            font-family: var(--fm);
-            font-size: .8rem;
-            letter-spacing: .06em;
-            cursor: pointer;
-            transition: all .25s;
-            font-weight: 500
         }
 
         #btn-lock {
             background: var(--r);
-            color: #fff
+            color: #fff;
+            padding: .85rem 1.8rem;
+            border-radius: 10px;
+            border: none;
+            font-family: var(--fm);
+            font-size: .78rem;
+            cursor: pointer;
+            transition: all .25s;
+            font-weight: 500
         }
 
         #btn-lock:hover {
@@ -884,7 +886,15 @@
 
         #btn-unlock {
             background: var(--g);
-            color: #070709
+            color: #06060a;
+            padding: .85rem 1.8rem;
+            border-radius: 10px;
+            border: none;
+            font-family: var(--fm);
+            font-size: .78rem;
+            cursor: pointer;
+            transition: all .25s;
+            font-weight: 500
         }
 
         #btn-unlock:hover {
@@ -894,77 +904,73 @@
 
         #lock-status {
             font-family: var(--fm);
-            font-size: .78rem;
+            font-size: .76rem;
             color: var(--muted);
-            padding: .8rem 1.2rem;
+            padding: .75rem 1.1rem;
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 8px
         }
 
         /* SEQUENCE */
-        #s-seq {
-            background: var(--bg)
-        }
-
         .seq-targets {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
-            margin-top: 1.5rem;
-            margin-bottom: 1.5rem
+            margin: 1.2rem 0
         }
 
-        .seq-target {
+        .st {
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.4rem;
             text-align: center;
             transition: all .4s
         }
 
-        .seq-target.active {
+        .st.active {
             border-color: var(--p);
-            box-shadow: 0 0 24px rgba(192, 132, 252, .3);
+            box-shadow: 0 0 22px rgba(192, 132, 252, .3);
             background: rgba(192, 132, 252, .06)
         }
 
-        .seq-icon {
-            font-size: 2rem;
-            margin-bottom: .5rem
+        .si {
+            font-size: 1.8rem;
+            margin-bottom: .45rem
         }
 
-        .seq-name {
+        .sn {
             font-family: var(--fd);
-            font-size: 1rem;
+            font-size: .95rem;
             font-weight: 700
         }
 
-        .seq-status {
+        .ss {
             font-family: var(--fm);
-            font-size: .72rem;
+            font-size: .68rem;
             color: var(--muted);
-            margin-top: .25rem
+            margin-top: .2rem
         }
 
-        .seq-controls {
-            display: flex;
-            gap: .75rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem
+        #seq-status {
+            font-family: var(--fm);
+            font-size: .76rem;
+            color: var(--muted);
+            padding: .6rem 1rem;
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 8px
         }
 
         /* PARALLAX */
         #s-parallax {
-            background: linear-gradient(180deg, var(--bg), var(--surface));
-            overflow: hidden;
-            min-height: 100vh
+            overflow: hidden
         }
 
-        .parallax-stage {
+        .plx-stage {
             position: relative;
-            height: 340px;
+            height: 320px;
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 16px;
@@ -972,12 +978,12 @@
             margin-top: 1.5rem
         }
 
-        .plx-layer {
+        .plx-l {
             position: absolute;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
+            border-radius: 10px;
             font-family: var(--fd);
             font-weight: 800;
             user-select: none
@@ -986,8 +992,8 @@
         #plx-bg {
             width: 100%;
             height: 100%;
-            background: radial-gradient(ellipse at 30% 60%, rgba(0, 255, 170, .06), transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(95, 141, 255, .06), transparent 60%);
-            font-size: .8rem;
+            background: radial-gradient(ellipse at 30% 60%, rgba(0, 255, 170, .05), transparent 60%), radial-gradient(ellipse at 70% 30%, rgba(95, 141, 255, .05), transparent 60%);
+            font-size: .72rem;
             font-family: var(--fm);
             color: var(--muted);
             letter-spacing: .15em;
@@ -998,60 +1004,61 @@
         }
 
         #plx-mid {
-            width: 220px;
-            height: 220px;
+            width: 200px;
+            height: 200px;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
             background: rgba(0, 255, 170, .05);
-            border: 1px solid rgba(0, 255, 170, .15);
+            border: 1px solid rgba(0, 255, 170, .12);
             border-radius: 50%;
-            font-size: 1rem;
-            color: rgba(0, 255, 170, .4);
+            font-size: .9rem;
+            color: rgba(0, 255, 170, .35);
             letter-spacing: .1em;
             text-align: center
         }
 
         #plx-fg {
-            bottom: 2rem;
-            left: 3rem;
+            bottom: 1.5rem;
+            left: 2.5rem;
             background: rgba(255, 95, 109, .1);
-            border: 1px solid rgba(255, 95, 109, .25);
-            color: rgba(255, 95, 109, .7);
-            padding: 1rem 1.5rem;
-            font-size: 1.5rem;
+            border: 1px solid rgba(255, 95, 109, .22);
+            color: rgba(255, 95, 109, .65);
+            padding: .9rem 1.4rem;
+            font-size: 1.4rem;
             letter-spacing: -.02em
         }
 
         .plx-hint {
             font-family: var(--fm);
-            font-size: .75rem;
+            font-size: .72rem;
             color: var(--muted);
-            margin-top: 1rem;
+            margin-top: .85rem;
             text-align: center
         }
 
-        .plx-controls {
+        .plx-speeds {
             display: flex;
-            gap: .75rem;
-            margin-top: 1rem;
-            flex-wrap: wrap
+            gap: .6rem;
+            margin-top: .85rem;
+            flex-wrap: wrap;
+            align-items: center
         }
 
-        .plx-speed {
+        .psp {
             font-family: var(--fm);
-            font-size: .8rem;
+            font-size: .72rem;
             background: var(--s2);
             border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: .5rem 1rem;
+            border-radius: 7px;
+            padding: .45rem .9rem;
             color: var(--text);
             cursor: pointer;
             transition: all .2s
         }
 
-        .plx-speed:hover,
-        .plx-speed.active {
+        .psp:hover,
+        .psp.active {
             border-color: var(--g);
             color: var(--g)
         }
@@ -1061,7 +1068,7 @@
             background: var(--surface)
         }
 
-        .progress-demo {
+        .prog-demo {
             margin-top: 1.5rem;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1069,150 +1076,391 @@
             align-items: start
         }
 
-        .prog-article {
+        .prog-art {
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 1.5rem;
-            height: 320px;
-            overflow-y: scroll;
-            scroll-behavior: smooth;
-            position: relative
+            padding: 1.4rem;
+            height: 300px;
+            overflow-y: scroll
         }
 
-        .prog-article p {
-            font-size: .85rem;
+        .prog-art p {
+            font-size: .83rem;
             color: var(--muted);
             line-height: 1.9;
-            margin-bottom: 1rem
+            margin-bottom: .9rem
         }
 
-        .prog-article p:last-child {
-            margin-bottom: 0
-        }
-
-        .prog-stats {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem
-        }
-
-        .prog-bar-wrap {
+        .pbw {
             background: var(--s3);
             border-radius: 999px;
-            height: 8px;
+            height: 7px;
             overflow: hidden;
             margin-bottom: .5rem
         }
 
-        #prog-bar-fill {
+        #prog-fill {
             height: 100%;
             border-radius: 999px;
             background: linear-gradient(90deg, var(--g), var(--b));
             width: 0%;
-            transition: width .1s linear;
             box-shadow: 0 0 10px rgba(0, 255, 170, .4)
-        }
-
-        .prog-val {
-            font-family: var(--fm);
-            font-size: 2.5rem;
-            font-weight: 500;
-            color: var(--g);
-            line-height: 1
-        }
-
-        .prog-lbl {
-            font-family: var(--fm);
-            font-size: .7rem;
-            color: var(--muted);
-            letter-spacing: .1em;
-            text-transform: uppercase;
-            margin-bottom: .5rem
         }
 
         /* SNAP */
         #s-snap {
-            background: linear-gradient(180deg, var(--surface), var(--bg));
             min-height: auto;
             padding: 5rem 2.5rem
         }
 
-        .snap-demo {
-            margin-top: 1.5rem;
-            position: relative
-        }
-
         .snap-stage {
-            height: 400px;
+            height: 380px;
             overflow-y: scroll;
             border: 1px solid var(--border);
             border-radius: 16px;
-            background: var(--s2);
-            scroll-behavior: auto
+            background: var(--s2)
         }
 
-        .snap-section {
-            height: 200px;
+        .snap-sec {
+            height: 190px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-bottom: 1px solid var(--border);
-            transition: background .3s, color .3s;
-            cursor: default;
             flex-direction: column;
-            gap: .5rem
+            gap: .4rem;
+            transition: background .3s
         }
 
-        .snap-section:last-child {
+        .snap-sec:last-child {
             border-bottom: none
         }
 
-        .snap-section.snapped {
-            background: rgba(0, 255, 170, .05);
-            border-color: rgba(0, 255, 170, .2)
+        .snap-sec.snapped {
+            background: rgba(0, 255, 170, .04)
         }
 
-        .snap-section .ss-num {
+        .ssn {
             font-family: var(--fd);
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 900;
-            color: var(--border2);
+            color: var(--border);
             transition: color .3s
         }
 
-        .snap-section.snapped .ss-num {
+        .snap-sec.snapped .ssn {
             color: var(--g)
         }
 
-        .snap-section .ss-lbl {
+        .ssl {
             font-family: var(--fm);
-            font-size: .72rem;
+            font-size: .7rem;
             color: var(--muted);
             letter-spacing: .15em;
             text-transform: uppercase
         }
 
-        .snap-toggle {
-            display: flex;
-            gap: .75rem;
-            margin-bottom: 1rem;
-            align-items: center;
-            flex-wrap: wrap
+        #snap-cur {
+            color: var(--g);
+            font-weight: 500
         }
 
-        .snap-indicator {
-            font-family: var(--fm);
+        /* ══ NEW v2 SECTIONS ══ */
+
+        /* REVEAL */
+        #s-reveal {
+            background: linear-gradient(180deg, var(--bg), var(--surface))
+        }
+
+        .reveal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem
+        }
+
+        .rv-card {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center
+        }
+
+        .rv-icon {
+            font-size: 2rem;
+            margin-bottom: .75rem
+        }
+
+        .rv-name {
+            font-family: var(--fd);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: .25rem
+        }
+
+        .rv-sub {
             font-size: .78rem;
+            color: var(--muted)
+        }
+
+        .effect-btns {
+            display: flex;
+            gap: .6rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem
+        }
+
+        .eff-btn {
+            font-family: var(--fm);
+            font-size: .7rem;
+            padding: .45rem .9rem;
+            border-radius: 7px;
+            border: 1px solid var(--border);
+            background: transparent;
             color: var(--muted);
-            padding: .6rem 1rem;
+            cursor: pointer;
+            transition: all .2s;
+            letter-spacing: .06em
+        }
+
+        .eff-btn:hover {
+            color: var(--text);
+            border-color: var(--b2)
+        }
+
+        .eff-btn.active {
+            color: var(--p);
+            border-color: var(--p);
+            background: rgba(192, 132, 252, .08)
+        }
+
+        /* TIMELINE */
+        #s-timeline {
+            background: var(--surface)
+        }
+
+        .timeline-stage {
+            position: relative;
+            height: 260px;
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        #tl-hero-text {
+            font-family: var(--fd);
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -.04em;
+            opacity: var(--tl-opacity, 1);
+            transform: scale(var(--tl-scale, 1)) translateY(var(--tl-y, 0px));
+            transition: none;
+            text-align: center;
+            line-height: 1.1
+        }
+
+        #tl-blur-overlay {
+            position: absolute;
+            inset: 0;
+            backdrop-filter: blur(var(--tl-blur, 0px));
+            pointer-events: none
+        }
+
+        #tl-bg-color {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 255, 170, var(--tl-bg, 0));
+            z-index: -1
+        }
+
+        .tl-tracks {
+            margin-top: 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: .75rem
+        }
+
+        .tl-track {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: .9rem 1rem
+        }
+
+        .tl-name {
+            font-family: var(--fm);
+            font-size: .68rem;
+            color: var(--muted);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            margin-bottom: .4rem
+        }
+
+        .tl-bar {
+            background: var(--s3);
+            border-radius: 999px;
+            height: 4px;
+            overflow: hidden
+        }
+
+        .tl-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width .1s linear
+        }
+
+        .tl-val {
+            font-family: var(--fm);
+            font-size: .72rem;
+            color: var(--g);
+            margin-top: .3rem
+        }
+
+        /* INFINITE SCROLL */
+        #s-infinite {
+            background: linear-gradient(180deg, var(--surface), var(--bg))
+        }
+
+        .inf-feed {
+            height: 380px;
+            overflow-y: scroll;
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            margin-top: 1.5rem;
+            padding: 1rem
+        }
+
+        .inf-item {
+            background: var(--s3);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.1rem 1.2rem;
+            margin-bottom: .75rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            animation: fu .4s both
+        }
+
+        .inf-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem
+        }
+
+        .inf-body .inf-title {
+            font-family: var(--fd);
+            font-size: .9rem;
+            font-weight: 700;
+            margin-bottom: .2rem
+        }
+
+        .inf-body .inf-sub {
+            font-size: .76rem;
+            color: var(--muted);
+            font-family: var(--fm)
+        }
+
+        .inf-loader {
+            text-align: center;
+            padding: 1rem;
+            font-family: var(--fm);
+            font-size: .75rem;
+            color: var(--muted);
+            display: none
+        }
+
+        .inf-loader.show {
+            display: block
+        }
+
+        #inf-count {
+            font-family: var(--fm);
+            font-size: .76rem;
+            color: var(--o);
+            padding: .55rem 1rem;
             background: var(--s2);
             border: 1px solid var(--border);
             border-radius: 8px
         }
 
-        #snap-cur {
-            color: var(--g);
+        /* SCROLL TRAP */
+        #s-trap {
+            background: var(--bg)
+        }
+
+        .trap-demo {
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            align-items: start
+        }
+
+        .trap-modal {
+            background: var(--s2);
+            border: 1px solid var(--b2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            height: 300px;
+            display: flex;
+            flex-direction: column
+        }
+
+        .trap-title {
+            font-family: var(--fd);
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .trap-content {
+            overflow-y: scroll;
+            flex: 1;
+            padding-right: .5rem
+        }
+
+        .trap-content p {
+            font-size: .83rem;
+            color: var(--muted);
+            line-height: 1.9;
+            margin-bottom: .9rem
+        }
+
+        .trap-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem
+        }
+
+        .trap-indicator {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem;
+            font-family: var(--fm);
+            font-size: .76rem;
+            color: var(--muted);
+            line-height: 1.8
+        }
+
+        #trap-state {
             font-weight: 500
         }
 
@@ -1221,7 +1469,7 @@
             border-top: 1px solid var(--border);
             text-align: center;
             font-family: var(--fm);
-            font-size: .72rem;
+            font-size: .7rem;
             color: var(--muted)
         }
 
@@ -1232,11 +1480,13 @@
 
         @media(max-width:720px) {
 
-            .stats,
-            .ease-grid,
+            .stat-grid,
             .vp-grid,
+            .tl-tracks,
+            .trap-demo,
             .seq-targets,
-            .progress-demo {
+            .prog-demo,
+            .reveal-grid {
                 grid-template-columns: 1fr 1fr
             }
 
@@ -1245,15 +1495,17 @@
             }
 
             nav {
-                padding: 1rem 1.5rem
+                padding: .9rem 1.5rem
             }
         }
 
         @media(max-width:440px) {
 
-            .stats,
+            .stat-grid,
             .needed-grid,
-            .progress-demo {
+            .prog-demo,
+            .tl-tracks,
+            .trap-demo {
                 grid-template-columns: 1fr
             }
         }
@@ -1265,300 +1517,277 @@
     <div class="badge" id="pct-badge">0%</div>
     <div class="badge" id="dir-badge">— IDLE</div>
     <div class="badge" id="end-badge">✓ scroll stopped</div>
+    <div class="badge" id="inf-badge">↓ loading more…</div>
     <button id="back-top">↑</button>
 
     <nav id="nav">
-        <span class="nav-logo">scroll-snap-kit v1.2</span>
+        <span class="nav-logo">scroll-snap-kit<span class="nav-v">v2.0</span></span>
         <div class="nav-links" id="nav-links">
-            <a href="#s-pos">position</a>
-            <a href="#s-spy">spy</a>
-            <a href="#s-end">onEnd</a>
-            <a href="#s-needed">ifNeeded</a>
-            <a href="#s-ease">ease</a>
-            <a href="#s-vp">viewport</a>
-            <a href="#s-lock">lock</a>
-            <a href="#s-seq">sequence</a>
-            <a href="#s-parallax">parallax</a>
-            <a href="#s-progress">progress</a>
-            <a href="#s-snap">snap</a>
+            <a href="#s-pos">pos</a><a href="#s-spy">spy</a><a href="#s-end">end</a>
+            <a href="#s-needed">needed</a><a href="#s-ease">ease</a><a href="#s-vp">viewport</a>
+            <a href="#s-lock">lock</a><a href="#s-seq">sequence</a><a href="#s-parallax">parallax</a>
+            <a href="#s-progress">progress</a><a href="#s-snap">snap</a>
+            <a href="#s-reveal">reveal</a><a href="#s-timeline">timeline</a>
+            <a href="#s-infinite">infinite</a><a href="#s-trap">trap</a>
         </div>
     </nav>
 
     <!-- HERO -->
     <section id="hero">
         <div class="container">
-            <div class="hero-pill">npm install scroll-snap-kit</div>
-            <h1>Scroll.<br /><span class="grad">Perfected.</span></h1>
-            <p class="hero-sub">12 scroll utilities + 5 React hooks. Zero dependencies. Tree-shakeable. Works with or
-                without React.</p>
-            <div class="hero-ctas">
-                <button class="btn btn-g" onclick="easeGo('#s-pos')">Explore demos ↓</button>
-                <a class="btn btn-ghost" href="https://npmjs.com" target="_blank">npm page ↗</a>
+            <div class="pill">npm install scroll-snap-kit</div>
+            <h1>Scroll.<br /><span class="grad">v2.0</span></h1>
+            <p class="hs">16 utilities · 5 React hooks · TypeScript types · ESM + CJS + UMD bundles. Zero dependencies.
+            </p>
+            <div class="hc">
+                <button class="btn bg" onclick="easeGo('#s-pos')">Explore demos ↓</button>
+                <a class="btn ghost" href="https://npmjs.com" target="_blank">npm page ↗</a>
             </div>
-            <div class="feat-counts">
-                <div class="fc">
-                    <div class="fc-n">12</div>
-                    <div class="fc-l">Utilities</div>
+            <div class="counts">
+                <div class="cn">
+                    <div class="cn-n">16</div>
+                    <div class="cn-l">Utilities</div>
                 </div>
-                <div class="fc">
-                    <div class="fc-n">5</div>
-                    <div class="fc-l">React Hooks</div>
+                <div class="cn">
+                    <div class="cn-n">5</div>
+                    <div class="cn-l">React Hooks</div>
                 </div>
-                <div class="fc">
-                    <div class="fc-n">0</div>
-                    <div class="fc-l">Dependencies</div>
+                <div class="cn">
+                    <div class="cn-n">3</div>
+                    <div class="cn-l">Bundle formats</div>
+                </div>
+                <div class="cn">
+                    <div class="cn-n">0</div>
+                    <div class="cn-l">Dependencies</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 01 POSITION -->
-    <section id="s-pos">
+    <section id="s-pos" style="background:linear-gradient(180deg,var(--bg),var(--surface))">
         <div class="container">
-            <div class="section-label lg">01 — getScrollPosition() + onScroll()</div>
+            <div class="sl lg">01 — getScrollPosition() + onScroll()</div>
             <h2>Live scroll data.</h2>
-            <p class="desc">Throttled listener giving you exact position, percentages and direction — in real time.</p>
-            <div class="stats">
+            <p class="desc">Throttled listener giving you exact position, percentages and direction in real time.</p>
+            <div class="stat-grid">
                 <div class="stat">
                     <div class="slbl">Scroll Y</div>
-                    <div class="sval" id="stat-y">0<span class="su">px</span></div>
+                    <div class="sval" id="sy">0<span class="su">px</span></div>
                 </div>
                 <div class="stat">
                     <div class="slbl">Progress</div>
-                    <div class="sval" id="stat-pct">0<span class="su">%</span></div>
+                    <div class="sval" id="spct">0<span class="su">%</span></div>
                 </div>
                 <div class="stat">
                     <div class="slbl">Direction</div>
-                    <div class="sval" id="stat-dir" style="font-size:1.3rem;color:var(--text)">—</div>
+                    <div class="sval" id="sdir" style="font-size:1.2rem;color:var(--text)">—</div>
                 </div>
                 <div class="stat">
                     <div class="slbl">Scroll X</div>
-                    <div class="sval" id="stat-x">0<span class="su">px</span></div>
+                    <div class="sval" id="sx">0<span class="su">px</span></div>
                 </div>
             </div>
-            <div class="codeblock">
-                <span class="kw">const</span> stop = <span class="fn">onScroll</span>(({ y, percentY }) => {<br />
-                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">`${percentY}% down`</span>)<br />
-                }, { throttle: <span class="str">100</span> })<br />
-                stop() <span class="cm">// cleanup</span>
-            </div>
+            <div class="cb"><span class="kw">const</span> stop = <span class="fn">onScroll</span>(({ y, percentY }) =>
+                {<br />&nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">`${percentY}%
+                    down`</span>)<br />}, { throttle: <span class="str">100</span> })</div>
         </div>
     </section>
 
     <!-- 02 SPY -->
-    <section id="s-spy">
+    <section id="s-spy" style="background:var(--surface)">
         <div class="container">
-            <div class="section-label lb">02 — scrollSpy()</div>
+            <div class="sl lb">02 — scrollSpy()</div>
             <h2>Nav that knows where you are.</h2>
-            <p class="desc">Automatically highlights nav links based on the active section. The top nav is using it live
-                right now.</p>
+            <p class="desc">The top nav is using it live. Mini-nav below is also synced.</p>
             <div class="spy-box">
-                <div class="spy-hint">↑ Watch the top nav. Or click these mini-nav links:</div>
+                <div class="spy-hint">↑ Watch the top nav update as you scroll:</div>
                 <div class="spy-nav" id="spy-mini">
-                    <a href="#s-pos" class="spy-link">position</a>
-                    <a href="#s-spy" class="spy-link">spy</a>
-                    <a href="#s-end" class="spy-link">onEnd</a>
-                    <a href="#s-needed" class="spy-link">ifNeeded</a>
-                    <a href="#s-ease" class="spy-link">ease</a>
-                    <a href="#s-vp" class="spy-link">viewport</a>
-                    <a href="#s-lock" class="spy-link">lock</a>
-                    <a href="#s-seq" class="spy-link">sequence</a>
-                    <a href="#s-parallax" class="spy-link">parallax</a>
-                    <a href="#s-progress" class="spy-link">progress</a>
-                    <a href="#s-snap" class="spy-link">snap</a>
+                    <a href="#s-pos" class="spy-link">pos</a><a href="#s-spy" class="spy-link">spy</a><a href="#s-end"
+                        class="spy-link">end</a>
+                    <a href="#s-needed" class="spy-link">needed</a><a href="#s-ease" class="spy-link">ease</a><a
+                        href="#s-vp" class="spy-link">viewport</a>
+                    <a href="#s-lock" class="spy-link">lock</a><a href="#s-seq" class="spy-link">sequence</a><a
+                        href="#s-parallax" class="spy-link">parallax</a>
+                    <a href="#s-progress" class="spy-link">progress</a><a href="#s-snap" class="spy-link">snap</a>
+                    <a href="#s-reveal" class="spy-link">reveal</a><a href="#s-timeline" class="spy-link">timeline</a>
+                    <a href="#s-infinite" class="spy-link">infinite</a><a href="#s-trap" class="spy-link">trap</a>
                 </div>
             </div>
-            <div class="codeblock">
-                <span class="kw">const</span> stop = <span class="fn">scrollSpy</span>(<span
+            <div class="cb"><span class="kw">const</span> stop = <span class="fn">scrollSpy</span>(<span
                     class="str">'section[id]'</span>, <span class="str">'nav a'</span>, { offset: <span
-                    class="str">80</span> })<br />
-                stop() <span class="cm">// remove listener</span>
-            </div>
+                    class="str">80</span> })</div>
         </div>
     </section>
 
-    <!-- 03 SCROLL END -->
-    <section id="s-end">
+    <!-- 03 END -->
+    <section id="s-end" style="background:linear-gradient(180deg,var(--surface),var(--bg))">
         <div class="container">
-            <div class="section-label ly">03 — onScrollEnd()</div>
+            <div class="sl ly">03 — onScrollEnd()</div>
             <h2>When scrolling stops.</h2>
-            <p class="desc">Fire a callback once the user has been idle for a configurable delay.</p>
+            <p class="desc">Fires once after 200ms of idle scroll. Great for lazy-loading or analytics.</p>
             <div class="end-box">
                 <div class="end-ind" id="end-ind">⏱</div>
-                <div class="et">
-                    <div class="title">Scroll, then stop.</div>
-                    <div class="sub">Fires after <strong style="color:var(--y)">200ms</strong> idle. Count: <span
-                            id="end-count" style="color:var(--y);font-weight:500">0</span></div>
+                <div>
+                    <div style="font-family:var(--fd);font-size:1.2rem;font-weight:700;margin-bottom:.3rem">Scroll, then
+                        stop.</div>
+                    <div style="font-family:var(--fm);font-size:.78rem;color:var(--muted)">Fires after <strong
+                            style="color:var(--y)">200ms</strong> idle. Count: <span id="end-count"
+                            style="color:var(--y)">0</span></div>
                 </div>
             </div>
-            <div class="codeblock">
-                <span class="kw">const</span> stop = <span class="fn">onScrollEnd</span>(() => {<br />
-                &nbsp;&nbsp;console.<span class="fn">log</span>(<span class="str">'Stopped!'</span>)<br />
-                }, { delay: <span class="str">200</span> })
-            </div>
+            <div class="cb"><span class="kw">const</span> stop = <span class="fn">onScrollEnd</span>(() => <span
+                    class="fn">saveState</span>(), { delay: <span class="str">200</span> })</div>
         </div>
     </section>
 
-    <!-- 04 IF NEEDED -->
-    <section id="s-needed">
+    <!-- 04 NEEDED -->
+    <section id="s-needed" style="background:var(--bg)">
         <div class="container">
-            <div class="section-label lb">04 — scrollIntoViewIfNeeded()</div>
+            <div class="sl lb">04 — scrollIntoViewIfNeeded()</div>
             <h2>Only scroll when necessary.</h2>
-            <p class="desc">Clicks a card — if the section is already visible, nothing happens.</p>
+            <p class="desc">Click a card — if the target is already visible, nothing happens.</p>
             <div class="needed-grid">
                 <div class="nc" onclick="needScroll('#s-pos')">
-                    <div class="icon">📍</div>
-                    <div class="name">Position</div>
-                    <div class="sub">scrollIntoViewIfNeeded()</div>
+                    <div class="ic">📍</div>
+                    <div class="nm">Position</div>
+                    <div class="sb">scrollIntoViewIfNeeded()</div>
                 </div>
-                <div class="nc" onclick="needScroll('#s-ease')">
-                    <div class="icon">🎢</div>
-                    <div class="name">Ease</div>
-                    <div class="sub">scrollIntoViewIfNeeded()</div>
+                <div class="nc" onclick="needScroll('#s-reveal')">
+                    <div class="ic">✨</div>
+                    <div class="nm">Reveal</div>
+                    <div class="sb">scrollIntoViewIfNeeded()</div>
                 </div>
-                <div class="nc" onclick="needScroll('#s-parallax')">
-                    <div class="icon">🏔</div>
-                    <div class="name">Parallax</div>
-                    <div class="sub">scrollIntoViewIfNeeded()</div>
+                <div class="nc" onclick="needScroll('#s-trap')">
+                    <div class="ic">🪤</div>
+                    <div class="nm">Trap</div>
+                    <div class="sb">scrollIntoViewIfNeeded()</div>
                 </div>
                 <div class="nc" onclick="needScroll('#hero')">
-                    <div class="icon">🚀</div>
-                    <div class="name">Hero (top)</div>
-                    <div class="sub">scrollIntoViewIfNeeded()</div>
+                    <div class="ic">🚀</div>
+                    <div class="nm">Hero</div>
+                    <div class="sb">scrollIntoViewIfNeeded()</div>
                 </div>
             </div>
-            <div id="needed-log">Click a card — the log will tell you if a scroll was needed.</div>
+            <div id="needed-log">Click a card above.</div>
         </div>
     </section>
 
     <!-- 05 EASE -->
-    <section id="s-ease">
+    <section id="s-ease" style="background:linear-gradient(180deg,var(--bg),var(--surface))">
         <div class="container">
-            <div class="section-label lr">05 — easeScroll() + Easings</div>
+            <div class="sl lr">05 — easeScroll() + Easings</div>
             <h2>Custom easing curves.</h2>
-            <p class="desc">Pick a curve and watch the ball animate across the track.</p>
+            <p class="desc">Pick a curve — watch the ball animate across the track.</p>
             <div class="ease-grid">
-                <div class="ease-btn active" data-e="easeInOutCubic">
-                    <div class="ease-name">easeInOutCubic</div>
-                    <div class="ease-desc">smooth in & out</div>
+                <div class="eb active" data-e="easeInOutCubic">
+                    <div class="en">easeInOutCubic</div>
+                    <div class="ed">smooth in & out</div>
                 </div>
-                <div class="ease-btn" data-e="easeOutElastic">
-                    <div class="ease-name">easeOutElastic</div>
-                    <div class="ease-desc">springy overshoot</div>
+                <div class="eb" data-e="easeOutElastic">
+                    <div class="en">easeOutElastic</div>
+                    <div class="ed">springy overshoot</div>
                 </div>
-                <div class="ease-btn" data-e="easeOutBounce">
-                    <div class="ease-name">easeOutBounce</div>
-                    <div class="ease-desc">bouncy landing</div>
+                <div class="eb" data-e="easeOutBounce">
+                    <div class="en">easeOutBounce</div>
+                    <div class="ed">bouncy landing</div>
                 </div>
-                <div class="ease-btn" data-e="easeOutQuart">
-                    <div class="ease-name">easeOutQuart</div>
-                    <div class="ease-desc">fast decelerate</div>
+                <div class="eb" data-e="easeOutQuart">
+                    <div class="en">easeOutQuart</div>
+                    <div class="ed">fast decelerate</div>
                 </div>
-                <div class="ease-btn" data-e="linear">
-                    <div class="ease-name">linear</div>
-                    <div class="ease-desc">constant speed</div>
+                <div class="eb" data-e="linear">
+                    <div class="en">linear</div>
+                    <div class="ed">constant speed</div>
                 </div>
-                <div class="ease-btn" data-e="easeInQuad">
-                    <div class="ease-name">easeInQuad</div>
-                    <div class="ease-desc">slow start</div>
+                <div class="eb" data-e="easeInQuad">
+                    <div class="en">easeInQuad</div>
+                    <div class="ed">slow start</div>
                 </div>
             </div>
             <div class="ease-vis">
-                <div class="ease-wrap">
+                <div class="ew">
                     <div id="ease-track"></div>
                     <div id="ease-ball"></div>
                 </div>
-                <div class="ease-status">Active: <span id="ease-cur">easeInOutCubic</span> &nbsp;—&nbsp; <button
-                        class="btn btn-ghost" style="padding:.4rem 1rem;font-size:.72rem;display:inline-flex"
-                        onclick="runBall()">▶ Play</button></div>
-            </div>
-            <div class="codeblock">
-                <span class="kw">await</span> <span class="fn">easeScroll</span>(<span class="str">'#contact'</span>, {
-                duration: <span class="str">800</span>, easing: Easings.<span class="fn">easeOutElastic</span> })
+                <div class="es">Active: <span id="ec">easeInOutCubic</span> — <button class="btn ghost"
+                        style="padding:.35rem .9rem;font-size:.7rem;display:inline-flex" onclick="runBall()">▶
+                        Play</button></div>
             </div>
         </div>
     </section>
 
     <!-- 06 VIEWPORT -->
-    <section id="s-vp">
+    <section id="s-vp" style="background:var(--surface)">
         <div class="container">
-            <div class="section-label lg">06 — isInViewport() / useInViewport()</div>
+            <div class="sl lg">06 — isInViewport() / useInViewport()</div>
             <h2>Visibility detection.</h2>
             <p class="desc">Cards animate in as they enter the viewport using IntersectionObserver.</p>
             <div class="vp-grid">
                 <div class="vpc" data-vp>
-                    <div class="vp-icon">⚡</div>
-                    <div class="vp-title">Fast</div>
-                    <div class="vp-sub">IntersectionObserver — no scroll listeners</div>
+                    <div class="vi">⚡</div>
+                    <div class="vt">Fast</div>
+                    <div class="vs">IntersectionObserver — no scroll listeners</div>
                 </div>
                 <div class="vpc" data-vp>
-                    <div class="vp-icon">🎯</div>
-                    <div class="vp-title">Precise</div>
-                    <div class="vp-sub">Configurable threshold 0–1</div>
+                    <div class="vi">🎯</div>
+                    <div class="vt">Precise</div>
+                    <div class="vs">Configurable threshold 0–1</div>
                 </div>
                 <div class="vpc" data-vp>
-                    <div class="vp-icon">🔂</div>
-                    <div class="vp-title">once: true</div>
-                    <div class="vp-sub">Trigger animation only once</div>
+                    <div class="vi">🔂</div>
+                    <div class="vt">once: true</div>
+                    <div class="vs">Trigger only the first time</div>
                 </div>
             </div>
-            <div class="codeblock">
-                <span class="kw">const</span> [ref, inView] = <span class="fn">useInViewport</span>({ threshold: <span
-                    class="str">0.2</span>, once: <span class="str">true</span> })
-            </div>
+            <div class="cb"><span class="kw">const</span> [ref, inView] = <span class="fn">useInViewport</span>({
+                threshold: <span class="str">0.2</span>, once: <span class="str">true</span> })</div>
         </div>
     </section>
 
     <!-- 07 LOCK -->
-    <section id="s-lock">
+    <section id="s-lock" style="background:linear-gradient(180deg,var(--surface),var(--bg))">
         <div class="container">
-            <div class="section-label lr">07 — lockScroll() / unlockScroll()</div>
+            <div class="sl lr">07 — lockScroll() / unlockScroll()</div>
             <h2>Freeze the page.</h2>
-            <p class="desc">Lock body scroll for modals or drawers. Restores the exact position on unlock.</p>
-            <div class="lock-row">
-                <button class="lock-btn" id="btn-lock" onclick="doLock()">🔒 Lock</button>
-                <button class="lock-btn" id="btn-unlock" onclick="doUnlock()">🔓 Unlock</button>
+            <p class="desc">Lock body scroll for modals or drawers. Restores position on unlock.</p>
+            <div class="row">
+                <button id="btn-lock" onclick="doLock()">🔒 Lock</button>
+                <button id="btn-unlock" onclick="doUnlock()">🔓 Unlock</button>
                 <div id="lock-status">Status: <strong>unlocked</strong></div>
-            </div>
-            <div class="codeblock">
-                <span class="fn">lockScroll</span>() <span class="cm">// body freezes, position saved</span><br />
-                <span class="fn">unlockScroll</span>() <span class="cm">// position restored perfectly</span>
             </div>
         </div>
     </section>
 
     <!-- 08 SEQUENCE -->
-    <section id="s-seq">
+    <section id="s-seq" style="background:var(--bg)">
         <div class="container">
-            <div class="section-label lp">08 — scrollSequence()</div>
-            <h2>Chain scroll animations.</h2>
-            <p class="desc">Run multiple <code>easeScroll</code> animations one after another as a choreographed
-                sequence. Supports pauses between steps and mid-sequence cancel.</p>
-            <div class="seq-controls">
-                <button class="btn btn-b" onclick="runSequence()">▶ Run full tour</button>
-                <button class="btn btn-ghost" onclick="cancelSeq()">✕ Cancel</button>
-                <div id="seq-status"
-                    style="font-family:var(--fm);font-size:.78rem;color:var(--muted);padding:.6rem 1rem;background:var(--s2);border:1px solid var(--border);border-radius:8px">
-                    Idle</div>
+            <div class="sl lp">08 — scrollSequence()</div>
+            <h2>Choreographed scroll tours.</h2>
+            <p class="desc">Chain multiple animations with pauses between steps. Cancel mid-flight.</p>
+            <div class="row" style="margin-top:0;margin-bottom:1rem">
+                <button class="btn bb" onclick="runSeq()">▶ Run tour</button>
+                <button class="btn ghost" onclick="cancelSeq()">✕ Cancel</button>
+                <div id="seq-status">Idle</div>
             </div>
-            <div class="seq-targets" id="seq-targets">
-                <div class="seq-target" id="sq1">
-                    <div class="seq-icon">1️⃣</div>
-                    <div class="seq-name">Position</div>
-                    <div class="seq-status">waiting</div>
+            <div class="seq-targets">
+                <div class="st" id="sq1">
+                    <div class="si">1️⃣</div>
+                    <div class="sn">Position</div>
+                    <div class="ss">waiting</div>
                 </div>
-                <div class="seq-target" id="sq2">
-                    <div class="seq-icon">2️⃣</div>
-                    <div class="seq-name">Parallax</div>
-                    <div class="seq-status">waiting</div>
+                <div class="st" id="sq2">
+                    <div class="si">2️⃣</div>
+                    <div class="sn">Parallax</div>
+                    <div class="ss">waiting</div>
                 </div>
-                <div class="seq-target" id="sq3">
-                    <div class="seq-icon">3️⃣</div>
-                    <div class="seq-name">Progress</div>
-                    <div class="seq-status">waiting</div>
+                <div class="st" id="sq3">
+                    <div class="si">3️⃣</div>
+                    <div class="sn">Reveal</div>
+                    <div class="ss">waiting</div>
                 </div>
             </div>
-            <div class="codeblock">
+            <div class="cb">
                 <span class="kw">const</span> { promise, cancel } = <span class="fn">scrollSequence</span>([<br />
                 &nbsp;&nbsp;{ target: <span class="str">'#intro'</span>, duration: <span class="str">600</span> },<br />
                 &nbsp;&nbsp;{ target: <span class="str">'#features'</span>, duration: <span class="str">800</span>,
@@ -1566,84 +1795,65 @@
                 &nbsp;&nbsp;{ target: <span class="str">'#pricing'</span>, easing: Easings.<span
                     class="fn">easeOutElastic</span> },<br />
                 ])<br />
-                <span class="kw">await</span> promise<br />
-                cancel() <span class="cm">// abort at any time</span>
+                cancel() <span class="cm">// abort anytime</span>
             </div>
         </div>
     </section>
 
     <!-- 09 PARALLAX -->
-    <section id="s-parallax">
+    <section id="s-parallax" style="background:linear-gradient(180deg,var(--bg),var(--surface));overflow:hidden">
         <div class="container">
-            <div class="section-label ly">09 — parallax()</div>
+            <div class="sl ly">09 — parallax()</div>
             <h2>Depth on scroll.</h2>
-            <p class="desc">Attach different scroll speeds to elements to create a layered parallax effect. Scroll down
-                slowly and watch the layers move at different rates.</p>
-            <div class="parallax-stage" id="parallax-stage">
-                <div class="plx-layer" id="plx-bg">speed: 0.2 — background</div>
-                <div class="plx-layer" id="plx-mid">speed: 0.6<br />midground</div>
-                <div class="plx-layer" id="plx-fg">speed: 1.4 — foreground</div>
+            <p class="desc">Three layers moving at different speeds. Scroll slowly through this section.</p>
+            <div class="plx-stage">
+                <div class="plx-l" id="plx-bg">speed: 0.2 — background</div>
+                <div class="plx-l" id="plx-mid">speed: 0.6<br />midground</div>
+                <div class="plx-l" id="plx-fg">speed: 1.4 — foreground</div>
             </div>
-            <p class="plx-hint">↑ Scroll to see parallax layers move at different speeds</p>
-            <div class="plx-controls">
-                <span style="font-family:var(--fm);font-size:.75rem;color:var(--muted)">BG speed:</span>
-                <div class="plx-speed active" data-speed="0.2" onclick="changeBgSpeed(this)">0.2 slow</div>
-                <div class="plx-speed" data-speed="0.5" onclick="changeBgSpeed(this)">0.5 medium</div>
-                <div class="plx-speed" data-speed="-0.1" onclick="changeBgSpeed(this)">−0.1 reverse</div>
-            </div>
-            <div class="codeblock">
-                <span class="cm">// speed &lt; 1 = slower (background feel)</span><br />
-                <span class="cm">// speed &gt; 1 = faster (foreground feel)</span><br />
-                <span class="cm">// speed &lt; 0 = moves in opposite direction</span><br />
-                <span class="kw">const</span> destroy = <span class="fn">parallax</span>(<span
-                    class="str">'.hero-bg'</span>, { speed: <span class="str">0.4</span> })<br />
-                <span class="kw">const</span> destroy = <span class="fn">parallax</span>(<span
-                    class="str">'.clouds'</span>, { speed: <span class="str">-0.2</span>, axis: <span
-                    class="str">'x'</span> })<br />
-                destroy() <span class="cm">// remove effect, reset transforms</span>
+            <p class="plx-hint">↑ Scroll to see layers move at different speeds</p>
+            <div class="plx-speeds">
+                <span style="font-family:var(--fm);font-size:.72rem;color:var(--muted)">BG speed:</span>
+                <div class="psp active" data-spd="0.2" onclick="changePlxSpeed(this)">0.2 slow</div>
+                <div class="psp" data-spd="0.5" onclick="changePlxSpeed(this)">0.5 medium</div>
+                <div class="psp" data-spd="-0.15" onclick="changePlxSpeed(this)">−0.15 reverse</div>
             </div>
         </div>
     </section>
 
-    <!-- 10 SCROLL PROGRESS -->
-    <section id="s-progress">
+    <!-- 10 PROGRESS -->
+    <section id="s-progress" style="background:var(--surface)">
         <div class="container">
-            <div class="section-label lg">10 — scrollProgress()</div>
-            <h2>Track element read progress.</h2>
-            <p class="desc">Measure how far through a specific element the user has scrolled — 0 when it enters the
-                viewport, 1 when it leaves. Scroll the article box below.</p>
-            <div class="progress-demo">
-                <div class="prog-article" id="prog-article">
-                    <p>Scroll snap kit gives you precise control over every aspect of scroll behaviour in your web app.
-                        Whether you need smooth navigation, progress tracking, or choreographed animations, the API is
-                        designed to be minimal and composable.</p>
-                    <p>The scrollProgress utility fires a callback with a normalised value from 0 to 1 as the user
-                        scrolls through the target element. This makes it trivially easy to build reading progress bars,
-                        reveal animations, or sticky sidebars that respond to content position.</p>
-                    <p>Unlike scroll percentage of the whole page, scrollProgress is scoped to a single element. This
-                        means you can independently track multiple articles, carousels, or code blocks on the same page
-                        without any interference.</p>
-                    <p>Under the hood it uses getBoundingClientRect on every scroll event, with a lightweight
-                        requestAnimationFrame throttle to keep performance smooth even on long pages.</p>
-                    <p>Combined with the easeScroll and scrollSequence utilities, scrollProgress unlocks scroll-driven
-                        storytelling patterns that previously required heavyweight libraries.</p>
-                    <p>Keep scrolling this box to see the progress value reach 100% ✨</p>
+            <div class="sl lg">10 — scrollProgress()</div>
+            <h2>Per-element read progress.</h2>
+            <p class="desc">0 when the element enters the viewport, 1 when it fully exits. Scroll the article box.</p>
+            <div class="prog-demo">
+                <div class="prog-art" id="prog-art">
+                    <p>scroll-snap-kit gives you precise control over every aspect of scroll behaviour. Whether you need
+                        smooth navigation, progress tracking, or choreographed animations, the API is minimal and
+                        composable.</p>
+                    <p>The scrollProgress utility fires a callback with a normalised 0–1 value as the user scrolls
+                        through the target element. Build reading progress bars, reveal animations, or sticky sidebars
+                        that respond to content position.</p>
+                    <p>Unlike page-level scroll percentage, scrollProgress is scoped to a single element — independently
+                        track multiple articles or components on the same page without interference.</p>
+                    <p>Under the hood it uses getBoundingClientRect on every scroll event, throttled via
+                        requestAnimationFrame for smooth performance even on long pages.</p>
+                    <p>Keep scrolling this box to reach 100% ✨</p>
                 </div>
-                <div class="prog-stats">
-                    <div class="stat" style="margin:0">
+                <div>
+                    <div class="stat" style="margin:0 0 1rem">
                         <div class="slbl">Article progress</div>
-                        <div class="prog-bar-wrap">
-                            <div id="prog-bar-fill"></div>
+                        <div class="pbw">
+                            <div id="prog-fill"></div>
                         </div>
-                        <div class="prog-val" id="prog-val">0<span class="su">%</span></div>
+                        <div class="sval" id="prog-val">0<span class="su">%</span></div>
                     </div>
-                    <div class="codeblock" style="margin:0">
+                    <div class="cb" style="margin:0">
                         <span class="kw">const</span> stop = <span class="fn">scrollProgress</span>(<br />
                         &nbsp;&nbsp;<span class="str">'#article'</span>,<br />
-                        &nbsp;&nbsp;progress => {<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;bar.style.width =<br />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="str">`${progress * 100}%`</span><br />
-                        &nbsp;&nbsp;}<br />
+                        &nbsp;&nbsp;p => bar.style.width =<br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">`${p * 100}%`</span><br />
                         )
                     </div>
                 </div>
@@ -1652,266 +1862,418 @@
     </section>
 
     <!-- 11 SNAP -->
-    <section id="s-snap">
+    <section id="s-snap"
+        style="min-height:auto;padding:5rem 2.5rem;background:linear-gradient(180deg,var(--surface),var(--bg))">
         <div class="container">
-            <div class="section-label lb">11 — snapToSection()</div>
+            <div class="sl lb">11 — snapToSection()</div>
             <h2>Auto-snap to nearest section.</h2>
-            <p class="desc">After scrolling stops, automatically snaps the container to the nearest section. Scroll the
-                box below — it'll snap after 300ms of idle time.</p>
-            <div class="snap-demo">
-                <div class="snap-toggle">
-                    <button class="btn btn-g" onclick="enableSnap()">✓ Enable snap</button>
-                    <button class="btn btn-ghost" onclick="disableSnap()">✕ Disable</button>
-                    <div class="snap-indicator">Snapped to: <span id="snap-cur">none</span></div>
+            <p class="desc">After scrolling stops, snaps to the nearest section. Try scrolling the box below.</p>
+            <div class="row" style="margin-top:0;margin-bottom:1rem">
+                <button class="btn bg" onclick="enableSnap()">✓ Enable snap</button>
+                <button class="btn ghost" onclick="disableSnap()">✕ Disable</button>
+                <div
+                    style="font-family:var(--fm);font-size:.76rem;color:var(--muted);padding:.6rem 1rem;background:var(--s2);border:1px solid var(--border);border-radius:8px">
+                    Snapped to: <span id="snap-cur">none</span></div>
+            </div>
+            <div class="snap-stage" id="snap-stage">
+                <div class="snap-sec" id="ss1">
+                    <div class="ssn">01</div>
+                    <div class="ssl">Section One</div>
                 </div>
-                <div class="snap-stage" id="snap-stage">
-                    <div class="snap-section" id="snap-s1">
-                        <div class="ss-num">01</div>
-                        <div class="ss-lbl">Section One</div>
-                    </div>
-                    <div class="snap-section" id="snap-s2">
-                        <div class="ss-num">02</div>
-                        <div class="ss-lbl">Section Two</div>
-                    </div>
-                    <div class="snap-section" id="snap-s3">
-                        <div class="ss-num">03</div>
-                        <div class="ss-lbl">Section Three</div>
-                    </div>
-                    <div class="snap-section" id="snap-s4">
-                        <div class="ss-num">04</div>
-                        <div class="ss-lbl">Section Four</div>
-                    </div>
-                    <div class="snap-section" id="snap-s5">
-                        <div class="ss-num">05</div>
-                        <div class="ss-lbl">Section Five</div>
-                    </div>
+                <div class="snap-sec" id="ss2">
+                    <div class="ssn">02</div>
+                    <div class="ssl">Section Two</div>
+                </div>
+                <div class="snap-sec" id="ss3">
+                    <div class="ssn">03</div>
+                    <div class="ssl">Section Three</div>
+                </div>
+                <div class="snap-sec" id="ss4">
+                    <div class="ssn">04</div>
+                    <div class="ssl">Section Four</div>
+                </div>
+                <div class="snap-sec" id="ss5">
+                    <div class="ssn">05</div>
+                    <div class="ssl">Section Five</div>
                 </div>
             </div>
-            <div class="codeblock">
-                <span class="kw">const</span> destroy = <span class="fn">snapToSection</span>(<span
-                    class="str">'section[id]'</span>, {<br />
-                &nbsp;&nbsp;delay: <span class="str">150</span>, <span class="cm">// ms after scroll stops</span><br />
-                &nbsp;&nbsp;offset: <span class="str">-70</span>, <span class="cm">// account for sticky
-                    nav</span><br />
-                &nbsp;&nbsp;easing: Easings.<span class="fn">easeInOutCubic</span><br />
+        </div>
+    </section>
+
+    <!-- 12 REVEAL ✨ NEW -->
+    <section id="s-reveal">
+        <div class="container">
+            <div class="sl lp">12 — scrollReveal() ✦ new in v2</div>
+            <h2>Scroll-triggered animations.</h2>
+            <p class="desc">Elements animate in as they enter the viewport. Pick an effect and click Reset to replay.
+            </p>
+            <div class="effect-btns" id="eff-btns">
+                <button class="eff-btn active" data-eff="fade">fade</button>
+                <button class="eff-btn" data-eff="slide-up">slide-up</button>
+                <button class="eff-btn" data-eff="slide-down">slide-down</button>
+                <button class="eff-btn" data-eff="slide-left">slide-left</button>
+                <button class="eff-btn" data-eff="slide-right">slide-right</button>
+                <button class="eff-btn" data-eff="scale">scale</button>
+                <button class="eff-btn" data-eff="fade-scale">fade-scale</button>
+                <button class="btn ghost" style="margin-left:.5rem" onclick="resetReveal()">↺ Reset</button>
+            </div>
+            <div class="reveal-grid" id="reveal-grid">
+                <div class="rv-card" data-rv>
+                    <div class="rv-icon">🎭</div>
+                    <div class="rv-name">Animated</div>
+                    <div class="rv-sub">Enters with effect</div>
+                </div>
+                <div class="rv-card" data-rv>
+                    <div class="rv-icon">🌊</div>
+                    <div class="rv-name">On scroll</div>
+                    <div class="rv-sub">Triggered by viewport</div>
+                </div>
+                <div class="rv-card" data-rv>
+                    <div class="rv-icon">⚙️</div>
+                    <div class="rv-name">Configurable</div>
+                    <div class="rv-sub">Duration, delay, distance</div>
+                </div>
+            </div>
+            <div class="cb">
+                <span class="kw">const</span> destroy = <span class="fn">scrollReveal</span>(<span
+                    class="str">'.card'</span>, {<br />
+                &nbsp;&nbsp;effect: <span class="str">'slide-up'</span>,<br />
+                &nbsp;&nbsp;duration: <span class="str">600</span>,<br />
+                &nbsp;&nbsp;delay: <span class="str">100</span>,<br />
+                &nbsp;&nbsp;once: <span class="str">true</span>,<br />
                 })<br />
-                destroy() <span class="cm">// remove snap behaviour</span>
+                destroy() <span class="cm">// reset + cleanup</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 13 TIMELINE ✨ NEW -->
+    <section id="s-timeline">
+        <div class="container">
+            <div class="sl lo">13 — scrollTimeline() ✦ new in v2</div>
+            <h2>CSS driven by scroll.</h2>
+            <p class="desc">Drives CSS custom properties from scroll position. The text below fades, scales, and the
+                background shifts as you scroll through this section.</p>
+            <div class="timeline-stage">
+                <div id="tl-bg-color"></div>
+                <div id="tl-blur-overlay"></div>
+                <div id="tl-hero-text">scroll<br /><span style="color:var(--g)">timeline</span></div>
+            </div>
+            <div class="tl-tracks">
+                <div class="tl-track">
+                    <div class="tl-name">Opacity</div>
+                    <div class="tl-bar">
+                        <div class="tl-fill" id="tl-op" style="background:var(--g);width:100%"></div>
+                    </div>
+                    <div class="tl-val" id="tl-op-v">1.00</div>
+                </div>
+                <div class="tl-track">
+                    <div class="tl-name">Scale</div>
+                    <div class="tl-bar">
+                        <div class="tl-fill" id="tl-sc" style="background:var(--b);width:100%"></div>
+                    </div>
+                    <div class="tl-val" id="tl-sc-v">1.00</div>
+                </div>
+                <div class="tl-track">
+                    <div class="tl-name">Blur</div>
+                    <div class="tl-bar">
+                        <div class="tl-fill" id="tl-bl" style="background:var(--r);width:0%"></div>
+                    </div>
+                    <div class="tl-val" id="tl-bl-v">0px</div>
+                </div>
+                <div class="tl-track">
+                    <div class="tl-name">BG glow</div>
+                    <div class="tl-bar">
+                        <div class="tl-fill" id="tl-bg2" style="background:var(--p);width:0%"></div>
+                    </div>
+                    <div class="tl-val" id="tl-bg-v">0%</div>
+                </div>
+            </div>
+            <div class="cb">
+                <span class="kw">const</span> stop = <span class="fn">scrollTimeline</span>([<br />
+                &nbsp;&nbsp;{ property: <span class="str">'--hero-opacity'</span>, from: <span class="str">1</span>, to:
+                <span class="str">0</span>, scrollStart: <span class="str">0</span>, scrollEnd: <span
+                    class="str">400</span> },<br />
+                &nbsp;&nbsp;{ property: <span class="str">'--nav-blur'</span>, from: <span class="str">0</span>, to:
+                <span class="str">16</span>, unit: <span class="str">'px'</span>, scrollStart: <span
+                    class="str">0</span>, scrollEnd: <span class="str">200</span> },<br />
+                ])
+            </div>
+        </div>
+    </section>
+
+    <!-- 14 INFINITE ✨ NEW -->
+    <section id="s-infinite">
+        <div class="container">
+            <div class="sl lo">14 — infiniteScroll() ✦ new in v2</div>
+            <h2>Load more on demand.</h2>
+            <p class="desc">Fires a callback when the user scrolls near the bottom. Auto-throttled with configurable
+                cooldown. Scroll the feed below to load more items.</p>
+            <div class="row" style="margin-top:0;margin-bottom:1rem">
+                <div id="inf-count">Loaded: <span id="inf-loaded">6</span> items</div>
+            </div>
+            <div class="inf-feed" id="inf-feed">
+                <!-- populated by JS -->
+            </div>
+            <div class="inf-loader" id="inf-loader">⏳ Loading more items…</div>
+            <div class="cb">
+                <span class="kw">const</span> stop = <span class="fn">infiniteScroll</span>(<span
+                    class="kw">async</span> () => {<br />
+                &nbsp;&nbsp;<span class="kw">const</span> items = <span class="kw">await</span> <span
+                    class="fn">fetchMoreItems</span>()<br />
+                &nbsp;&nbsp;<span class="fn">appendItems</span>(items)<br />
+                }, { threshold: <span class="str">300</span>, cooldown: <span class="str">500</span> })
+            </div>
+        </div>
+    </section>
+
+    <!-- 15 TRAP ✨ NEW -->
+    <section id="s-trap">
+        <div class="container">
+            <div class="sl lp">15 — scrollTrap() ✦ new in v2</div>
+            <h2>Contain scroll in a modal.</h2>
+            <p class="desc">While the trap is active, scroll is locked to the modal box — the page behind won't move.
+                Handles wheel, touch, and keyboard.</p>
+            <div class="trap-demo">
+                <div class="trap-modal" id="trap-modal">
+                    <div class="trap-title">
+                        📦 Modal content
+                        <span style="font-family:var(--fm);font-size:.72rem;color:var(--muted)" id="trap-badge">trap:
+                            OFF</span>
+                    </div>
+                    <div class="trap-content" id="trap-content">
+                        <p>This is a scrollable modal. When the trap is active, scrolling inside this box will not leak
+                            to the page behind it.</p>
+                        <p>Try it: enable the trap, then scroll here. The background page will stay perfectly still
+                            while this content scrolls normally.</p>
+                        <p>scrollTrap handles mouse wheel events, touch scroll, and keyboard arrow keys — all three
+                            input methods are intercepted.</p>
+                        <p>When the trap is disabled, scroll behaves normally on both this element and the page.</p>
+                        <p>This is essential for accessible modals, drawers, and overlays where scroll leaking breaks
+                            the UX.</p>
+                        <p>Scroll all the way down here ↓</p>
+                        <p style="color:var(--g);font-family:var(--fm);font-size:.8rem">✓ You reached the bottom of the
+                            modal!</p>
+                    </div>
+                </div>
+                <div class="trap-info">
+                    <div class="row" style="margin-top:0">
+                        <button class="btn bp" onclick="enableTrap()">🪤 Enable trap</button>
+                        <button class="btn ghost" onclick="disableTrap()">✕ Release</button>
+                    </div>
+                    <div class="trap-indicator">
+                        Trap state: <span id="trap-state" style="color:var(--muted)">disabled</span><br />
+                        Scroll this box: <span id="trap-scroll-note" style="color:var(--muted)">normal</span><br />
+                        Page behind: <span id="trap-page-note" style="color:var(--muted)">can scroll</span>
+                    </div>
+                    <div class="cb" style="margin:0">
+                        <span class="kw">const</span> release = <span class="fn">scrollTrap</span>(<br />
+                        &nbsp;&nbsp;document.<span class="fn">querySelector</span>(<span
+                            class="str">'.modal'</span>)<br />
+                        )<br /><br />
+                        <span class="cm">// when modal closes:</span><br />
+                        <span class="fn">release</span>()
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <footer>
-        <p><a href="#">scroll-snap-kit</a> — MIT License — 12 utilities · 5 hooks · 0 dependencies</p>
+        <p><a href="#">scroll-snap-kit</a> v2.0.0 — MIT License — 16 utilities · 5 hooks · TypeScript types · ESM + CJS
+            + UMD</p>
     </footer>
 
     <script>
-        // ══════════════════════════════════════════════
-        // INLINE IMPLEMENTATIONS (mirrors the npm pkg)
-        // ══════════════════════════════════════════════
-        const Easings = {
-            linear: t => t,
-            easeInQuad: t => t * t,
+        // ═══════════════════════════════════════════════
+        // IMPLEMENTATIONS (mirrors npm package)
+        // ═══════════════════════════════════════════════
+        const E = {
+            linear: t => t, easeInQuad: t => t * t,
             easeInOutCubic: t => t < .5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1,
             easeOutQuart: t => 1 - (--t) * t * t * t,
             easeOutElastic: t => { const c = (2 * Math.PI) / 3; return t === 0 ? 0 : t === 1 ? 1 : Math.pow(2, -10 * t) * Math.sin((t * 10 - .75) * c) + 1 },
             easeOutBounce: t => { const n = 7.5625, d = 2.75; if (t < 1 / d) return n * t * t; if (t < 2 / d) return n * (t -= 1.5 / d) * t + .75; if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + .9375; return n * (t -= 2.625 / d) * t + .984375 },
         };
 
-        function easeGo(target, opts = {}) {
-            const { duration = 700, easing = Easings.easeInOutCubic, offset = -80 } = opts;
-            const el = typeof target === 'string' ? document.querySelector(target) : target;
-            const targetY = (el ? el.getBoundingClientRect().top + window.scrollY : +target) + offset;
-            const startY = window.scrollY, dist = targetY - startY, t0 = performance.now();
-            return new Promise(res => {
-                function step(now) { const p = Math.min((now - t0) / duration, 1); window.scrollTo(0, startY + dist * easing(p)); p < 1 ? requestAnimationFrame(step) : res(); }
-                requestAnimationFrame(step);
-            });
-        }
-
-        // scrollSequence
-        let activeSeqCancel = null;
-        async function runSequence() {
-            if (activeSeqCancel) { activeSeqCancel(); }
-            let cancelled = false;
-            activeSeqCancel = () => { cancelled = true; };
-            const steps = [
-                { id: 'sq1', target: '#s-pos', label: 'Position', duration: 700 },
-                { id: 'sq2', target: '#s-parallax', label: 'Parallax', duration: 800, pause: 500 },
-                { id: 'sq3', target: '#s-progress', label: 'Progress', duration: 700 },
-            ];
-            document.getElementById('seq-status').textContent = 'Running…';
-            for (const step of steps) {
-                if (cancelled) break;
-                document.querySelectorAll('.seq-target').forEach(el => { el.classList.remove('active'); el.querySelector('.seq-status').textContent = 'waiting'; });
-                const card = document.getElementById(step.id);
-                if (card) { card.classList.add('active'); card.querySelector('.seq-status').textContent = '▶ scrolling…'; }
-                await easeGo(step.target, { duration: step.duration, offset: -80 });
-                if (cancelled) break;
-                if (card) card.querySelector('.seq-status').textContent = '✓ done';
-                if (step.pause) await new Promise(r => setTimeout(r, step.pause));
-            }
-            document.getElementById('seq-status').textContent = cancelled ? 'Cancelled' : '✓ Sequence complete';
-            if (!cancelled) document.querySelectorAll('.seq-target').forEach(el => el.classList.remove('active'));
-            activeSeqCancel = null;
-        }
-        function cancelSeq() { if (activeSeqCancel) { activeSeqCancel(); document.getElementById('seq-status').textContent = 'Cancelled'; } }
-
-        // parallax
-        let plxDestroys = [];
-        function initParallax() {
-            plxDestroys.forEach(d => d());
-            plxDestroys = [];
-            const stage = document.getElementById('parallax-stage');
-            function plx(el, speed, axis = 'y') {
-                const originY = el.getBoundingClientRect().top + window.scrollY;
-                let rafId = null;
-                const handler = () => { if (!rafId) rafId = requestAnimationFrame(() => { const dy = (window.scrollY - (originY - window.innerHeight / 2)) * (speed - 1); el.style.transform = `translateY(${dy}px)`; rafId = null; }); };
-                window.addEventListener('scroll', handler, { passive: true });
-                handler();
-                return () => { window.removeEventListener('scroll', handler); if (rafId) cancelAnimationFrame(rafId); el.style.transform = ''; };
-            }
-            plxDestroys.push(plx(document.getElementById('plx-bg'), parseFloat(document.querySelector('.plx-speed.active')?.dataset.speed || '0.2')));
-            plxDestroys.push(plx(document.getElementById('plx-mid'), 0.6));
-            plxDestroys.push(plx(document.getElementById('plx-fg'), 1.4));
-        }
-        function changeBgSpeed(el) { document.querySelectorAll('.plx-speed').forEach(b => b.classList.remove('active')); el.classList.add('active'); initParallax(); }
-        initParallax();
-
-        // scrollProgress on article
-        (function () {
-            const article = document.getElementById('prog-article');
-            function calc() {
-                const rect = article.getBoundingClientRect(), wh = window.innerHeight;
-                const total = rect.height + wh, passed = wh - rect.top;
-                const p = Math.min(1, Math.max(0, passed / total));
-                document.getElementById('prog-bar-fill').style.width = (p * 100) + '%';
-                document.getElementById('prog-val').innerHTML = Math.round(p * 100) + '<span class="su">%</span>';
-            }
-            article.addEventListener('scroll', calc);
-            window.addEventListener('scroll', calc, { passive: true });
-        })();
-
-        // snapToSection in the demo box
-        let snapDestroy = null;
-        function enableSnap() {
-            if (snapDestroy) { snapDestroy(); }
-            const stage = document.getElementById('snap-stage');
-            const sections = Array.from(stage.querySelectorAll('.snap-section'));
-            let timer = null, snapping = false;
-            snapDestroy = () => { clearTimeout(timer); stage.removeEventListener('scroll', handler); };
-            function handler() {
-                clearTimeout(timer);
-                timer = setTimeout(async () => {
-                    if (snapping) return; snapping = true;
-                    const mid = stage.scrollTop + stage.clientHeight / 2;
-                    let closest = sections[0], minD = Infinity;
-                    sections.forEach(s => { const d = Math.abs((s.offsetTop + s.offsetHeight / 2) - mid); if (d < minD) { minD = d; closest = s; } });
-                    const targetTop = closest.offsetTop;
-                    const startY = stage.scrollTop, dist = targetTop - startY, t0 = performance.now(), dur = 400;
-                    function step(now) { const p = Math.min((now - t0) / dur, 1); stage.scrollTop = startY + dist * Easings.easeInOutCubic(p); p < 1 ? requestAnimationFrame(step) : null; }
-                    requestAnimationFrame(step);
-                    sections.forEach(s => s.classList.remove('snapped'));
-                    closest.classList.add('snapped');
-                    document.getElementById('snap-cur').textContent = closest.querySelector('.ss-lbl').textContent;
-                    snapping = false;
-                }, 300);
-            }
-            stage.addEventListener('scroll', handler, { passive: true });
-        }
-        function disableSnap() { if (snapDestroy) { snapDestroy(); snapDestroy = null; } document.querySelectorAll('.snap-section').forEach(s => s.classList.remove('snapped')); document.getElementById('snap-cur').textContent = 'disabled'; }
-        enableSnap();
-
-        // scrollIntoViewIfNeeded
-        function scrollIntoViewIfNeeded(target, opts = {}) {
-            const { threshold = 1, offset = 0 } = opts;
-            const el = typeof target === 'string' ? document.querySelector(target) : target;
-            if (!el) return { scrolled: false };
-            const rect = el.getBoundingClientRect(), wh = window.innerHeight, ww = window.innerWidth;
-            const vh = Math.min(rect.bottom, wh) - Math.max(rect.top, 0);
-            const vw = Math.min(rect.right, ww) - Math.max(rect.left, 0);
-            const ratio = (Math.max(0, vh) * Math.max(0, vw)) / (rect.height * rect.width);
-            if (ratio >= threshold) return { scrolled: false };
-            window.scrollTo({ top: rect.top + window.scrollY + offset, behavior: 'smooth' });
-            return { scrolled: true };
-        }
-        function needScroll(sel) {
-            const r = scrollIntoViewIfNeeded(sel, { threshold: .9, offset: -80 });
-            document.getElementById('needed-log').innerHTML = r.scrolled
-                ? `<span style="color:var(--g)">✓ Scrolled</span> — ${sel} was outside the viewport.`
-                : `<span style="color:var(--muted)">— Skipped</span> — ${sel} was already ≥90% visible. No scroll needed!`;
-        }
-
-        // lockScroll
+        function easeGo(t, o = {}) { const { dur = 700, ease = E.easeInOutCubic, off = -80 } = o; const el = typeof t === 'string' ? document.querySelector(t) : t; const ty = (el ? el.getBoundingClientRect().top + window.scrollY : +t) + off; const sy = window.scrollY, d = ty - sy, t0 = performance.now(); return new Promise(r => { function s(n) { const p = Math.min((n - t0) / dur, 1); window.scrollTo(0, sy + d * ease(p)); p < 1 ? requestAnimationFrame(s) : r(); } requestAnimationFrame(s); }); }
         function lockScroll() { const sy = window.scrollY; document.body.style.cssText = `position:fixed;top:-${sy}px;width:100%`; }
         function unlockScroll() { const sy = document.body.style.top; document.body.style.cssText = ''; window.scrollTo(0, parseInt(sy || '0') * -1); }
+
+        // scrollIntoViewIfNeeded
+        function needScroll(sel) { const el = document.querySelector(sel); if (!el) return; const rect = el.getBoundingClientRect(), wh = window.innerHeight, ww = window.innerWidth; const vh = Math.min(rect.bottom, wh) - Math.max(rect.top, 0); const vw = Math.min(rect.right, ww) - Math.max(rect.left, 0); const r = (Math.max(0, vh) * Math.max(0, vw)) / (rect.height * rect.width); if (r >= .9) { document.getElementById('needed-log').innerHTML = `<span style="color:var(--muted)">— Skipped</span> — ${sel} was already ≥90% visible.`; return; } window.scrollTo({ top: rect.top + window.scrollY - 80, behavior: 'smooth' }); document.getElementById('needed-log').innerHTML = `<span style="color:var(--g)">✓ Scrolled</span> — ${sel} was outside the viewport.`; }
+
+        // Spy
+        function initSpy(ss, ls, o = {}) { const { off = 80, ac = 'active' } = o; const secs = Array.from(document.querySelectorAll(ss)); const grps = ls.map(s => Array.from(document.querySelectorAll(s))); function u() { const sy = window.scrollY + off; let cur = secs[0]; for (const s of secs) { if (s.offsetTop <= sy) cur = s; } grps.forEach(g => g.forEach(l => { l.classList.remove(ac); if (l.getAttribute('href') === '#' + cur?.id) l.classList.add(ac); })); } u(); window.addEventListener('scroll', u, { passive: true }); }
+        initSpy('section[id]', ['#nav-links a', '#spy-mini a'], { off: 200 });
+
+        // Viewport observer
+        const vpO = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }), { threshold: .2 });
+        document.querySelectorAll('[data-vp]').forEach(el => vpO.observe(el));
+
+        // Lock
         function doLock() { lockScroll(); document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--r)">locked 🔒</strong>'; }
         function doUnlock() { unlockScroll(); document.getElementById('lock-status').innerHTML = 'Status: <strong style="color:var(--g)">unlocked 🔓</strong>'; }
 
-        // ease ball
-        let curEasing = 'easeInOutCubic', ballRunning = false;
-        document.querySelectorAll('.ease-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.ease-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active'); curEasing = btn.dataset.e;
-                document.getElementById('ease-cur').textContent = curEasing; runBall();
+        // Ease ball
+        let curE = 'easeInOutCubic', ballGoing = false;
+        document.querySelectorAll('.eb').forEach(b => b.addEventListener('click', () => { document.querySelectorAll('.eb').forEach(x => x.classList.remove('active')); b.classList.add('active'); curE = b.dataset.e; document.getElementById('ec').textContent = curE; runBall(); }));
+        function runBall() { if (ballGoing) return; ballGoing = true; const ball = document.getElementById('ease-ball'); const tw = document.getElementById('ease-track').offsetWidth - 18; const ease = E[curE], dur = 1000, t0 = performance.now(); function s(n) { const p = Math.min((n - t0) / dur, 1); ball.style.transform = `translateY(-50%) translateX(${ease(p) * tw}px)`; if (p < 1) requestAnimationFrame(s); else setTimeout(() => { const s2 = performance.now(); function b2(n) { const p2 = Math.min((n - s2) / 600, 1); ball.style.transform = `translateY(-50%) translateX(${(1 - p2) * tw}px)`; p2 < 1 ? requestAnimationFrame(b2) : ballGoing = false; } requestAnimationFrame(b2); }, 350); } requestAnimationFrame(s); }
+
+        // Sequence
+        let seqCancel = null;
+        async function runSeq() { if (seqCancel) seqCancel(); let cancelled = false; seqCancel = () => cancelled = true; const steps = [{ id: 'sq1', t: '#s-pos', n: 'Position' }, { id: 'sq2', t: '#s-parallax', n: 'Parallax' }, { id: 'sq3', t: '#s-reveal', n: 'Reveal' }]; document.getElementById('seq-status').textContent = 'Running…'; for (const step of steps) { if (cancelled) break; document.querySelectorAll('.st').forEach(el => { el.classList.remove('active'); el.querySelector('.ss').textContent = 'waiting'; }); const c = document.getElementById(step.id); c.classList.add('active'); c.querySelector('.ss').textContent = '▶ scrolling…'; await easeGo(step.t, { dur: 800, off: -80 }); if (cancelled) break; c.querySelector('.ss').textContent = '✓ done'; await new Promise(r => setTimeout(r, 500)); } document.getElementById('seq-status').textContent = cancelled ? 'Cancelled' : '✓ Complete'; if (!cancelled) document.querySelectorAll('.st').forEach(el => el.classList.remove('active')); seqCancel = null; }
+        function cancelSeq() { if (seqCancel) { seqCancel(); document.getElementById('seq-status').textContent = 'Cancelled'; } }
+
+        // Parallax
+        let plxDs = [];
+        function initPlx() { plxDs.forEach(d => d()); plxDs = []; function plx(el, spd) { const oy = el.getBoundingClientRect().top + window.scrollY; let raf = null; const h = () => { if (!raf) raf = requestAnimationFrame(() => { const dy = (window.scrollY - (oy - window.innerHeight / 2)) * (spd - 1); el.style.transform = `translateY(${dy}px)`; raf = null; }); }; window.addEventListener('scroll', h, { passive: true }); h(); return () => { window.removeEventListener('scroll', h); if (raf) cancelAnimationFrame(raf); el.style.transform = ''; }; } const curSpd = parseFloat(document.querySelector('.psp.active')?.dataset.spd || '0.2'); plxDs.push(plx(document.getElementById('plx-bg'), curSpd)); plxDs.push(plx(document.getElementById('plx-mid'), 0.6)); plxDs.push(plx(document.getElementById('plx-fg'), 1.4)); }
+        function changePlxSpeed(el) { document.querySelectorAll('.psp').forEach(b => b.classList.remove('active')); el.classList.add('active'); initPlx(); }
+        initPlx();
+
+        // Progress bar (article)
+        (() => { const art = document.getElementById('prog-art'); function calc() { const rect = art.getBoundingClientRect(), wh = window.innerHeight; const p = Math.min(1, Math.max(0, (wh - rect.top) / (rect.height + wh))); document.getElementById('prog-fill').style.width = (p * 100) + '%'; document.getElementById('prog-val').innerHTML = Math.round(p * 100) + '<span class="su">%</span>'; } art.addEventListener('scroll', calc); window.addEventListener('scroll', calc, { passive: true }); })();
+
+        // Snap
+        let snapD = null;
+        function enableSnap() { if (snapD) snapD(); const stage = document.getElementById('snap-stage'); const secs = Array.from(stage.querySelectorAll('.snap-sec')); let timer = null, snapping = false; snapD = () => { clearTimeout(timer); stage.removeEventListener('scroll', h); }; function h() { clearTimeout(timer); timer = setTimeout(async () => { if (snapping) return; snapping = true; const mid = stage.scrollTop + stage.clientHeight / 2; let cl = secs[0], md = Infinity; secs.forEach(s => { const d = Math.abs((s.offsetTop + s.offsetHeight / 2) - mid); if (d < md) { md = d; cl = s; } }); const ty = cl.offsetTop, sy = stage.scrollTop, dist = ty - sy, t0 = performance.now(), dur = 400; function step(n) { const p = Math.min((n - t0) / dur, 1); stage.scrollTop = sy + dist * E.easeInOutCubic(p); p < 1 ? requestAnimationFrame(step) : null; } requestAnimationFrame(step); secs.forEach(s => s.classList.remove('snapped')); cl.classList.add('snapped'); document.getElementById('snap-cur').textContent = cl.querySelector('.ssl').textContent; snapping = false; }, 300); } stage.addEventListener('scroll', h, { passive: true }); }
+        function disableSnap() { if (snapD) { snapD(); snapD = null; } document.querySelectorAll('.snap-sec').forEach(s => s.classList.remove('snapped')); document.getElementById('snap-cur').textContent = 'disabled'; }
+        enableSnap();
+
+        // ═══ NEW v2 FEATURES ═══
+
+        // scrollReveal
+        let revealDestroy = null;
+        let curEffect = 'fade';
+        document.querySelectorAll('.eff-btn[data-eff]').forEach(b => b.addEventListener('click', () => { document.querySelectorAll('.eff-btn[data-eff]').forEach(x => x.classList.remove('active')); b.classList.add('active'); curEffect = b.dataset.eff; resetReveal(); }));
+
+        function resetReveal() {
+            if (revealDestroy) revealDestroy();
+            const cards = document.querySelectorAll('[data-rv]');
+            const hidden = {
+                'fade': { opacity: '0' }, 'slide-up': { opacity: '0', transform: 'translateY(24px)' },
+                'slide-down': { opacity: '0', transform: 'translateY(-24px)' }, 'slide-left': { opacity: '0', transform: 'translateX(24px)' },
+                'slide-right': { opacity: '0', transform: 'translateX(-24px)' }, 'scale': { opacity: '0', transform: 'scale(0.9)' },
+                'fade-scale': { opacity: '0', transform: 'scale(0.95) translateY(16px)' },
+            };
+            const h = hidden[curEffect] || hidden.fade;
+            cards.forEach(el => { Object.assign(el.style, h); el.style.transition = 'opacity .6s cubic-bezier(.4,0,.2,1), transform .6s cubic-bezier(.4,0,.2,1)'; });
+            const obs = new IntersectionObserver(entries => { entries.forEach((entry, i) => { if (entry.isIntersecting) { setTimeout(() => { entry.target.style.opacity = ''; entry.target.style.transform = ''; }, i * 80); obs.unobserve(entry.target); } }); }, { threshold: .15 });
+            cards.forEach(el => obs.observe(el));
+            revealDestroy = () => { obs.disconnect(); cards.forEach(el => { el.style.opacity = ''; el.style.transform = ''; el.style.transition = ''; }); };
+        }
+        resetReveal();
+
+        // scrollTimeline — drive CSS vars from scroll on the timeline section
+        (() => {
+            const stage = document.getElementById('s-timeline');
+            function update() {
+                const rect = stage.getBoundingClientRect(), wh = window.innerHeight;
+                const prog = Math.min(1, Math.max(0, (wh - rect.top) / (rect.height + wh)));
+                const opacity = Math.max(0, 1 - prog * 2.2);
+                const scale = Math.max(0.7, 1 - prog * 0.35);
+                const blur = prog * 12;
+                const bg = prog * 0.08;
+                const translateY = prog * -30;
+                document.documentElement.style.setProperty('--tl-opacity', opacity);
+                document.documentElement.style.setProperty('--tl-scale', scale);
+                document.documentElement.style.setProperty('--tl-blur', blur + 'px');
+                document.documentElement.style.setProperty('--tl-bg', bg);
+                document.documentElement.style.setProperty('--tl-y', translateY + 'px');
+                // update track displays
+                document.getElementById('tl-op').style.width = (opacity * 100) + '%';
+                document.getElementById('tl-op-v').textContent = opacity.toFixed(2);
+                document.getElementById('tl-sc').style.width = ((scale - .7) / .3 * 100) + '%';
+                document.getElementById('tl-sc-v').textContent = scale.toFixed(2);
+                document.getElementById('tl-bl').style.width = (blur / 12 * 100) + '%';
+                document.getElementById('tl-bl-v').textContent = Math.round(blur) + 'px';
+                document.getElementById('tl-bg2').style.width = (bg / 0.08 * 100) + '%';
+                document.getElementById('tl-bg-v').textContent = Math.round(bg * 100) + '%';
+            }
+            window.addEventListener('scroll', update, { passive: true }); update();
+        })();
+
+        // infiniteScroll
+        const EMOJI = ['🚀', '⚡', '🎯', '✨', '🔥', '💡', '🎭', '🌊', '⚙️', '🎪', '🦋', '🎨', '🔮', '🌈', '💎', '🎲'];
+        const TITLES = ['Smooth scrolling mastered', 'Zero dependencies shipped', 'TypeScript types added', 'Bundle size optimised', 'New easing curve added', 'IntersectionObserver enabled', 'Scroll trap implemented', 'Parallax effect deployed', 'Infinite scroll working', 'Progress tracking live'];
+        let infItems = 0;
+        function makeItems(n) { const frag = document.createDocumentFragment(); for (let i = 0; i < n; i++) { const item = document.createElement('div'); item.className = 'inf-item'; item.style.animationDelay = (i * 60) + 'ms'; item.innerHTML = `<div class="inf-avatar" style="background:rgba(0,255,170,.08)">${EMOJI[(infItems + i) % EMOJI.length]}</div><div class="inf-body"><div class="inf-title">Item #${infItems + i + 1} — ${TITLES[(infItems + i) % TITLES.length]}</div><div class="inf-sub">scroll-snap-kit · just loaded</div></div>`; frag.appendChild(item); } return frag; }
+        const feed = document.getElementById('inf-feed'); feed.appendChild(makeItems(6)); infItems = 6;
+        (() => {
+            let loading = false;
+            feed.addEventListener('scroll', async () => {
+                if (loading) return;
+                if (feed.scrollHeight - feed.scrollTop - feed.clientHeight > 150) return;
+                loading = true;
+                document.getElementById('inf-loader').classList.add('show');
+                document.getElementById('inf-badge').classList.add('show');
+                await new Promise(r => setTimeout(r, 800));
+                feed.appendChild(makeItems(4)); infItems += 4;
+                document.getElementById('inf-loaded').textContent = infItems;
+                document.getElementById('inf-loader').classList.remove('show');
+                setTimeout(() => document.getElementById('inf-badge').classList.remove('show'), 1500);
+                loading = false;
             });
-        });
-        function runBall() {
-            if (ballRunning) return; ballRunning = true;
-            const ball = document.getElementById('ease-ball');
-            const trackW = document.getElementById('ease-track').offsetWidth - 20;
-            const ease = Easings[curEasing], dur = 1000, t0 = performance.now();
-            function step(now) { const p = Math.min((now - t0) / dur, 1); ball.style.transform = `translateY(-50%) translateX(${ease(p) * trackW}px)`; if (p < 1) requestAnimationFrame(step); else setTimeout(() => { const s2 = performance.now(); function back(n) { const p2 = Math.min((n - s2) / 600, 1); ball.style.transform = `translateY(-50%) translateX(${(1 - p2) * trackW}px)`; p2 < 1 ? requestAnimationFrame(back) : ballRunning = false; } requestAnimationFrame(back); }, 350); }
-            requestAnimationFrame(step);
+        })();
+
+        // scrollTrap
+        let trapRelease = null;
+        function enableTrap() {
+            if (trapRelease) trapRelease();
+            const modal = document.getElementById('trap-content');
+            const canUp = () => modal.scrollTop > 0;
+            const canDn = () => modal.scrollTop < modal.scrollHeight - modal.clientHeight;
+            const onWheel = e => { if (e.deltaY > 0 && !canDn()) { e.preventDefault(); return; } if (e.deltaY < 0 && !canUp()) { e.preventDefault(); return; } };
+            let ty = 0;
+            const onTS = e => { ty = e.touches[0].clientY };
+            const onTM = e => { const dy = ty - e.touches[0].clientY; if (dy > 0 && !canDn()) { e.preventDefault(); } if (dy < 0 && !canUp()) { e.preventDefault(); } };
+            modal.addEventListener('wheel', onWheel, { passive: false });
+            modal.addEventListener('touchstart', onTS, { passive: true });
+            modal.addEventListener('touchmove', onTM, { passive: false });
+            lockScroll();
+            trapRelease = () => { modal.removeEventListener('wheel', onWheel); modal.removeEventListener('touchstart', onTS); modal.removeEventListener('touchmove', onTM); unlockScroll(); };
+            document.getElementById('trap-state').innerHTML = '<span style="color:var(--p)">active 🪤</span>';
+            document.getElementById('trap-scroll-note').innerHTML = '<span style="color:var(--g)">contained ✓</span>';
+            document.getElementById('trap-page-note').innerHTML = '<span style="color:var(--r)">locked ✗</span>';
+            document.getElementById('trap-badge').textContent = 'trap: ON';
+            document.getElementById('trap-badge').style.color = 'var(--p)';
+        }
+        function disableTrap() {
+            if (trapRelease) { trapRelease(); trapRelease = null; }
+            document.getElementById('trap-state').innerHTML = '<span style="color:var(--muted)">disabled</span>';
+            document.getElementById('trap-scroll-note').innerHTML = '<span style="color:var(--muted)">normal</span>';
+            document.getElementById('trap-page-note').innerHTML = '<span style="color:var(--muted)">can scroll</span>';
+            document.getElementById('trap-badge').textContent = 'trap: OFF';
+            document.getElementById('trap-badge').style.color = '';
         }
 
-        // scroll spy
-        function initSpy(secSel, linkSels, opts = {}) {
-            const { offset = 80, activeClass = 'active' } = opts;
-            const sections = Array.from(document.querySelectorAll(secSel));
-            const groups = linkSels.map(s => Array.from(document.querySelectorAll(s)));
-            function update() { const sy = window.scrollY + offset; let cur = sections[0]; for (const s of sections) { if (s.offsetTop <= sy) cur = s; } groups.forEach(links => links.forEach(l => { l.classList.remove(activeClass); if (l.getAttribute('href') === '#' + cur?.id) l.classList.add(activeClass); })); }
-            update(); window.addEventListener('scroll', update, { passive: true });
-        }
-        initSpy('section[id]', ['#nav-links a', '#spy-mini a'], { offset: 200 });
+        // Anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); easeGo(a.getAttribute('href'), { off: -70, dur: 700 }); }));
+        document.getElementById('back-top').addEventListener('click', () => easeGo('#hero', { off: 0, dur: 900 }));
 
-        // viewport observer
-        const vpObs = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') }), { threshold: .2 });
-        document.querySelectorAll('[data-vp]').forEach(el => vpObs.observe(el));
-
-        // anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(a => {
-            a.addEventListener('click', e => { e.preventDefault(); easeGo(a.getAttribute('href'), { offset: -70, duration: 700 }); });
-        });
-        document.getElementById('back-top').addEventListener('click', () => easeGo('#hero', { offset: 0, duration: 900 }));
-
-        // main scroll listener
-        let lastY = 0, ticking = false, endTimer = null, endCount = 0;
+        // Main scroll listener
+        let lastY = 0, tick = false, et = null, ec2 = 0;
         window.addEventListener('scroll', () => {
-            if (!ticking) {
+            if (!tick) {
                 requestAnimationFrame(() => {
                     const x = window.scrollX, y = window.scrollY, maxY = document.body.scrollHeight - window.innerHeight;
                     const pct = maxY > 0 ? Math.round((y / maxY) * 100) : 0;
                     document.getElementById('progress-bar').style.width = pct + '%';
-                    document.getElementById('stat-y').innerHTML = `${y}<span class="su">px</span>`;
-                    document.getElementById('stat-x').innerHTML = `${x}<span class="su">px</span>`;
-                    document.getElementById('stat-pct').innerHTML = `${pct}<span class="su">%</span>`;
+                    document.getElementById('sy').innerHTML = `${y}<span class="su">px</span>`;
+                    document.getElementById('sx').innerHTML = `${x}<span class="su">px</span>`;
+                    document.getElementById('spct').innerHTML = `${pct}<span class="su">%</span>`;
                     document.getElementById('pct-badge').textContent = pct + '% scrolled';
                     const dir = y > lastY ? 'down' : 'up';
-                    const de = document.getElementById('stat-dir'), db = document.getElementById('dir-badge');
-                    de.textContent = dir === 'down' ? '↓ Down' : '↑ Up'; de.style.color = dir === 'down' ? 'var(--r)' : 'var(--g)';
-                    db.textContent = dir === 'down' ? '↓ SCROLLING DOWN' : '↑ SCROLLING UP'; db.className = 'badge ' + (dir === 'down' ? 'down' : 'up');
-                    const nav = document.getElementById('nav');
-                    nav.classList.toggle('scrolled', y > 10); nav.classList.toggle('hidden', y > lastY && y > 200);
+                    document.getElementById('sdir').textContent = dir === 'down' ? '↓ Down' : '↑ Up';
+                    document.getElementById('sdir').style.color = dir === 'down' ? 'var(--r)' : 'var(--g)';
+                    const db = document.getElementById('dir-badge');
+                    db.textContent = dir === 'down' ? '↓ DOWN' : '↑ UP'; db.className = 'badge ' + (dir === 'down' ? 'down' : 'up');
+                    document.getElementById('nav').classList.toggle('scrolled', y > 10);
+                    document.getElementById('nav').classList.toggle('hidden', y > lastY && y > 200);
                     document.getElementById('back-top').classList.toggle('show', y > 300);
-                    clearTimeout(endTimer); endTimer = setTimeout(() => {
-                        endCount++; document.getElementById('end-count').textContent = endCount;
-                        const ind = document.getElementById('end-ind'); ind.classList.add('fired'); ind.textContent = '✓';
-                        document.getElementById('end-badge').classList.add('show');
-                        setTimeout(() => { ind.classList.remove('fired'); ind.textContent = '⏱'; document.getElementById('end-badge').classList.remove('show'); }, 1800);
-                    }, 200);
-                    lastY = y; ticking = false;
-                }); ticking = true;
+                    clearTimeout(et); et = setTimeout(() => { ec2++; document.getElementById('end-count').textContent = ec2; const ind = document.getElementById('end-ind'); ind.classList.add('fired'); ind.textContent = '✓'; document.getElementById('end-badge').classList.add('show'); setTimeout(() => { ind.classList.remove('fired'); ind.textContent = '⏱'; document.getElementById('end-badge').classList.remove('show'); }, 1800); }, 200);
+                    lastY = y; tick = false;
+                }); tick = true;
             }
         }, { passive: true });
     </script>

@@ -1,4 +1,10 @@
 /**
+ * scroll-snap-kit v2.0.0 (CommonJS)
+ * MIT License — https://github.com/farazfarid/scroll-snap-kit
+ */
+"use strict";
+
+/**
  * scroll-snap-kit — Core Utilities
  */
 
@@ -7,7 +13,7 @@
  * @param {Element|number} target - A DOM element or Y pixel value
  * @param {{ behavior?: ScrollBehavior, block?: ScrollLogicalPosition, offset?: number }} options
  */
-export function scrollTo(target, options = {}) {
+function scrollTo(target, options = {}) {
     const { behavior = 'smooth', block = 'start', offset = 0 } = options;
 
     if (typeof target === 'number') {
@@ -32,7 +38,7 @@ export function scrollTo(target, options = {}) {
  * Smoothly scrolls to the top of the page.
  * @param {{ behavior?: ScrollBehavior }} options
  */
-export function scrollToTop(options = {}) {
+function scrollToTop(options = {}) {
     const { behavior = 'smooth' } = options;
     window.scrollTo({ top: 0, behavior });
 }
@@ -41,7 +47,7 @@ export function scrollToTop(options = {}) {
  * Smoothly scrolls to the bottom of the page.
  * @param {{ behavior?: ScrollBehavior }} options
  */
-export function scrollToBottom(options = {}) {
+function scrollToBottom(options = {}) {
     const { behavior = 'smooth' } = options;
     window.scrollTo({ top: document.body.scrollHeight, behavior });
 }
@@ -51,7 +57,7 @@ export function scrollToBottom(options = {}) {
  * @param {Element} [container=window] - Optional scrollable container
  * @returns {{ x: number, y: number, percentX: number, percentY: number }}
  */
-export function getScrollPosition(container) {
+function getScrollPosition(container) {
     if (container && container instanceof Element) {
         const { scrollLeft, scrollTop, scrollWidth, scrollHeight, clientWidth, clientHeight } = container;
         return {
@@ -81,7 +87,7 @@ export function getScrollPosition(container) {
  * @param {{ throttle?: number, container?: Element }} options
  * @returns {() => void} Cleanup function to remove the listener
  */
-export function onScroll(callback, options = {}) {
+function onScroll(callback, options = {}) {
     const { throttle: throttleMs = 100, container } = options;
     const target = container || window;
 
@@ -115,7 +121,7 @@ export function onScroll(callback, options = {}) {
  * @param {{ threshold?: number }} options - threshold: 0–1, portion of element that must be visible
  * @returns {boolean}
  */
-export function isInViewport(element, options = {}) {
+function isInViewport(element, options = {}) {
     if (!(element instanceof Element)) {
         console.warn('[scroll-snap-kit] isInViewport: argument must be an Element');
         return false;
@@ -135,7 +141,7 @@ export function isInViewport(element, options = {}) {
 /**
  * Locks the page scroll (e.g. when a modal is open).
  */
-export function lockScroll() {
+function lockScroll() {
     const scrollY = window.scrollY;
     document.body.style.position = 'fixed';
     document.body.style.top = `-${scrollY}px`;
@@ -145,7 +151,7 @@ export function lockScroll() {
 /**
  * Unlocks the page scroll and restores position.
  */
-export function unlockScroll() {
+function unlockScroll() {
     const scrollY = document.body.style.top;
     document.body.style.position = '';
     document.body.style.top = '';
@@ -169,7 +175,7 @@ export function unlockScroll() {
  * @example
  * const stop = scrollSpy('section[id]', 'nav a', { offset: 80, activeClass: 'active' })
  */
-export function scrollSpy(sectionsSelector, linksSelector, options = {}) {
+function scrollSpy(sectionsSelector, linksSelector, options = {}) {
     const { offset = 0, activeClass = 'scroll-spy-active' } = options;
 
     const sections = Array.from(document.querySelectorAll(sectionsSelector));
@@ -212,7 +218,7 @@ export function scrollSpy(sectionsSelector, linksSelector, options = {}) {
  * @example
  * const stop = onScrollEnd(() => console.log('Scrolling stopped!'), { delay: 150 })
  */
-export function onScrollEnd(callback, options = {}) {
+function onScrollEnd(callback, options = {}) {
     const { delay = 150, container } = options;
     const target = container || window;
     let timer = null;
@@ -242,7 +248,7 @@ export function onScrollEnd(callback, options = {}) {
  * @example
  * scrollIntoViewIfNeeded(document.querySelector('.card'))
  */
-export function scrollIntoViewIfNeeded(element, options = {}) {
+function scrollIntoViewIfNeeded(element, options = {}) {
     if (!(element instanceof Element)) {
         console.warn('[scroll-snap-kit] scrollIntoViewIfNeeded: argument must be an Element');
         return;
@@ -267,7 +273,7 @@ export function scrollIntoViewIfNeeded(element, options = {}) {
 /**
  * Built-in easing functions for use with easeScroll().
  */
-export const Easings = {
+const Easings = {
     linear: (t) => t,
     easeInQuad: (t) => t * t,
     easeOutQuad: (t) => t * (2 - t),
@@ -302,7 +308,7 @@ export const Easings = {
  * @example
  * await easeScroll('#contact', { duration: 800, easing: Easings.easeOutElastic })
  */
-export function easeScroll(target, options = {}) {
+function easeScroll(target, options = {}) {
     const { duration = 600, easing = Easings.easeInOutCubic, offset = 0 } = options;
 
     let targetY;
@@ -351,7 +357,7 @@ export function easeScroll(target, options = {}) {
  *   { target: '#pricing',  duration: 600, easing: Easings.easeOutElastic },
  * ])
  */
-export function scrollSequence(steps) {
+function scrollSequence(steps) {
     let cancelled = false;
     const promise = (async () => {
         for (const step of steps) {
@@ -373,7 +379,7 @@ export function scrollSequence(steps) {
  * const destroy = parallax('.hero-bg', { speed: 0.4 })
  * const destroy = parallax('.clouds',  { speed: -0.2, axis: 'x' })
  */
-export function parallax(targets, options = {}) {
+function parallax(targets, options = {}) {
     const { speed = 0.5, axis = 'y', container } = options;
     let els;
     if (typeof targets === 'string') els = Array.from(document.querySelectorAll(targets));
@@ -421,7 +427,7 @@ export function parallax(targets, options = {}) {
  *   bar.style.width = `${progress * 100}%`
  * })
  */
-export function scrollProgress(element, callback, options = {}) {
+function scrollProgress(element, callback, options = {}) {
     const el = typeof element === 'string' ? document.querySelector(element) : element;
     if (!el) { console.warn('[scroll-snap-kit] scrollProgress: element not found'); return () => { }; }
     const { offset = 0 } = options;
@@ -448,7 +454,7 @@ export function scrollProgress(element, callback, options = {}) {
  * @example
  * const destroy = snapToSection('section[id]', { delay: 150, offset: -70 })
  */
-export function snapToSection(sections, options = {}) {
+function snapToSection(sections, options = {}) {
     const { delay = 150, offset = 0, duration = 500, easing = Easings.easeInOutCubic } = options;
     const els = typeof sections === 'string'
         ? Array.from(document.querySelectorAll(sections))
@@ -495,7 +501,7 @@ export function snapToSection(sections, options = {}) {
  * @example
  * const destroy = scrollReveal('.card', { effect: 'slide-up', duration: 600, delay: 100 })
  */
-export function scrollReveal(targets, options = {}) {
+function scrollReveal(targets, options = {}) {
     const {
         effect = 'fade',
         duration = 500,
@@ -584,7 +590,7 @@ export function scrollReveal(targets, options = {}) {
  *   { property: '--nav-blur',     from: 0, to: 16, unit: 'px', scrollStart: 0, scrollEnd: 200 },
  * ])
  */
-export function scrollTimeline(tracks, options = {}) {
+function scrollTimeline(tracks, options = {}) {
     if (!Array.isArray(tracks) || !tracks.length) {
         console.warn('[scroll-snap-kit] scrollTimeline: tracks must be a non-empty array');
         return () => { };
@@ -641,7 +647,7 @@ export function scrollTimeline(tracks, options = {}) {
  *   appendItems(items)
  * }, { threshold: 300 })
  */
-export function infiniteScroll(callback, options = {}) {
+function infiniteScroll(callback, options = {}) {
     const { threshold = 200, cooldown = 500, container } = options;
     let loading = false;
 
@@ -687,7 +693,7 @@ export function infiniteScroll(callback, options = {}) {
  * // …later, when modal closes:
  * release()
  */
-export function scrollTrap(element, options = {}) {
+function scrollTrap(element, options = {}) {
     const el = typeof element === 'string' ? document.querySelector(element) : element;
     if (!(el instanceof Element)) {
         console.warn('[scroll-snap-kit] scrollTrap: element not found');
@@ -741,3 +747,167 @@ export function scrollTrap(element, options = {}) {
         unlockScroll();
     };
 }
+
+/**
+ * scroll-snap-kit — React Hooks
+ * Requires React 16.8+
+ */
+
+/**
+ * Returns the current scroll position, updated on scroll.
+ * @param {{ throttle?: number, container?: Element }} options
+ * @returns {{ x: number, y: number, percentX: number, percentY: number }}
+ */
+function useScrollPosition(options = {}) {
+    const { throttle = 100, container } = options;
+    const [position, setPosition] = useState(() =>
+        typeof window !== 'undefined' ? getScrollPosition(container) : { x: 0, y: 0, percentX: 0, percentY: 0 }
+    );
+
+    useEffect(() => {
+        const cleanup = onScroll((pos) => setPosition(pos), { throttle, container });
+        return cleanup;
+    }, [throttle, container]);
+
+    return position;
+}
+
+/**
+ * Returns whether a referenced element is currently in the viewport.
+ * @param {{ threshold?: number, once?: boolean }} options
+ * @returns {[React.RefObject, boolean]}
+ */
+function useInViewport(options = {}) {
+    const { threshold = 0, once = false } = options;
+    const ref = useRef(null);
+    const [inView, setInView] = useState(false);
+    const hasTriggered = useRef(false);
+
+    useEffect(() => {
+        if (!ref.current) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                const visible = entry.isIntersecting;
+                if (once) {
+                    if (visible && !hasTriggered.current) {
+                        hasTriggered.current = true;
+                        setInView(true);
+                        observer.disconnect();
+                    }
+                } else {
+                    setInView(visible);
+                }
+            },
+            { threshold }
+        );
+
+        observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [threshold, once]);
+
+    return [ref, inView];
+}
+
+/**
+ * Returns a scrollTo function scoped to an element ref or the window.
+ * @returns {[React.RefObject, (target: Element|number, options?: object) => void]}
+ */
+function useScrollTo() {
+    const containerRef = useRef(null);
+
+    const scrollToTarget = useCallback((target, options = {}) => {
+        const { behavior = 'smooth', offset = 0 } = options;
+        const container = containerRef.current;
+
+        if (!container) {
+            // fallback to window scroll
+            if (typeof target === 'number') {
+                window.scrollTo({ top: target + offset, behavior });
+            } else if (target instanceof Element) {
+                target.scrollIntoView({ behavior });
+            }
+            return;
+        }
+
+        if (typeof target === 'number') {
+            container.scrollTo({ top: target + offset, behavior });
+        } else if (target instanceof Element) {
+            const containerTop = container.getBoundingClientRect().top;
+            const targetTop = target.getBoundingClientRect().top;
+            container.scrollBy({ top: targetTop - containerTop + offset, behavior });
+        }
+    }, []);
+
+    return [containerRef, scrollToTarget];
+}
+
+/**
+ * Tracks whether the user has scrolled past a given pixel threshold.
+ * @param {number} threshold - Y pixel value to check against (default: 100)
+ * @param {{ container?: Element }} options
+ * @returns {boolean}
+ */
+function useScrolledPast(threshold = 100, options = {}) {
+    const { container } = options;
+    const [scrolledPast, setScrolledPast] = useState(false);
+
+    useEffect(() => {
+        const cleanup = onScroll(({ y }) => {
+            setScrolledPast(y > threshold);
+        }, { container });
+        return cleanup;
+    }, [threshold, container]);
+
+    return scrolledPast;
+}
+
+/**
+ * Returns scroll direction: 'up' | 'down' | null
+ * @param {{ throttle?: number }} options
+ * @returns {'up'|'down'|null}
+ */
+function useScrollDirection(options = {}) {
+    const { throttle = 100 } = options;
+    const [direction, setDirection] = useState(null);
+    const lastY = useRef(typeof window !== 'undefined' ? window.scrollY : 0);
+
+    useEffect(() => {
+        const cleanup = onScroll(({ y }) => {
+            setDirection(y > lastY.current ? 'down' : 'up');
+            lastY.current = y;
+        }, { throttle });
+        return cleanup;
+    }, [throttle]);
+
+    return direction;
+}
+
+module.exports = {
+    scrollTo,
+    scrollToTop,
+    scrollToBottom,
+    getScrollPosition,
+    onScroll,
+    isInViewport,
+    lockScroll,
+    unlockScroll,
+    scrollSpy,
+    onScrollEnd,
+    scrollIntoViewIfNeeded,
+    Easings,
+    easeScroll,
+    scrollSequence,
+    parallax,
+    scrollProgress,
+    snapToSection,
+    scrollReveal,
+    scrollTimeline,
+    infiniteScroll,
+    scrollTrap,
+    useScrollPosition,
+    useInViewport,
+    useScrollTo,
+    useScrolledPast,
+    useScrollDirection,
+};

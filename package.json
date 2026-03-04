@@ -3,32 +3,43 @@
     "version": "1.1.0",
     "description": "Smooth scroll utilities and React hooks for modern web apps",
     "type": "module",
-    "main": "./src/index.js",
-    "module": "./src/index.js",
+    "main": "./dist/index.cjs.js",
+    "module": "./dist/index.esm.js",
+    "types": "./dist/index.d.ts",
     "exports": {
         ".": {
-            "import": "./src/index.js"
+            "import": "./dist/index.esm.js",
+            "require": "./dist/index.cjs.js",
+            "types": "./dist/index.d.ts"
         },
         "./utils": {
-            "import": "./src/utils.js"
+            "import": "./src/utils.js",
+            "require": "./dist/index.cjs.js",
+            "types": "./dist/index.d.ts"
         },
         "./hooks": {
-            "import": "./src/hooks.js"
+            "import": "./src/hooks.js",
+            "types": "./dist/index.d.ts"
         }
     },
     "files": [
-        "src"
+        "src",
+        "dist"
     ],
     "scripts": {
-        "test": "echo \"No tests yet\""
+        "build": "node build.js",
+        "prepublishOnly": "node build.js"
     },
     "keywords": [
         "scroll",
         "smooth-scroll",
-        "scroll-hooks",
+        "parallax",
+        "scroll-spy",
+        "scroll-reveal",
+        "infinite-scroll",
         "react-hooks",
         "viewport",
-        "scroll-position",
+        "scroll-animation",
         "frontend",
         "ui"
     ],
