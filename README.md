@@ -425,7 +425,7 @@ All modern browsers. `easeScroll` and `scrollSequence` use `requestAnimationFram
 
 ## Changelog
 
-### v1.2.0
+### v2.0.0
 - ✨ `scrollSequence()` — chain multiple scroll animations with pauses and cancel support
 - ✨ `parallax()` — multi-element parallax with configurable speed, axis, and cleanup
 - ✨ `scrollProgress()` — per-element scroll progress tracking (0→1)
